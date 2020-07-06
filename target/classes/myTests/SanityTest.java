@@ -50,6 +50,7 @@ public class SanityTest {
         homePage.logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
         homePage.logInSubmit.click();
         System.out.println("Logged in as existing user");
+        System.out.println("testing git");
 
     }
 }
