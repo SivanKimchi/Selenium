@@ -15,6 +15,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.ls.LSOutput;
 import pageObjects.HomePage;
 
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SanityTest {
@@ -186,6 +188,23 @@ public class SanityTest {
 
     }
 
+
+    @Test
+    public void enterOnlineShop() {
+
+        HomePage homePage = new HomePage(driver);
+        homePage.mainMenuLametayelOnlineShop.click();
+
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String parentId = it.next();
+        String childId = it.next();
+        driver.switchTo().window(childId);
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("shop.lametayel.co.il"));
+
+
+    }
 
 
 
