@@ -79,7 +79,29 @@ public class HomePage {
     @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(16)")
     public WebElement userMenuDisconnect;
 
+    //members - centralBarLinks
 
+    @FindBy(css = "div[class='market-buttons max-w-full -mt-12 absolute pin-t bg-white rounded-lg shadow-lg']")
+    public WebElement centralBar;
+
+    @FindBy(css = "span[class='icon icon-plane text-3xl md:text-4xl mt-2']")
+    public WebElement flights;
+
+    @FindBy(css = "span[class='icon icon-lodging text-3xl md:text-4xl mt-2']")
+    public WebElement hotels;
+
+    @FindBy(css = "span[class='icon icon-award text-3xl md:text-4xl mt-2']")
+    public WebElement insurance;
+
+    @FindBy(css = "span[class='icon icon-gift text-3xl md:text-4xl mt-2']")
+    public WebElement benefits;
+
+    @FindBy(css = "span[class='icon icon-dots-three-vertical text-3xl md:text-4xl mt-2']")
+    public WebElement moreOptions;
+    //
+
+    @FindBy(css = "section[class='section-market flex flex-col lg:flex-row items-center lg:items-start justify-center py-8 lg:py-16 mt-10 lg:mt-20 -mx-2 lg:mx-0']")
+    public WebElement bottomWidget;
 
 
     //constructor
