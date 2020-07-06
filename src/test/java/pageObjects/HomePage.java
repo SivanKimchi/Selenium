@@ -103,6 +103,17 @@ public class HomePage {
     @FindBy(css = "section[class='section-market flex flex-col lg:flex-row items-center lg:items-start justify-center py-8 lg:py-16 mt-10 lg:mt-20 -mx-2 lg:mx-0']")
     public WebElement bottomWidget;
 
+    @FindBy(css = "input[class='menu_search appearance-none outline-none text-base md:text-xl border-none flex-1 py-3 md:py-4 pr-12 ui-autocomplete-input']")
+    public WebElement searchBar;
+
+    @FindBy (id="ui-id-2")
+    public WebElement searchAutocomplete;
+
+    @FindBy(css = "button[class='appearance-none btn-lam border-none font-bold select-none px-6 md:px-12 py-3 md:py-4 text-base md:text-xl']")
+    public WebElement searchButton;
+
+    @FindBy (id="node_title")
+    public WebElement searchResultsPageH1;
 
     //constructor
     public HomePage(WebDriver driver) {

@@ -5,11 +5,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.w3c.dom.ls.LSOutput;
 import pageObjects.HomePage;
 
 import java.util.concurrent.TimeUnit;
@@ -42,10 +44,10 @@ public class SanityTest {
 
     }
 
-    @After
-    public void closeTest(){
-        driver.close();
-    }
+//    @After
+//    public void closeTest(){
+//        driver.close();
+//    }
 
 
     @Test
@@ -134,6 +136,33 @@ public class SanityTest {
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(homePage.bottomWidget.isDisplayed());
 
+    }
+
+
+    @Test
+    public void searchBar(){
+
+        HomePage homePage = new HomePage(driver);
+        homePage.searchBar.sendKeys("far");
+
+        WebDriverWait wait = new WebDriverWait(driver,20);
+        wait.until(ExpectedConditions.visibilityOf(homePage.searchAutocomplete));
+
+        //autocomplete dropdown
+        homePage.searchBar.sendKeys(Keys.ARROW_DOWN);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        homePage.searchBar.sendKeys(Keys.ENTER);
+        Assert.assertTrue(driver.getCurrentUrl().contains("faroe-islands"));
+
+        driver.navigate().back();
+        wait.until(ExpectedConditions.visibilityOf(homePage.searchBar));
+
+        //check PARTIAL input (no autocomplete) in HEBREW >> goes to generic results page   **button does not work on site
+        homePage.searchBar.sendKeys("איי פא");
+        homePage.searchBar.sendKeys(Keys.ENTER);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        Assert.assertEquals(homePage.searchResultsPageH1.getText(),"תוצאות עבור \"איי פא\"");
+        
     }
 
 
