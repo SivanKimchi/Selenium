@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -64,6 +65,7 @@ public class SanityTest {
         Assert.assertTrue(homePage.userMenu.isDisplayed());
 
     }
+
 
     @Test
     public void userMenuValues(){
@@ -162,8 +164,29 @@ public class SanityTest {
         homePage.searchBar.sendKeys(Keys.ENTER);
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         Assert.assertEquals(homePage.searchResultsPageH1.getText(),"תוצאות עבור \"איי פא\"");
-        
+
     }
+
+
+
+    @Test
+    public void mainMenuDestinations(){
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        HomePage homePage = new HomePage(driver);
+        Actions actions = new Actions(driver);
+
+        actions.moveToElement(homePage.mainMenuDestinations).build().perform();
+        wait.until(ExpectedConditions.visibilityOf(homePage.mainMenuDestinationNorthAmerica));
+        actions.moveToElement(homePage.mainMenuDestinationNorthAmerica).build().perform();
+        homePage.mainMenuDestinationCanada.click();
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("canada"));
+
+    }
+
+
 
 
 

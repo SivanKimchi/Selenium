@@ -115,6 +115,47 @@ public class HomePage {
     @FindBy (id="node_title")
     public WebElement searchResultsPageH1;
 
+
+    //members- main menu
+    @FindBy (id= "m-dests-li")
+    public WebElement mainMenuDestinations;
+
+    @FindBy (id= "m-sites-li")
+    public WebElement mainMenuTripTypes;
+
+    @FindBy (css= "span[class='icon-tips main_menu_item_icon']")
+    public WebElement mainMenuTips;
+
+    @FindBy (css= "span[class='icon-blogs main_menu_item_icon']")
+    public WebElement mainMenuBlogs;
+
+    @FindBy (css= "span[class='icon-partners main_menu_item_icon']")
+    public WebElement mainMenuPartners;
+
+    @FindBy (id = "m-forum-li")
+    public WebElement mainMenuForums;
+
+    @FindBy (id = "m-info-li")
+    public WebElement mainMenuInspiration;
+
+    @FindBy (id = "m-shops-li")
+    public WebElement mainMenuLametayelBranches;
+
+    @FindBy (id = "m-internet-shop-li")
+    public WebElement mainMenuLametayelOnlineShop;
+
+
+    @FindBy(id="m-dests")
+    public WebElement mainMenuDestinationsMenu;
+
+    @FindBy(id="m-dests-n_america")
+    public WebElement mainMenuDestinationNorthAmerica;
+
+    @FindBy(css = "div[id='m-n_america'] span:nth-child(3) li:nth-child(2)")
+    public WebElement mainMenuDestinationCanada;
+
+
+
     //constructor
     public HomePage(WebDriver driver) {
 
