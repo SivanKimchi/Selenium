@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -50,7 +51,14 @@ public class SanityTest {
         homePage.logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
         homePage.logInSubmit.click();
         System.out.println("Logged in as existing user");
-        System.out.println("testing git");
 
+        Assert.assertTrue(homePage.userMenu.isDisplayed());
+
+        driver.close();
     }
+
+
+
+
+
 }

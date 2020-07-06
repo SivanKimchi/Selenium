@@ -24,6 +24,19 @@ public class HomePage {
     @FindBy(id="login_widget_submit_btn")
     public WebElement logInSubmit;
 
+    @FindBy(xpath="//*[@id=\"hd_user_img\"]/img")
+    public WebElement loggedUserImg;
+
+    @FindBy(id="hd_user_img")
+    public WebElement userMenu;
+
+    @FindBy(xpath = "//*[@id=\"authenticated_user_menu\"]/li[1]/span")
+    public WebElement userMenuName;
+
+//    @FindBy(css = "")
+//    public WebElement userMenuNameCSS;
+
+
     //constructor
     public HomePage(WebDriver driver) {
 
