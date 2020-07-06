@@ -94,6 +94,47 @@ public class SanityTest {
 
 
 
+    @Test
+    public void centralBarLinks(){
+
+        HomePage homePage = new HomePage(driver);
+
+        WebDriverWait wait = new WebDriverWait(driver,20);
+        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+
+        homePage.flights.click();
+        driver.manage().timeouts().implicitlyWait(5000,TimeUnit.MILLISECONDS);
+        driver.navigate().forward();
+        Assert.assertTrue(driver.getCurrentUrl().contains("fly.lametayel.co.il"));
+
+        driver.navigate().back();
+        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+        homePage.hotels.click();
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        driver.navigate().refresh();
+        Assert.assertTrue(driver.getCurrentUrl().contains("hotels.lametayel.co.il"));
+
+        driver.navigate().back();
+        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+        homePage.insurance.click();
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        driver.navigate().refresh();
+        Assert.assertTrue(driver.getCurrentUrl().contains("insurance.lametayel.co.il"));
+
+        driver.navigate().back();
+        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+        homePage.benefits.click();
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        driver.navigate().refresh();
+        Assert.assertTrue(driver.getCurrentUrl().contains("club-lametayel"));
+
+        driver.navigate().back();
+        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+        homePage.moreOptions.click();
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(homePage.bottomWidget.isDisplayed());
+
+    }
 
 
 
