@@ -92,12 +92,13 @@ public class OrderWidgetTest {
         Thread.sleep(3000);
         orderWidget.flightsTo_InputBox.sendKeys("rey");
         Thread.sleep(5000);
-        orderWidget.flightsTo_InputBox.sendKeys(Keys.DOWN, Keys.DOWN);
-
-        orderWidget.flightsTo_InputBox.sendKeys(Keys.ENTER);
-        wait.until(ExpectedConditions.elementToBeClickable(orderWidget.flightsTo));
+        orderWidget.flightsTo_InputBox.sendKeys(Keys.ARROW_DOWN, Keys.ARROW_DOWN, Keys.ENTER);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(orderWidget.flightsTo.getText().contains("רייקייאוויק"));
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         orderWidget.flightsSearchButton.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         Set<String> windowsIds = driver.getWindowHandles();
         Iterator<String> it = windowsIds.iterator();

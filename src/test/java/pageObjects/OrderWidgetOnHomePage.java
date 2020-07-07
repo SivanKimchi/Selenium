@@ -108,35 +108,14 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[class='flex md:flex-no-grow h-full md:ml-px'] div:nth-of-type(1)")
     public WebElement flightsFrom;
 
-
-
-
-   // @FindBy (css = "div[id='market-widget-flights-1594113831300'] section iframe")
- //   public WebElement flightsDestinationiframe;
-
-//    @FindBy (css = "div[id='market-widget-flights-1594129238381'] section[class='relative flights-with-iframe'] iframe")
-//    public WebElement flightsDestinationiframe;
-
-    @FindBy (xpath = "//*[@id=\"market-widget-flights-1594129238381\"]/section/iframe")
-    public WebElement flightsDestinationiframe;
-//(css = "iframe[class='w-full mx-auto bg-transparent h-full absolute pin overflow-hidden z-10 iframe-with-loader']")
-
-
-
-
     @FindBy (css = "div[class='mdc-list-group']")
     public WebElement flightsFrom_InputBox;
 
     @FindBy (css = "div[class='flex md:flex-no-grow h-full md:ml-px']")
     public WebElement flightsTo;
-//
-//    @FindBy (css = "ul[class='mdc-list'] div[class='mdc-list-group'] li input")
-//    public WebElement flightsTo_InputBox;
 
     @FindBy (xpath = "//*[@id=\"fly-app\"]/div/article/div/div/div[2]/div[1]/div[1]/div[2]/div[2]/ul/div[1]/li/input")
     public WebElement flightsTo_InputBox;
-
-
 
 
     @FindBy (css = "div[id='datepicker-trigger'] div div:nth-child(1)")
