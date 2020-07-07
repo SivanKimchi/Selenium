@@ -93,9 +93,9 @@ public class OrderWidgetTest {
         orderWidget.flightsTo_InputBox.sendKeys("rey");
         Thread.sleep(5000);
         orderWidget.flightsTo_InputBox.sendKeys(Keys.DOWN, Keys.DOWN);
-
+        Thread.sleep(5000);
         orderWidget.flightsTo_InputBox.sendKeys(Keys.ENTER);
-        wait.until(ExpectedConditions.elementToBeClickable(orderWidget.flightsTo));
+        Thread.sleep(5000);
         Assert.assertTrue(orderWidget.flightsTo.getText().contains("רייקייאוויק"));
         orderWidget.flightsSearchButton.click();
 
