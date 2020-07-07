@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -207,6 +208,17 @@ public class SanityTest {
     }
 
 
+
+    @Test
+    public void scrollDownToFacebookLike(){
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        HomePage homepage = new HomePage(driver);
+
+        js.executeScript("arguments[0].scrollIntoView();", homepage.facebookLikeBox);
+        System.out.println(homepage.facebookLikeBox.getText());
+    }
 
 
 

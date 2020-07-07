@@ -155,6 +155,11 @@ public class HomePage {
     public WebElement mainMenuDestinationCanada;
 
 
+    //members- "like" box at the scroll down
+    @FindBy (css = "div[id='hp_like_box'] h2[class='heading heading-sm']")
+    public WebElement facebookLikeBox;
+
+
 
     //constructor
     public HomePage(WebDriver driver) {
