@@ -1,10 +1,15 @@
 package pageObjects;
 
+import Lametayel.GeneralProperties;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.Iterator;
+import java.util.Set;
 
 public class HomePage {
 
@@ -160,6 +165,53 @@ public class HomePage {
     public WebElement facebookLikeBox;
 
 
+    public void logIntoSite(){
+        logInButton.click();
+        logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
+        logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
+        logInSubmit.click();
+        System.out.println("Logged in as existing user");
+
+        Assert.assertTrue(userMenu.isDisplayed());
+
+
+    }
+
+    public void assertUserMenuValuesValid(){
+
+        Assert.assertEquals(userMenuName.getText(), "היי earth_trekker");
+        Assert.assertEquals(userMenuLametayelSheliClub.getText(), "מועדון למטייל שלי");
+        Assert.assertEquals(userMenuEditProfile.getText(), "עריכת הפרופיל");
+        Assert.assertEquals(userMenuViewProfile.getText(), "צפיה בפרופיל");
+        Assert.assertEquals(userMenuNewsletterManagement.getText(), "ניהול הרשמות ודיוורים");
+        Assert.assertEquals(userMenuAddNewContent.getText(), "הוספת תוכן חדש");
+        Assert.assertEquals(userMenuAddNewTip.getText(), "טיפ");
+        Assert.assertEquals(userMenuAddNewBlogPost.getText(), "פוסט לבלוג");
+        Assert.assertEquals(userMenuAddNewPartnersAd.getText(), "מודעת מחפשים שותפים");
+        Assert.assertEquals(userMenuMyContents.getText(), "התכנים שלי");
+        Assert.assertEquals(userMenuMyMessages.getText(), "הודעות");
+        Assert.assertEquals(userMenuMyFavorites.getText(), "המועדפים שלי");
+        Assert.assertEquals(userMenuMyPublishedContents.getText(), "התכנים שפירסמתי");
+        Assert.assertEquals(userMenuMyContentsComments.getText(), "תגובות לתכנים שפירסמתי");
+        Assert.assertEquals(userMenuDisconnect.getText(), "יציאה מהמערכת");
+
+        Assert.assertEquals(userMenuName.getAttribute("role"), "presentation");
+        Assert.assertEquals(userMenuAddNewContent.getAttribute("role"), "presentation");
+        Assert.assertEquals(userMenuMyContents.getAttribute("role"), "presentation");
+
+
+    }
+
+
+    public void moveToNextTab(){
+
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String parentId = it.next();
+        String childId = it.next();
+        driver.switchTo().window(childId);
+
+    }
 
     //constructor
     public HomePage(WebDriver driver) {

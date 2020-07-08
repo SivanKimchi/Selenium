@@ -41,6 +41,7 @@ public class OrderWidgetTest {
 
         driver.get(GeneralProperties.SiteURL1);
 
+
     }
 
 //    @After
@@ -66,14 +67,8 @@ public class OrderWidgetTest {
         //check direction with click on first result and then with arrow down
         orderWidget.flightsDirection.click();
         orderWidget.flightsDirectionFirstChoice.click();
-        orderWidget.flightsTo.click();
 
-        orderWidget.flightsTo_InputBox.clear();
-        Thread.sleep(3000);
-        orderWidget.flightsTo_InputBox.sendKeys("rey");
-        Thread.sleep(5000);
-        orderWidget.flightsTo_InputBox.sendKeys(Keys.ENTER);
-        Thread.sleep(5000);
+        orderWidget.pickDestination("rey");
 
         Assert.assertTrue(orderWidget.flightsTo.getText().contains("ריאונוסה"));
         orderWidget.flightsTo.click();
@@ -89,11 +84,7 @@ public class OrderWidgetTest {
 
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
-        Set<String> windowsIds = driver.getWindowHandles();
-        Iterator<String> it = windowsIds.iterator();
-        String parentId = it.next();
-        String childId = it.next();
-        driver.switchTo().window(childId);
+        orderWidget.moveToNextTab();
 
         Assert.assertTrue(driver.getCurrentUrl().contains("flights.lametayel.co.il"));
 
@@ -117,24 +108,13 @@ public class OrderWidgetTest {
         orderWidget.flightsDirectIfChecked.click();
         Assert.assertTrue(orderWidget.flightsDirectIfChecked.isSelected());
 
-        orderWidget.flightsTo.click();
-
-        orderWidget.flightsTo_InputBox.clear();
-        Thread.sleep(3000);
-        orderWidget.flightsTo_InputBox.sendKeys("paris");
-        Thread.sleep(3000);
-        orderWidget.flightsTo_InputBox.sendKeys(Keys.ENTER);
-        Thread.sleep(5000);
+        orderWidget.pickDestination("paris");
 
         orderWidget.flightsSearchButton.click();
 
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
-        Set<String> windowsIds = driver.getWindowHandles();
-        Iterator<String> it = windowsIds.iterator();
-        String parentId = it.next();
-        String childId = it.next();
-        driver.switchTo().window(childId);
+        orderWidget.moveToNextTab();
 
         wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsPageFilterBar));
 
@@ -142,9 +122,23 @@ public class OrderWidgetTest {
         Assert.assertEquals(orderWidget.directFlightSelected.getAttribute("class"), "stops-button selected");
         Assert.assertNotEquals(orderWidget.nondirectFlightSelected.getAttribute("class"), "stops-button selected");
 
+    }
+
+
+    @Test
+    public void returnFlightWithSelectedDates() throws InterruptedException {
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
+        driver.switchTo().frame(orderWidget.flightsiframe);
+
+        orderWidget.pickDestination("paris");
 
 
 
     }
-
 }

@@ -1,12 +1,15 @@
 package pageObjects;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class OrderWidgetOnHomePage {
 
@@ -167,6 +170,19 @@ public class OrderWidgetOnHomePage {
 
 
 
+    //choose destination
+    public void pickDestination (String destination) throws InterruptedException {
+        flightsTo.click();
+        flightsTo_InputBox.clear();
+        Thread.sleep(3000);
+        flightsTo_InputBox.sendKeys(destination);
+        Thread.sleep(3000);
+        flightsTo_InputBox.sendKeys(Keys.ENTER);
+        Thread.sleep(5000);
+    }
+
+
+
     //pick specific flight date
     public void pickAMonthToFly (String month, String day){
         while (!flightsCalendarMonth.getText().contains(month)){
@@ -179,6 +195,17 @@ public class OrderWidgetOnHomePage {
                 break;
             }
         }
+    }
+
+
+    public void moveToNextTab(){
+
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String parentId = it.next();
+        String childId = it.next();
+        driver.switchTo().window(childId);
+
     }
 
 
