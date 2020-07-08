@@ -138,8 +138,20 @@ public class OrderWidgetTest {
 
         orderWidget.pickDestination("paris");
 
+        orderWidget.flightsDatesOneWay.click();
 
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
 
+        orderWidget.pickADateToFly("דצמבר", "20");
+        orderWidget.pickADateToFly("דצמבר", "25");
+        orderWidget.flightsSearchButton.click();
 
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        orderWidget.moveToNextTab();
+
+        //Check month and day on flights page filter (according to previously inserted day and month)
+        Assert.assertTrue(orderWidget.flightsPageOutboundDate.getAttribute("value").contains("20/12"));
+        Assert.assertTrue(orderWidget.flightsPageInboundDate.getAttribute("value").contains("25/12"));
     }
 }

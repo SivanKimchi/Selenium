@@ -6,10 +6,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class OrderWidgetOnHomePage {
 
@@ -150,8 +153,14 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "td[class='asd__day asd__day--enabled asd__day--disabled']")
     public WebElement flightsCalenderDisabledDate;
 
-    @FindBy (css = "div[class='asd__month-name']")
+    @FindBy (css = "div[class='asd__inner-wrapper'] div:nth-of-type(2) div")
     public WebElement flightsCalendarMonth;
+
+    @FindBy (id="search_engine_search_engine_flight_outbound_date")
+    public WebElement flightsPageOutboundDate;
+
+    @FindBy (id="search_engine_search_engine_flight_inbound_date")
+    public WebElement flightsPageInboundDate;
 
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--previous']")
     public WebElement flightsCalenderMoveToPreviousMonth;
@@ -159,7 +168,7 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--next']")
     public WebElement flightsCalenderMoveToNextMonth;
 
-    @FindBy (css = "button[class='asd__mobile-close']")
+    @FindBy (css = "button[class='asd__mobile-close'] div:")
     public WebElement flightsCalenderClose;
 
     @FindBy (className = "asd__day-button")
@@ -184,10 +193,19 @@ public class OrderWidgetOnHomePage {
 
 
     //pick specific flight date
-    public void pickAMonthToFly (String month, String day){
-        while (!flightsCalendarMonth.getText().contains(month)){
+    public void pickADateToFly (String month, String day) {
+
+        String visibleMonth = flightsCalendarMonth.getText();
+
+        while (!visibleMonth.contains(month)){
                 flightsCalenderMoveToNextMonth.click();
+
+                WebDriverWait wait = new WebDriverWait(driver,10);
+                wait.until(ExpectedConditions.visibilityOf(flightsCalendarMonth));
+
+                visibleMonth = flightsCalendarMonth.getText();
         }
+
         for (int i=0; i<dates.size(); i++) {
             String text = dates.get(i).getText();
             if (text.equals(day)){
