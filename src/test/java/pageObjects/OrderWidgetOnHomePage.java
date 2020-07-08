@@ -105,6 +105,15 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "input[id='direct-only']")
     public WebElement flightsDirectIfChecked;
 
+    @FindBy (css = "div[class='stops-buttons'] div:nth-child(1)")
+    public WebElement directFlightSelected;
+
+    @FindBy (css = "div[class='stops-buttons'] div:nth-child(3)")
+    public WebElement nondirectFlightSelected;
+
+    @FindBy (css = "div[class='filters-title float-left']")
+    public WebElement flightsPageFilterBar;
+
     @FindBy (css = "div[class='flex md:flex-no-grow h-full md:ml-px'] div:nth-of-type(1)")
     public WebElement flightsFrom;
 

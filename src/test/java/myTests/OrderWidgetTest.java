@@ -68,15 +68,6 @@ public class OrderWidgetTest {
         orderWidget.flightsDirectionFirstChoice.click();
         orderWidget.flightsTo.click();
 
-
-       // driver.switchTo().defaultContent();
-       // driver.switchTo().frame(2);
-
-  //      wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsDestinationiframe));
-//        driver.switchTo().frame(orderWidget.flightsDestinationiframe);
-//2 not interactable
-
-
         orderWidget.flightsTo_InputBox.clear();
         Thread.sleep(3000);
         orderWidget.flightsTo_InputBox.sendKeys("rey");
@@ -109,5 +100,51 @@ public class OrderWidgetTest {
     }
 
 
+
+
+    @Test
+    public void directFlightsOnly() throws InterruptedException {
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
+        driver.switchTo().frame(orderWidget.flightsiframe);
+
+        //check box for direct flights
+        orderWidget.flightsDirectIfChecked.click();
+        Assert.assertTrue(orderWidget.flightsDirectIfChecked.isSelected());
+
+        orderWidget.flightsTo.click();
+
+        orderWidget.flightsTo_InputBox.clear();
+        Thread.sleep(3000);
+        orderWidget.flightsTo_InputBox.sendKeys("paris");
+        Thread.sleep(3000);
+        orderWidget.flightsTo_InputBox.sendKeys(Keys.ENTER);
+        Thread.sleep(5000);
+
+        orderWidget.flightsSearchButton.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String parentId = it.next();
+        String childId = it.next();
+        driver.switchTo().window(childId);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsPageFilterBar));
+
+        //check for direct flights
+        Assert.assertEquals(orderWidget.directFlightSelected.getAttribute("class"), "stops-button selected");
+        Assert.assertNotEquals(orderWidget.nondirectFlightSelected.getAttribute("class"), "stops-button selected");
+
+
+
+
+    }
 
 }
