@@ -15,6 +15,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.HomePage;
 import pageObjects.OrderWidgetOnHomePage;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -109,7 +113,6 @@ public class OrderWidgetTest {
         Assert.assertTrue(orderWidget.flightsDirectIfChecked.isSelected());
 
         orderWidget.pickDestination("paris");
-
         orderWidget.flightsSearchButton.click();
 
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
@@ -154,4 +157,30 @@ public class OrderWidgetTest {
         Assert.assertTrue(orderWidget.flightsPageOutboundDate.getAttribute("value").contains("20/12"));
         Assert.assertTrue(orderWidget.flightsPageInboundDate.getAttribute("value").contains("25/12"));
     }
+
+
+
+    @Test
+    public void flightWithInvalidDate() throws InterruptedException, ParseException {
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
+        driver.switchTo().frame(orderWidget.flightsiframe);
+
+        orderWidget.flightsDirection.click();
+        orderWidget.flightsDirectionFirstChoice.click();
+
+        orderWidget.flightsDatesOneWay.click();
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
+
+        //orderWidget.dontAllowPastDates("אוגוסט", 7);
+        orderWidget.pastDateIsInvalid("יולי", 7);
+
+    }
+
 }

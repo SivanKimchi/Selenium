@@ -1,5 +1,6 @@
 package pageObjects;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -9,9 +10,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class OrderWidgetOnHomePage {
@@ -151,7 +152,7 @@ public class OrderWidgetOnHomePage {
     public WebElement flightsCalenderPickedRange;  //range of return vacation
 
     @FindBy (css = "td[class='asd__day asd__day--enabled asd__day--disabled']")
-    public WebElement flightsCalenderDisabledDate;
+    public List<WebElement> flightsCalenderDisabledDate;
 
     @FindBy (css = "div[class='asd__inner-wrapper'] div:nth-of-type(2) div")
     public WebElement flightsCalendarMonth;
@@ -171,7 +172,7 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "button[class='asd__mobile-close'] div:")
     public WebElement flightsCalenderClose;
 
-    @FindBy (className = "asd__day-button")
+    @FindBy (css = "table[class='asd__month-table'] button[class='asd__day-button']")
     public List<WebElement> dates;
 
     @FindBy (css = "button[id='flights-search-button']")
@@ -214,6 +215,82 @@ public class OrderWidgetOnHomePage {
             }
         }
     }
+
+
+    // *** same method as the next method - pastDateIsInvalid() - using Calendar ***
+    public void dontAllowPastDates(String month, int day) throws ParseException {
+
+        String visibleMonth = flightsCalendarMonth.getText();
+
+        if (visibleMonth.contains(month)) {
+
+            Date pdate = new Date();
+            Calendar lCal = Calendar.getInstance();
+            lCal.setTime(pdate);
+            int today = lCal.get(Calendar.DATE);
+
+            String dayString = String.valueOf(day);
+
+            for (int i = 0; i < dates.size(); i++) {
+                String text = dates.get(i).getText();
+                if (text.equals(dayString) && today > day) {  // day is smaller or before today's day){
+                    System.out.println("invalid date");
+                    Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
+                } else if (text.equals(dayString)) {
+                    System.out.println("valid date");
+                }
+
+            }
+        }
+    }
+
+
+
+
+        public void pastDateIsInvalid(String month, int day) {
+
+            String visibleMonth = flightsCalendarMonth.getText();
+
+            if (visibleMonth.contains(month)){
+
+                String dayString = String.valueOf(day);
+
+                SimpleDateFormat viewedDateSDF = new SimpleDateFormat("yyyy-MM-dd");
+                Date todayDate = new Date();
+                String todayDateString = viewedDateSDF.format(todayDate);
+                Date todayDateFormatted = null;
+
+                try {
+                    todayDateFormatted = viewedDateSDF.parse(todayDateString);    // Today's date in DATE type, formatted
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                for (int i = 0; i < dates.size(); i++) {
+
+                    String viewedDate = dates.get(i).getAttribute("date");
+
+                    try {
+
+                        Date viewedDateDateType = viewedDateSDF.parse(viewedDate);   // Date picked on website, DATE type, formatted
+
+                        if ((dates.get(i).getText().equals(dayString)) && todayDateFormatted.after(viewedDateDateType)) {
+                            System.out.println("invalid date- " + viewedDateDateType);
+                            Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
+                        } else if (dates.get(i).getText().equals(dayString)) {
+                            dates.get(i).click();
+                            System.out.println("valid date");
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+            }
+        }  else {
+                System.out.println("This is probably a future month, so it is irrelevant to the test.");
+            }
+    }
+
 
 
     public void moveToNextTab(){
