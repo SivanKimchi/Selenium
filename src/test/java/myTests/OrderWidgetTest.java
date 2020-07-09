@@ -179,7 +179,86 @@ public class OrderWidgetTest {
         wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
 
         //orderWidget.dontAllowPastDates("אוגוסט", 7);
-        orderWidget.pastDateIsInvalid("יולי", 7);
+        orderWidget.pastDateIsInvalid("יולי", 1);
+
+    }
+
+
+    @Test
+    public void dateInPastMonthInvalid() throws InterruptedException, ParseException{
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
+        driver.switchTo().frame(orderWidget.flightsiframe);
+
+        orderWidget.flightsDirection.click();
+        orderWidget.flightsDirectionFirstChoice.click();
+
+        orderWidget.flightsDatesOneWay.click();
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
+
+        orderWidget.flightsCalenderMoveToPreviousMonth.click();
+
+        orderWidget.dateInPastMonthInvalid("מאי 2020");
+
+    }
+
+
+    @Test
+    public void flightFromAnotherCity() throws InterruptedException {
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
+        driver.switchTo().frame(orderWidget.flightsiframe);
+
+        Assert.assertEquals(orderWidget.flightsFrom.getText(), "תל אביב (TLV)");
+        orderWidget.pickOutboundCity("לונדון");
+        orderWidget.pickDestination("רומא");
+
+        orderWidget.flightsSearchButton.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        orderWidget.moveToNextTab();
+
+        Thread.sleep(5000);
+        //Check to&from on flights page filter (according to previously inserted values)
+        Assert.assertTrue(orderWidget.flightsPageOutboundCity.getAttribute("data-label").contains("לונדון"));
+        Assert.assertTrue(orderWidget.flightsPageInboundCity.getAttribute("data-label").contains("רומא"));
+
+    }
+
+
+    @Test
+    public void changeNumberOfPassengers() throws InterruptedException {
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
+        driver.switchTo().frame(orderWidget.flightsiframe);
+
+        orderWidget.flightsMultiplePassengers();
+
+        orderWidget.pickDestination("paris");
+        orderWidget.flightsSearchButton.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        orderWidget.moveToNextTab();
+
+        Thread.sleep(5000);
+
+        Assert.assertTrue(orderWidget.flightsPageNumOfPassengers.getText().equals("6"));
 
     }
 

@@ -61,7 +61,7 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "ul[class='mdc-list'] li:nth-child(2)")
     public WebElement flightsDirectionSecondChoice;
 
-    @FindBy (css = "button[class='mdc-button h-6 text-base font-semibold tracking-normal font-normal mdc-button__white'] div[class='flex items-center text-black']")
+    @FindBy (xpath = "//*[@id=\"fly-app\"]/div/article/div/div/div[1]/button/div")
     public WebElement flightsNumberOfPassengers;
 
     @FindBy (css = "div[id='my-dialog-content']")
@@ -73,34 +73,36 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(1) span[class='icon icon-remove']")
     public WebElement flightsRemoveAdult;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(1) div:nth-child(2) span")
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(1) div:nth-child(2)")
     public WebElement flightsSelectedNumOfAdultS;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(2) span[class='icon icon-add']")
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(2) div:nth-child(2) span[class='icon icon-add']")
     public WebElement flightsAddPensioner;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(2) span[class='icon icon-remove']")
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(2) div:nth-child(2) span[class='icon icon-remove']")
     public WebElement flightsRemovePensioner;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(2) div:nth-child(2) span")
+
+    @FindBy (xpath = "//*[@id='my-dialog-content']/div/div[2]/div[2]/span")
     public WebElement flightsSelectedNumOfPensioners;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(3) span[class='icon icon-add']")
+
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(3) div:nth-child(2) span[class='icon icon-add']")
     public WebElement flightsAddChild;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(3) span[class='icon icon-remove']")
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(3) div:nth-child(2) span[class='icon icon-remove']")
     public WebElement flightsRemoveChild;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(3) div:nth-child(2) span")
+    @FindBy (xpath = "//*[@id='my-dialog-content']/div/div[3]/div[2]/span")
     public WebElement flightsSelectedNumOfChildren;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(4) span[class='icon icon-add']")
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(4) div:nth-child(2) span[class='icon icon-add']")
     public WebElement flightsAddInfant;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(4) span[class='icon icon-remove']")
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(4) div:nth-child(2) span[class='icon icon-remove']")
     public WebElement flightsRemoveInfant;
 
-    @FindBy (css = "div[id='my-dialog-content'] div div:nth-child(4) div:nth-child(2) span")
+    @FindBy (xpath = "//*[@id='my-dialog-content']/div/div[4]/div[2]/span")
     public WebElement flightsSelectedNumOfInfants;
 
     @FindBy (css = "footer[class='mdc-dialog__actions'] button[class='btn btn-primary']")
@@ -108,6 +110,11 @@ public class OrderWidgetOnHomePage {
 
     @FindBy (css = "footer[class='mdc-dialog__actions'] button[class='btn text-grey-dark font-semibold']")
     public WebElement flightsCancelChangesInPassengers;
+
+    @FindBy (css = "div[class='passengers etField flight-pax js__pax_display-container']")
+    public WebElement flightsPageNumOfPassengers;
+
+
 
     @FindBy (css = "input[id='direct-only']")
     public WebElement flightsDirectIfChecked;
@@ -124,7 +131,7 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[class='flex md:flex-no-grow h-full md:ml-px'] div:nth-of-type(1)")
     public WebElement flightsFrom;
 
-    @FindBy (css = "div[class='mdc-list-group']")
+    @FindBy (xpath = "//*[@id=\"fly-app\"]/div/article/div/div/div[2]/div[1]/div[1]/div[1]/div[2]/ul/div/li/input")
     public WebElement flightsFrom_InputBox;
 
     @FindBy (css = "div[class='flex md:flex-no-grow h-full md:ml-px']")
@@ -163,6 +170,13 @@ public class OrderWidgetOnHomePage {
     @FindBy (id="search_engine_search_engine_flight_inbound_date")
     public WebElement flightsPageInboundDate;
 
+    @FindBy (id="search_engine_search_engine_flight_outbound_airport")
+    public WebElement flightsPageOutboundCity;
+
+    @FindBy (id="search_engine_search_engine_flight_inbound_airport")
+    public WebElement flightsPageInboundCity;
+
+
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--previous']")
     public WebElement flightsCalenderMoveToPreviousMonth;
 
@@ -192,6 +206,16 @@ public class OrderWidgetOnHomePage {
     }
 
 
+    public void pickOutboundCity (String city) throws InterruptedException {
+        flightsFrom.click();
+        flightsFrom_InputBox.clear();
+        Thread.sleep(3000);
+        flightsFrom_InputBox.sendKeys(city);
+        Thread.sleep(3000);
+        flightsFrom_InputBox.sendKeys(Keys.ENTER);
+        Thread.sleep(5000);
+    }
+
 
     //pick specific flight date
     public void pickADateToFly (String month, String day) {
@@ -206,6 +230,8 @@ public class OrderWidgetOnHomePage {
 
                 visibleMonth = flightsCalendarMonth.getText();
         }
+
+
 
         for (int i=0; i<dates.size(); i++) {
             String text = dates.get(i).getText();
@@ -290,6 +316,63 @@ public class OrderWidgetOnHomePage {
                 System.out.println("This is probably a future month, so it is irrelevant to the test.");
             }
     }
+
+
+
+
+
+    public void dateInPastMonthInvalid (String pastMonthYear) {
+
+        String visibleMonth = flightsCalendarMonth.getText();
+
+        while (!visibleMonth.equals(pastMonthYear)){
+            flightsCalenderMoveToPreviousMonth.click();
+
+            WebDriverWait wait = new WebDriverWait(driver,10);
+            wait.until(ExpectedConditions.visibilityOf(flightsCalendarMonth));
+
+            visibleMonth = flightsCalendarMonth.getText();
+        }
+
+            for (int i = 0; i < dates.size(); i++) {
+
+                Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
+
+            }
+        }
+
+
+
+    public void flightsMultiplePassengers() throws InterruptedException {
+        flightsNumberOfPassengers.click();
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(flightsNumberOfPassengersBox));
+
+        Assert.assertTrue(flightsSelectedNumOfAdultS.getText().equals("1"));
+        flightsAddAdult.click();
+        Thread.sleep(3000);
+        flightsRemoveAdult.click();   //num of adults = 1
+        Assert.assertTrue(flightsSelectedNumOfPensioners.getText().equals("0"));
+        flightsAddPensioner.click();
+        flightsAddPensioner.click();
+        flightsAddPensioner.click();
+        flightsRemovePensioner.click();   //num of pensioners = 2
+        Assert.assertTrue(flightsSelectedNumOfChildren.getText().equals("0"));
+        flightsAddChild.click();
+        flightsAddChild.click();
+        flightsRemoveChild.click();   //num of children = 1
+        Assert.assertTrue(flightsSelectedNumOfInfants.getText().equals("0"));
+        flightsAddInfant.click();
+        flightsAddInfant.click();
+        flightsAddInfant.click();
+        flightsRemoveInfant.click();   //num of infants = 2
+        flightsApprovePassengers.click();
+        Assert.assertTrue(flightsNumberOfPassengers.getText().contains("6"));
+
+
+    }
+
 
 
 
