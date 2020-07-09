@@ -1,10 +1,7 @@
 package pageObjects;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -24,14 +21,15 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg']")
     public WebElement orderWidget;
 
-    @FindBy (id = "swiper-1594065332666")
+    @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div")
     public WebElement orderWidgetBar;
 
     @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(1)")
     public WebElement orderWidgetFlights;
 
-    @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(2)")
+    @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div ul li:nth-of-type(2)")
     public WebElement orderWidgetHotels;
+
 
     @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(3)")
     public WebElement orderWidgetInsurance;
@@ -47,7 +45,7 @@ public class OrderWidgetOnHomePage {
 
 
     @FindBy (css = "iframe[class='w-full mx-auto bg-transparent h-full absolute pin overflow-hidden z-10 iframe-with-loader']")
-    public WebElement flightsiframe;
+    public WebElement widgetiframe;
 
     @FindBy (css = "div[id='fly-app']")
     public WebElement orderWidgetFlightsApp;
@@ -114,8 +112,6 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[class='passengers etField flight-pax js__pax_display-container']")
     public WebElement flightsPageNumOfPassengers;
 
-
-
     @FindBy (css = "input[id='direct-only']")
     public WebElement flightsDirectIfChecked;
 
@@ -176,7 +172,6 @@ public class OrderWidgetOnHomePage {
     @FindBy (id="search_engine_search_engine_flight_inbound_airport")
     public WebElement flightsPageInboundCity;
 
-
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--previous']")
     public WebElement flightsCalenderMoveToPreviousMonth;
 
@@ -193,6 +188,28 @@ public class OrderWidgetOnHomePage {
     public WebElement flightsSearchButton;
 
 
+    //   hotels
+    @FindBy (xpath = "//*[@id=\"hotel-app\"]/div/article/div/section/section/div[2]/div[1]/div[1]")
+    public WebElement hotelOrCityName;
+
+    @FindBy (id="hotels-search-button")
+    public WebElement hotelSearchButton;
+
+    @FindBy (css = "div[class='mdc-list-group'] li input")
+    public WebElement insertHotelOrCity;
+
+    @FindBy (css = "iframe[class='min-h-full']")
+    public WebElement hotelsPageiframe;
+
+    @FindBy (id = "H7mf")
+    public WebElement hotelsPageSearchBreadcrumb;
+
+
+    @FindBy (id="YK5l-SearchLocation")
+    public WebElement hotelsPageSearchDestination;
+
+
+
 
     //choose destination
     public void pickDestination (String destination) throws InterruptedException {
@@ -203,6 +220,18 @@ public class OrderWidgetOnHomePage {
         Thread.sleep(3000);
         flightsTo_InputBox.sendKeys(Keys.ENTER);
         Thread.sleep(5000);
+    }
+
+    //insert destination for hotels search
+    public void pickDestinationOrHotelName (String destinationOrHotel) throws InterruptedException {  // english-first letter in CAPS)
+        hotelOrCityName.click();
+        insertHotelOrCity.clear();
+        Thread.sleep(3000);
+        insertHotelOrCity.sendKeys(destinationOrHotel);
+        Thread.sleep(3000);
+        insertHotelOrCity.sendKeys(Keys.ENTER);
+        hotelSearchButton.click();
+
     }
 
 
@@ -230,8 +259,6 @@ public class OrderWidgetOnHomePage {
 
                 visibleMonth = flightsCalendarMonth.getText();
         }
-
-
 
         for (int i=0; i<dates.size(); i++) {
             String text = dates.get(i).getText();
@@ -319,8 +346,6 @@ public class OrderWidgetOnHomePage {
 
 
 
-
-
     public void dateInPastMonthInvalid (String pastMonthYear) {
 
         String visibleMonth = flightsCalendarMonth.getText();
@@ -333,11 +358,8 @@ public class OrderWidgetOnHomePage {
 
             visibleMonth = flightsCalendarMonth.getText();
         }
-
             for (int i = 0; i < dates.size(); i++) {
-
                 Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
-
             }
         }
 
@@ -367,13 +389,11 @@ public class OrderWidgetOnHomePage {
         flightsAddInfant.click();
         flightsAddInfant.click();
         flightsRemoveInfant.click();   //num of infants = 2
+
         flightsApprovePassengers.click();
         Assert.assertTrue(flightsNumberOfPassengers.getText().contains("6"));
 
-
     }
-
-
 
 
     public void moveToNextTab(){
@@ -386,6 +406,25 @@ public class OrderWidgetOnHomePage {
 
     }
 
+
+    public void scrollDownToWidget (WebElement waitForVisibilityOf){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(waitForVisibilityOf));
+
+    }
+
+    public void moveToiframe(){
+        scrollDownToWidget(widgetiframe);
+        driver.switchTo().frame(widgetiframe);
+    }
+
+    public void moveToHotelsPageiframe(){
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(hotelsPageiframe));
+        driver.switchTo().frame(hotelsPageiframe);
+        }
 
 
 

@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class OrderWidgetTest {
+public class OrderWidgetFlightsTest {
 
 
     //members
@@ -48,22 +49,17 @@ public class OrderWidgetTest {
 
     }
 
-//    @After
-//    public void closeTest(){
-//        driver.close();
-//    }
+    @After
+    public void closeTest(){
+        driver.close();
+    }
 
 
     @Test
     public void orderFlightOneWay() throws InterruptedException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         Assert.assertTrue(orderWidget.orderWidgetFlightsApp.isDisplayed());
         Assert.assertEquals(orderWidget.flightsDirection.getText(), "הלוך - חזור");
@@ -86,6 +82,7 @@ public class OrderWidgetTest {
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         orderWidget.flightsSearchButton.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         orderWidget.moveToNextTab();
@@ -101,12 +98,7 @@ public class OrderWidgetTest {
     public void directFlightsOnly() throws InterruptedException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         //check box for direct flights
         orderWidget.flightsDirectIfChecked.click();
@@ -115,6 +107,7 @@ public class OrderWidgetTest {
         orderWidget.pickDestination("paris");
         orderWidget.flightsSearchButton.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         orderWidget.moveToNextTab();
@@ -132,17 +125,13 @@ public class OrderWidgetTest {
     public void returnFlightWithSelectedDates() throws InterruptedException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         orderWidget.pickDestination("paris");
 
         orderWidget.flightsDatesOneWay.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
 
         orderWidget.pickADateToFly("דצמבר", "20");
@@ -164,18 +153,14 @@ public class OrderWidgetTest {
     public void flightWithInvalidDate() throws InterruptedException, ParseException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         orderWidget.flightsDirection.click();
         orderWidget.flightsDirectionFirstChoice.click();
 
         orderWidget.flightsDatesOneWay.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
 
         //orderWidget.dontAllowPastDates("אוגוסט", 7);
@@ -188,18 +173,14 @@ public class OrderWidgetTest {
     public void dateInPastMonthInvalid() throws InterruptedException, ParseException{
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         orderWidget.flightsDirection.click();
         orderWidget.flightsDirectionFirstChoice.click();
 
         orderWidget.flightsDatesOneWay.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
 
         orderWidget.flightsCalenderMoveToPreviousMonth.click();
@@ -212,12 +193,7 @@ public class OrderWidgetTest {
     @Test
     public void flightFromAnotherCity() throws InterruptedException {
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         Assert.assertEquals(orderWidget.flightsFrom.getText(), "תל אביב (TLV)");
         orderWidget.pickOutboundCity("לונדון");
@@ -225,6 +201,7 @@ public class OrderWidgetTest {
 
         orderWidget.flightsSearchButton.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         orderWidget.moveToNextTab();
@@ -240,18 +217,14 @@ public class OrderWidgetTest {
     @Test
     public void changeNumberOfPassengers() throws InterruptedException {
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget.orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsiframe));
-        driver.switchTo().frame(orderWidget.flightsiframe);
+        orderWidget.moveToiframe();
 
         orderWidget.flightsMultiplePassengers();
 
         orderWidget.pickDestination("paris");
         orderWidget.flightsSearchButton.click();
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         orderWidget.moveToNextTab();
@@ -261,5 +234,8 @@ public class OrderWidgetTest {
         Assert.assertTrue(orderWidget.flightsPageNumOfPassengers.getText().equals("6"));
 
     }
+
+
+
 
 }
