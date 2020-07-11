@@ -100,7 +100,29 @@ public class OrderWidgetHotelsTest {
         orderWidget.moveToiframe();
 
         orderWidget.changeRoomAndGuestsNumbers("חדר אחד, 2 אורחים", "4", "2", "1", "2 חדרים, 8 אורחים", "חדר אחד, 6 אורחים");  //format:  "2 חדרים, 8 אורחים"
+    }
 
+
+
+    @Test
+    public void orderHotelPickDates(){
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        orderWidget.scrollDownToWidget(orderWidget.orderWidgetHotels);
+
+        orderWidget.orderWidgetHotels.click();
+        orderWidget.moveToiframe();
+
+        orderWidget.hotelsDates.click();
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.hotelCalendarMonth));
+
+        orderWidget.pickADateForHotel("דצמבר", "20");
+        orderWidget.pickADateForHotel("דצמבר", "25");
+
+        Assert.assertTrue(orderWidget.hotelsDates.getText().contains("20 דצמ"));
+        Assert.assertTrue(orderWidget.hotelsDates.getText().contains("25 דצמ"));
 
     }
 }

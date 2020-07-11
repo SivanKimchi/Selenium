@@ -243,6 +243,15 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[id='my-dialog-content'] div div:nth-of-type(2) button" )
     public WebElement removeSecondRoom;
 
+    @FindBy (id = "datepicker-trigger")
+    public WebElement hotelsDates;
+
+    @FindBy (css = "div[class='asd__inner-wrapper'] div:nth-of-type(2) div")
+    public WebElement hotelCalendarMonth;
+
+
+    @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--next']")
+    public WebElement hotelsCalenderMoveToNextMonth;
 
 
     //choose destination
@@ -466,8 +475,29 @@ public class OrderWidgetOnHomePage {
         acceptRoomsButton.click();
         Assert.assertEquals(numOfRooms.getText(), finalAmountofGuests);
 
+    }
 
 
+    public void pickADateForHotel (String month, String day) {
+
+        String visibleMonth = hotelCalendarMonth.getText();
+
+        while (!visibleMonth.contains(month)){
+            hotelsCalenderMoveToNextMonth.click();
+
+            WebDriverWait wait = new WebDriverWait(driver,10);
+            wait.until(ExpectedConditions.visibilityOf(hotelCalendarMonth));
+
+            visibleMonth = hotelCalendarMonth.getText();
+        }
+
+        for (int i=0; i<dates.size(); i++) {
+            String text = dates.get(i).getText();
+            if (text.equals(day)){
+                dates.get(i).click();
+                break;
+            }
+        }
     }
 
 
