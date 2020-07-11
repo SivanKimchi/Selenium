@@ -159,7 +159,7 @@ public class OrderWidgetOnHomePage {
     public List<WebElement> flightsCalenderDisabledDate;
 
     @FindBy (css = "div[class='asd__inner-wrapper'] div:nth-of-type(2) div")
-    public WebElement flightsCalendarMonth;
+    public WebElement calendarMonth;
 
     @FindBy (id="search_engine_search_engine_flight_outbound_date")
     public WebElement flightsPageOutboundDate;
@@ -177,7 +177,7 @@ public class OrderWidgetOnHomePage {
     public WebElement flightsCalenderMoveToPreviousMonth;
 
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--next']")
-    public WebElement flightsCalenderMoveToNextMonth;
+    public WebElement calenderMoveToNextMonth;
 
     @FindBy (css = "button[class='asd__mobile-close'] div:")
     public WebElement flightsCalenderClose;
@@ -246,12 +246,8 @@ public class OrderWidgetOnHomePage {
     @FindBy (id = "datepicker-trigger")
     public WebElement hotelsDates;
 
-    @FindBy (css = "div[class='asd__inner-wrapper'] div:nth-of-type(2) div")
-    public WebElement hotelCalendarMonth;
 
 
-    @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--next']")
-    public WebElement hotelsCalenderMoveToNextMonth;
 
 
     //choose destination
@@ -290,17 +286,17 @@ public class OrderWidgetOnHomePage {
 
 
     //pick specific flight date
-    public void pickADateToFly (String month, String day) {
+    public void pickADateInCalendar (String month, String day) {
 
-        String visibleMonth = flightsCalendarMonth.getText();
+        String visibleMonth = calendarMonth.getText();
 
         while (!visibleMonth.contains(month)){
-                flightsCalenderMoveToNextMonth.click();
+                calenderMoveToNextMonth.click();
 
                 WebDriverWait wait = new WebDriverWait(driver,10);
-                wait.until(ExpectedConditions.visibilityOf(flightsCalendarMonth));
+                wait.until(ExpectedConditions.visibilityOf(calendarMonth));
 
-                visibleMonth = flightsCalendarMonth.getText();
+                visibleMonth = calendarMonth.getText();
         }
 
         for (int i=0; i<dates.size(); i++) {
@@ -316,7 +312,7 @@ public class OrderWidgetOnHomePage {
     // *** same method as the next method - pastDateIsInvalid() - using Calendar ***
     public void dontAllowPastDates(String month, int day) throws ParseException {
 
-        String visibleMonth = flightsCalendarMonth.getText();
+        String visibleMonth = calendarMonth.getText();
 
         if (visibleMonth.contains(month)) {
 
@@ -345,7 +341,7 @@ public class OrderWidgetOnHomePage {
 
         public void pastDateIsInvalid(String month, int day) {
 
-            String visibleMonth = flightsCalendarMonth.getText();
+            String visibleMonth = calendarMonth.getText();
 
             if (visibleMonth.contains(month)){
 
@@ -391,15 +387,15 @@ public class OrderWidgetOnHomePage {
 
     public void dateInPastMonthInvalid (String pastMonthYear) {
 
-        String visibleMonth = flightsCalendarMonth.getText();
+        String visibleMonth = calendarMonth.getText();
 
         while (!visibleMonth.equals(pastMonthYear)){
             flightsCalenderMoveToPreviousMonth.click();
 
             WebDriverWait wait = new WebDriverWait(driver,10);
-            wait.until(ExpectedConditions.visibilityOf(flightsCalendarMonth));
+            wait.until(ExpectedConditions.visibilityOf(calendarMonth));
 
-            visibleMonth = flightsCalendarMonth.getText();
+            visibleMonth = calendarMonth.getText();
         }
             for (int i = 0; i < dates.size(); i++) {
                 Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
@@ -477,28 +473,6 @@ public class OrderWidgetOnHomePage {
 
     }
 
-
-    public void pickADateForHotel (String month, String day) {
-
-        String visibleMonth = hotelCalendarMonth.getText();
-
-        while (!visibleMonth.contains(month)){
-            hotelsCalenderMoveToNextMonth.click();
-
-            WebDriverWait wait = new WebDriverWait(driver,10);
-            wait.until(ExpectedConditions.visibilityOf(hotelCalendarMonth));
-
-            visibleMonth = hotelCalendarMonth.getText();
-        }
-
-        for (int i=0; i<dates.size(); i++) {
-            String text = dates.get(i).getText();
-            if (text.equals(day)){
-                dates.get(i).click();
-                break;
-            }
-        }
-    }
 
 
     public void moveToNextTab(){

@@ -116,10 +116,10 @@ public class OrderWidgetHotelsTest {
         orderWidget.hotelsDates.click();
 
         WebDriverWait wait = new WebDriverWait(driver,10);
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.hotelCalendarMonth));
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.calendarMonth));
 
-        orderWidget.pickADateForHotel("דצמבר", "20");
-        orderWidget.pickADateForHotel("דצמבר", "25");
+        orderWidget.pickADateInCalendar("דצמבר", "20");
+        orderWidget.pickADateInCalendar("דצמבר", "25");
 
         Assert.assertTrue(orderWidget.hotelsDates.getText().contains("20 דצמ"));
         Assert.assertTrue(orderWidget.hotelsDates.getText().contains("25 דצמ"));

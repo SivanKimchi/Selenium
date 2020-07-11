@@ -51,7 +51,7 @@ public class OrderWidgetFlightsTest {
 
     @After
     public void closeTest(){
-        driver.close();
+        driver.quit();
     }
 
 
@@ -132,16 +132,17 @@ public class OrderWidgetFlightsTest {
         orderWidget.flightsDatesOneWay.click();
 
         WebDriverWait wait = new WebDriverWait(driver,10);
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.calendarMonth));
 
-        orderWidget.pickADateToFly("דצמבר", "20");
-        orderWidget.pickADateToFly("דצמבר", "25");
+        orderWidget.pickADateInCalendar("דצמבר", "20");
+        orderWidget.pickADateInCalendar("דצמבר", "25");
         orderWidget.flightsSearchButton.click();
 
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
         orderWidget.moveToNextTab();
 
+        Thread.sleep(3000);
         //Check month and day on flights page filter (according to previously inserted day and month)
         Assert.assertTrue(orderWidget.flightsPageOutboundDate.getAttribute("value").contains("20/12"));
         Assert.assertTrue(orderWidget.flightsPageInboundDate.getAttribute("value").contains("25/12"));
@@ -161,7 +162,7 @@ public class OrderWidgetFlightsTest {
         orderWidget.flightsDatesOneWay.click();
 
         WebDriverWait wait = new WebDriverWait(driver,10);
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.calendarMonth));
 
         //orderWidget.dontAllowPastDates("אוגוסט", 7);
         orderWidget.pastDateIsInvalid("יולי", 1);
@@ -181,7 +182,7 @@ public class OrderWidgetFlightsTest {
         orderWidget.flightsDatesOneWay.click();
 
         WebDriverWait wait = new WebDriverWait(driver,10);
-        wait.until(ExpectedConditions.visibilityOf(orderWidget.flightsCalendarMonth));
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.calendarMonth));
 
         orderWidget.flightsCalenderMoveToPreviousMonth.click();
 
