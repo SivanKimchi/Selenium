@@ -10,6 +10,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.OrderWidgetOnHomePage;
 
@@ -86,6 +87,20 @@ public class OrderWidgetHotelsTest {
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         orderWidget.moveToNextTab();
         Assert.assertTrue(driver.getCurrentUrl().contains("Ibis"));
+
+    }
+
+
+    @Test
+    public void orderHotelChangeRoomOption() {
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        orderWidget.scrollDownToWidget(orderWidget.orderWidgetHotels);
+
+        orderWidget.orderWidgetHotels.click();
+        orderWidget.moveToiframe();
+
+        orderWidget.changeRoomAndGuestsNumbers("חדר אחד, 2 אורחים", "4", "2", "1", "2 חדרים, 8 אורחים", "חדר אחד, 6 אורחים");  //format:  "2 חדרים, 8 אורחים"
+
 
     }
 }

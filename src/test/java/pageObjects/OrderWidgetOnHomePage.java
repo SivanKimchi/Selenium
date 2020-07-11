@@ -5,6 +5,7 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.text.ParseException;
@@ -209,6 +210,39 @@ public class OrderWidgetOnHomePage {
     public WebElement hotelsPageSearchDestination;
 
 
+    @FindBy (css = "div[class='mb-1'] button")
+    public WebElement numOfRooms;
+
+    @FindBy (id = "adults-0")
+    public WebElement selectNumOfAdults;
+
+    @FindBy (id = "kids-0")
+    public WebElement selectNumOfKids;
+
+    @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex']")
+    public WebElement selectAgeOfKids;
+
+
+    @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex'] div select")
+    public List<WebElement> childrenAgesToFill;
+
+
+//    @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex'] div:nth-child(1) select")
+//    public WebElement selectAgeOfChild1;
+//
+//
+//    @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex'] div:nth-child(2) select")
+//    public WebElement selectAgeOfChild2;
+
+    @FindBy (css = "button[class='appearance-none cursor-pointer flex items-center hover:text-brand mt-3 mb-4']")
+    public WebElement addRoom;
+
+    @FindBy (css = "button[class='btn btn-primary']")
+    public WebElement acceptRoomsButton;
+
+    @FindBy (css = "div[id='my-dialog-content'] div div:nth-of-type(2) button" )
+    public WebElement removeSecondRoom;
+
 
 
     //choose destination
@@ -392,6 +426,47 @@ public class OrderWidgetOnHomePage {
 
         flightsApprovePassengers.click();
         Assert.assertTrue(flightsNumberOfPassengers.getText().contains("6"));
+
+    }
+
+
+    //addedUpAmountOfGuests = format:  "2 חדרים, 8 אורחים"
+    public void changeRoomAndGuestsNumbers(String defaultText, String numOfAdults, String numOfKids, String ageOfKid, String addedUpAmountOfGuests, String finalAmountofGuests ) {
+
+        Assert.assertEquals(numOfRooms.getText(), defaultText);
+        numOfRooms.click();
+
+        Select s1 = new Select(selectNumOfAdults);
+        s1.selectByValue(numOfAdults);
+        Select s2 = new Select(selectNumOfKids);
+        s2.selectByValue(numOfKids);
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(selectAgeOfKids));
+
+        int numOfKidsInt = Integer.parseInt(numOfKids);
+
+        if (numOfKidsInt > 0) {
+            for (int i = 0; i < numOfKidsInt; i++) {
+                Select s3 = new Select (childrenAgesToFill.get(i));
+                s3.selectByValue(ageOfKid);
+                int ageOfKidInt = Integer.parseInt(ageOfKid);
+                System.out.println("age of kid- " + ageOfKid);
+                ageOfKidInt++;
+                ageOfKid = Integer.toString(ageOfKidInt);
+            }
+    }
+
+        addRoom.click();
+        acceptRoomsButton.click();
+
+        Assert.assertEquals(numOfRooms.getText(), addedUpAmountOfGuests);
+        numOfRooms.click();
+        removeSecondRoom.click();
+        acceptRoomsButton.click();
+        Assert.assertEquals(numOfRooms.getText(), finalAmountofGuests);
+
+
 
     }
 
