@@ -134,7 +134,7 @@ public class HomePage {
     @FindBy (css= "span[class='icon-tips main_menu_item_icon']")
     public WebElement mainMenuTips;
 
-    @FindBy (css= "span[class='icon-blogs main_menu_item_icon']")
+    @FindBy (xpath= "//*[@id='main-menu']/li[6]/a")
     public WebElement mainMenuBlogs;
 
     @FindBy (css= "span[class='icon-partners main_menu_item_icon']")
