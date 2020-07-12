@@ -68,8 +68,24 @@ public class BlogsTest {
 
 
     @Test
-    public void createABlogPost(){
+    public void createABlogPost() {
           //with logged-in user
+        BlogsPage blogs = new BlogsPage(driver);
+        HomePage homePage = new HomePage(driver);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        homePage.logIntoSite();
+        homePage.userMenu.click();
+        homePage.userMenuAddNewBlogPost.click();
+        try {
+            blogs.skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+        // make post private
+        blogs.scrollDown(blogs.blogPermissions);
+        blogs.makeBlogPostPrivate.click();
+        Assert.assertTrue(blogs.blogPermissionsPrivateDiv.getAttribute("class").contains("icon-radio-checked"));
+        System.out.println("Blog post is private");
 
 
 

@@ -5,15 +5,11 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.json.JsonOutput;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -68,7 +64,17 @@ public class BlogsPage {
     @FindBy (css = "[id='app'] section div h1")
     public WebElement myBlog;
 
+    @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
+    public WebElement skipToPageButton;
 
+    @FindBy (id="blog_permissions")
+    public WebElement blogPermissions;
+
+    @FindBy (xpath = "//*[@id='blog_permissions']/label[2]/div/ins")
+    public WebElement makeBlogPostPrivate;
+
+    @FindBy (xpath = "//*[@id='blog_permissions']/label[2]/div")
+    public WebElement blogPermissionsPrivateDiv;
 
 
 
@@ -118,7 +124,7 @@ public class BlogsPage {
     }
 
 
-    public void scrollDownToWidget (WebElement waitForVisibilityOf){
+    public void scrollDown(WebElement waitForVisibilityOf){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -135,15 +141,15 @@ public class BlogsPage {
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.mainMenuBlogs.click();
         wait.until(ExpectedConditions.visibilityOf(systemSuggestions));
-        scrollDownToWidget(systemSuggestions);
+        scrollDown(systemSuggestions);
         Assert.assertEquals(suggestedBlogPosts.size(), 9);
         System.out.println("There are default " + suggestedBlogPosts.size() + " suggested blog posts");
 
-        scrollDownToWidget(postsFromBlogs);
+        scrollDown(postsFromBlogs);
         Assert.assertEquals(recentBlogPosts.size(), 30);      //should be 30
         System.out.println("There are default " + recentBlogPosts.size() + " recent posts from blogs");
 
-        scrollDownToWidget(nextSectionOfBlogPostsButton);
+        scrollDown(nextSectionOfBlogPostsButton);
         nextSectionOfBlogPostsButton.click();
         driver.navigate().refresh();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
