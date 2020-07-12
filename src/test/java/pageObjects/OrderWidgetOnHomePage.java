@@ -25,20 +25,21 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div")
     public WebElement orderWidgetBar;
 
-    @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(1)")
+    //RE
+    @FindBy (css = "div[contains(@id, 'swiper-1594065332666')] ul li:nth-child(1)")
     public WebElement orderWidgetFlights;
 
     @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div ul li:nth-of-type(2)")
     public WebElement orderWidgetHotels;
 
 
-    @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(3)")
+    @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div ul li:nth-of-type(3)")
     public WebElement orderWidgetInsurance;
 
-    @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(4)")
+    @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div ul li:nth-of-type(4)")
     public WebElement orderWidgetCar;
 
-    @FindBy (css = "div[id='swiper-1594065332666'] ul li:nth-child(5)")
+    @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div ul li:nth-of-type(5)")
     public WebElement orderWidgetStores;
 
     @FindBy (css = "div[class='mdc-menu-surface--anchor inline-flex'] button")
@@ -247,6 +248,39 @@ public class OrderWidgetOnHomePage {
     public WebElement hotelsDates;
 
 
+    //insurance
+    //regular expression
+    @FindBy (xpath = "//*[contains(@id,'market-widget-insurance')]/section/div[2]/a")
+    public WebElement orderInsuranceButton;
+
+    //car
+    @FindBy (xpath = "//*[contains(@id,'market-widget-cars')]/section/div[2]/a")
+    public WebElement orderVehicleButton;
+
+
+    //stores
+    //car
+    @FindBy (xpath = "//*[contains(@id,'market-widget-stores')]/section/div[2]/a")
+    public WebElement orderStoreBranchesButton;
+
+    @FindBy (css = "li[id='bottom_shops_box'] ul[class='m-stores_list list-unstyled']")
+    public WebElement storesPageStoresBox;
+
+    @FindBy (css = "iframe[id='google_ads_iframe_/21774958701/transient_desktop_0']")
+    public WebElement googleAdiframe;
+
+    @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
+    public WebElement skipToPageButton;
+
+
+    @FindBy (css = "ul[class='m-stores_list list-unstyled'] li:nth-of-type(1) a")
+    public WebElement firstBranch;
+
+    @FindBy (css = "div[id='store_all_stores'] div:nth-of-type(1) h2")
+    public WebElement firstBranchLowerMenu;
+
+    @FindBy (css = "div[id='page_title_wrapper'] h1[id='node_title']")
+    public WebElement firstBranchMoreInfoPageHeadline;
 
 
 

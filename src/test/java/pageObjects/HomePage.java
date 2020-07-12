@@ -29,6 +29,9 @@ public class HomePage {
     @FindBy(id="login_widget_submit_btn")
     public WebElement logInSubmit;
 
+    @FindBy (css = "div[class='login_errors_container error mt-1']")
+    public WebElement invalidLoginErrorContainer;
+
     @FindBy(xpath="//*[@id=\"hd_user_img\"]/img")
     public WebElement loggedUserImg;
 
@@ -176,6 +179,43 @@ public class HomePage {
 
 
     }
+
+    public void invalidLogIn() throws InterruptedException {
+
+        logInButton.click();
+        logInInputEmail.sendKeys("email");
+        logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
+        logInSubmit.click();
+        Thread.sleep(3000);
+        Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+
+        logInInputEmail.clear();
+        logInInputEmail.sendKeys("");
+        logInInputPassword.clear();
+        logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
+        logInSubmit.click();
+        Thread.sleep(3000);
+        Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+
+        logInInputEmail.clear();
+        logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
+        logInInputPassword.clear();
+        logInInputPassword.sendKeys("123456");
+        logInSubmit.click();
+        Thread.sleep(3000);
+        Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+
+        logInInputEmail.clear();
+        logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
+        logInInputPassword.clear();
+        logInInputPassword.sendKeys("");
+        logInSubmit.click();
+        Thread.sleep(3000);
+        Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+
+    }
+
+
 
     public void assertUserMenuValuesValid(){
 

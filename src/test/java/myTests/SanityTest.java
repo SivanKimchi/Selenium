@@ -63,6 +63,13 @@ public class SanityTest {
 
     }
 
+    @Test
+    public void invalidLogin() throws InterruptedException {
+        HomePage homePage = new HomePage(driver);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        homePage.invalidLogIn();
+    }
+
 
     @Test
     public void userMenuValues(){

@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,10 +40,10 @@ public class OrderWidgetHotelsTest {
 
     }
 
-//    @After
-//    public void closeTest(){
-//        driver.close();
-//    }
+    @After
+    public void closeTest(){
+        driver.close();
+    }
 
 
     @Test
