@@ -51,5 +51,38 @@ public class BlogsTest {
 
     }
 
+    @Test
+    public void blogSuggestions() {
+        BlogsPage blogs = new BlogsPage(driver);
+        blogs.suggestedBlogs();
+    }
+
+
+
+    @Test
+    public void checkForMandatoryBlogAttributes(){
+
+
+    }
+
+
+
+    @Test
+    public void createABlogPost(){
+          //with logged-in user
+
+
+
+
+
+
+        //with user that is not logged in
+
+
+
+
+    }
+
+
 
 }

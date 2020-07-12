@@ -5,6 +5,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.json.JsonOutput;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class BlogsPage {
 
@@ -34,15 +36,25 @@ public class BlogsPage {
     @FindBy (css = "div[class='mt-10 md:mt-20'] article div:nth-of-type(2) a span")
     public WebElement writeABlog;
 
-    @FindBy (css = "article[class='mt-10 md:mt-20'] div div")   //should be 9
+    @FindBy (xpath = "//*[text()='המלצות המערכת']")
+    public WebElement systemSuggestions;
+
+    @FindBy (css = "div[id='app'] div main article:nth-child(6) div div article")
     public List<WebElement> suggestedBlogPosts;
 
+    @FindBy (xpath = "//*[text()='פוסטים מתוך הבלוגים של למטייל']")
+    public WebElement postsFromBlogs;
+
+
     //REGULAR EXPRRESSION
-    @FindBy (css = "article[class='mt-10 md:mt-20'] article[class*='post-card']")   //should be 30
+    @FindBy (css = "div[id='app'] div main article:nth-child(7) article[class*='post-card']")   //should be 30
     public List<WebElement> recentBlogPosts;
 
+    @FindBy (css = "div[id='results-container'] article[class*='post-card']")
+    public List<WebElement> nextPageBlogPosts;
+
     @FindBy (css = "li[class='page-item'] a")
-    public WebElement nextSectionOfBlogPosts;
+    public WebElement nextSectionOfBlogPostsButton;
 
     @FindBy (css = "div:nth-of-type(1) main section:nth-of-type(1) div:nth-of-type(2) h2")
     public WebElement blogPostsHeader;
@@ -104,6 +116,42 @@ public class BlogsPage {
 
         }
     }
+
+
+    public void scrollDownToWidget (WebElement waitForVisibilityOf){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+
+
+    }
+
+
+    public void suggestedBlogs(){
+        HomePage homePage = new HomePage(driver);
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+        homePage.mainMenuBlogs.click();
+        wait.until(ExpectedConditions.visibilityOf(systemSuggestions));
+        scrollDownToWidget(systemSuggestions);
+        Assert.assertEquals(suggestedBlogPosts.size(), 9);
+        System.out.println("There are default " + suggestedBlogPosts.size() + " suggested blog posts");
+
+        scrollDownToWidget(postsFromBlogs);
+        Assert.assertEquals(recentBlogPosts.size(), 30);      //should be 30
+        System.out.println("There are default " + recentBlogPosts.size() + " recent posts from blogs");
+
+        scrollDownToWidget(nextSectionOfBlogPostsButton);
+        nextSectionOfBlogPostsButton.click();
+        driver.navigate().refresh();
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        Assert.assertEquals(nextPageBlogPosts.size(), 30);      //should be 30
+        System.out.println("The number of blog posts in the next page is also " + nextPageBlogPosts.size());
+
+    }
+
 
     //constructor
     public BlogsPage(WebDriver driver) {
