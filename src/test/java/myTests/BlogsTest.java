@@ -43,7 +43,7 @@ public class BlogsTest {
     @Test
     public void searchBlog() throws InterruptedException {
         BlogsPage blogs = new BlogsPage(driver);
-        blogs.searchBlogPost("נורווגיה");
+        blogs.searchBlogPost("איסלנד");
 
     }
 
@@ -97,7 +97,26 @@ public class BlogsTest {
 
 
     @Test
-    public void checkForMandatoryBlogAttributes(){
+    public void checkForMandatoryBlogAttributes() throws InterruptedException {
+
+        BlogsPage blogs = new BlogsPage(driver);
+        blogs.searchBlog("נורווגיה");
+        blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
+        driver.navigate().refresh();
+        blogs.myBlogPosts.get(1).click();
+
+        // blog attributes:
+
+    }
+
+
+
+
+    @Test     //follow , like, view count , save for later , share facebook, share whatsapp, print ** same on bottom of post ** , comment
+    public void interactWithBlogPost() {
+
+
+
 
 
     }
