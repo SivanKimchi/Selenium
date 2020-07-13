@@ -55,12 +55,6 @@ public class BlogsTest {
 
 
 
-    @Test
-    public void checkForMandatoryBlogAttributes(){
-
-
-    }
-
 
 
     @Test
@@ -73,8 +67,6 @@ public class BlogsTest {
     }
 
 
-
-    //with user that is not logged in
 
 
     @Test
@@ -94,9 +86,23 @@ public class BlogsTest {
     }
 
 
+
     @Test
-    public void invalidBlogPost() {
+    public void invalidBlogPost() throws InterruptedException {
+        BlogsPage blogs = new BlogsPage(driver);
+        blogs.createInvalidBlogPost("", "הבלוג שלי", "", "בא לי חו\"ל", "אירלנד");
+    }
+
+
+
+
+    @Test
+    public void checkForMandatoryBlogAttributes(){
+
 
     }
+
+
+
 
 }

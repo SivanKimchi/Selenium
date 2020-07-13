@@ -19,128 +19,141 @@ public class BlogsPage {
     //members
     private WebDriver driver;
 
-    @FindBy (xpath = "//*[@id='index-main-page-search']/div[2]/div/div[1]/span[2]")
+    @FindBy(xpath = "//*[@id='index-main-page-search']/div[2]/div/div[1]/span[2]")
     public WebElement searchBlogsBar;
 
-    @FindBy (xpath = "//*[@id='index-main-page-search']/div[2]/div/div[2]/ul/div/li/input")
+    @FindBy(xpath = "//*[@id='index-main-page-search']/div[2]/div/div[2]/ul/div/li/input")
     public WebElement searchBlogsInput;
 
 
-    @FindBy (css = "div[class='mdc-menu-surface--anchor h-full cursor-pointer'] div div")
+    @FindBy(css = "div[class='mdc-menu-surface--anchor h-full cursor-pointer'] div div")
     public WebElement searchBlogsButton;
 
-    @FindBy (css = "div[class='mt-10 md:mt-20'] article div:nth-of-type(2) a span")
+    @FindBy(css = "div[class='mt-10 md:mt-20'] article div:nth-of-type(2) a span")
     public WebElement writeABlog;
 
-    @FindBy (xpath = "//*[text()='המלצות המערכת']")
+    @FindBy(xpath = "//*[text()='המלצות המערכת']")
     public WebElement systemSuggestions;
 
-    @FindBy (css = "div[id='app'] div main article:nth-child(6) div div article")
+    @FindBy(css = "div[id='app'] div main article:nth-child(6) div div article")
     public List<WebElement> suggestedBlogPosts;
 
-    @FindBy (xpath = "//*[text()='פוסטים מתוך הבלוגים של למטייל']")
+    @FindBy(xpath = "//*[text()='פוסטים מתוך הבלוגים של למטייל']")
     public WebElement postsFromBlogs;
 
 
     //REGULAR EXPRRESSION
-    @FindBy (css = "div[id='app'] div main article:nth-child(7) article[class*='post-card']")   //should be 30
+    @FindBy(css = "div[id='app'] div main article:nth-child(7) article[class*='post-card']")   //should be 30
     public List<WebElement> recentBlogPosts;
 
-    @FindBy (css = "div[id='results-container'] article[class*='post-card']")
+    @FindBy(css = "div[id='results-container'] article[class*='post-card']")
     public List<WebElement> nextPageBlogPosts;
 
-    @FindBy (css = "li[class='page-item'] a")
+    @FindBy(css = "li[class='page-item'] a")
     public WebElement nextSectionOfBlogPostsButton;
 
-    @FindBy (css = "div:nth-of-type(1) main section:nth-of-type(1) div:nth-of-type(2) h2")
+    @FindBy(css = "div:nth-of-type(1) main section:nth-of-type(1) div:nth-of-type(2) h2")
     public WebElement blogPostsHeader;
 
-    @FindBy (xpath = "//*[@id='app']/section[3]/main/h1")
+    @FindBy(xpath = "//*[@id='app']/section[3]/main/h1")
     public WebElement postHeader;
 
-    @FindBy (css = "section[class='mb-10'] div:nth-of-type(2) label input")
-    public  WebElement searchBlogFreeText;
+    @FindBy(css = "section[class='mb-10'] div:nth-of-type(2) label input")
+    public WebElement searchBlogFreeText;
 
-    @FindBy (css = "div[id='results-container'] article")   //size:2
+    @FindBy(css = "div[id='results-container'] article")   //size:2
     public List<WebElement> myBlogIcelandPosts;
 
-    @FindBy (css = "[id='app'] section div h1")
+    @FindBy(css = "[id='app'] section div h1")
     public WebElement myBlog;
 
-    @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
+    @FindBy(xpath = "//button[contains(text(), 'דלג לאתר')]")
     public WebElement skipToPageButton;
 
-    @FindBy (id="blog_permissions")
+    @FindBy(id = "blog_permissions")
     public WebElement blogPermissions;
 
-    @FindBy (xpath = "//*[@id='blog_permissions']/label[2]/div/ins")
+    @FindBy(xpath = "//*[@id='blog_permissions']/label[2]/div/ins")
     public WebElement makeBlogPostPrivate;
 
-    @FindBy (xpath = "//*[@id='blog_permissions']/label[2]/div")
+    @FindBy(xpath = "//*[@id='blog_permissions']/label[2]/div")
     public WebElement blogPermissionsPrivateDiv;
 
-    @FindBy (css = "input[name='edit[title]']")
+    @FindBy(css = "input[name='edit[title]']")
     public WebElement postHeadline;
 
-    @FindBy (css = "input[name='uploadfile']")
+    @FindBy(css = "input[name='uploadfile']")
     public WebElement addPictureToPost;
 
-    @FindBy (css = "div[id='cke_1_contents'] div[role='textbox']")
+    @FindBy(css = "div[id='cke_1_contents'] div[role='textbox']")
     public WebElement postContent;
 
-    @FindBy (id = "form_dest_autocomplete")
+    @FindBy(id = "form_dest_autocomplete")
     public WebElement blogDestinations;
 
-    @FindBy (css = "a[id='form_dest_show_selects']")
+    @FindBy(css = "a[id='form_dest_show_selects']")
     public WebElement blogDestinationPickFromList;
 
-    @FindBy (css = "div[id='form_dest_selects_wrapper']")
+    @FindBy(css = "div[id='form_dest_selects_wrapper']")
     public WebElement blogDestinationListDiv;
 
-    @FindBy (css = "div[id='dests_chained_select'] span span")
+    @FindBy(css = "div[id='dests_chained_select'] span span")
     public List<WebElement> blogDestinationTagList;   //4
 
-    @FindBy (css = "div[id='dests_chained_select'] span ul li")
+    @FindBy(css = "div[id='dests_chained_select'] span ul li")
     public List<WebElement> blogDestinationContinentOptions;
 
-    @FindBy (css = "ul[id='search_countrySelectBoxItOptions'] li")
+    @FindBy(css = "ul[id='search_countrySelectBoxItOptions'] li")
     public List<WebElement> blogDestinationCountryOptions;
 
-    @FindBy (css = "ul[id='search_citySelectBoxItOptions'] li")
+    @FindBy(css = "ul[id='search_citySelectBoxItOptions'] li")
     public List<WebElement> blogDestinationCityOptions;
 
-    @FindBy (id = "form_dest_add_selection")
+    @FindBy(id = "form_dest_add_selection")
     public WebElement addDestinationTag;
 
-    @FindBy (id = "saved_locs_display")
+    @FindBy(id = "saved_locs_display")
     public WebElement destinationTagsChosen;
 
 
-    @FindBy (css = "button[type='submit'][name='op']")
-    public WebElement saveBlogPost;
+    @FindBy(css = "button[type='submit'][name='op']")
+    public WebElement saveBlogPostButton;
 
 
-    @FindBy (xpath = "//*[contains(@id,'dropdown')]/div/div/span[1]")
+    @FindBy(xpath = "//*[contains(@id,'dropdown')]/div/div/span[1]")
     public WebElement userMenuFromBlogsPage;
 
 
-    @FindBy (css = "div[id='modals'] div:nth-child(2) li:nth-child(8)")
+    @FindBy(css = "div[id='modals'] div:nth-child(2) li:nth-child(8)")
     public WebElement userMenuMyBlogFromBlogsPage;
 
-    @FindBy (xpath = "//*[@id='app']/section[4]/main/div[2]/a")
+    @FindBy(xpath = "//*[@id='app']/section[4]/main/div[2]/a")
     public WebElement myDrafts;
 
 
-    @FindBy (xpath = "//*[@id='app']/section[3]/main/div[1]/div/article/a[2]/span")
+    @FindBy(xpath = "//*[@id='app']/section[3]/main/div[1]/div/article/a[2]/span")
     public WebElement editPost;
 
-    @FindBy (css = "button[value='מחק']")
+    @FindBy(css = "button[value='מחק']")
     public WebElement deletePost;
 
-    @FindBy (css = "form[id='node_delete_confirm'] button[value='מחק']")
+    @FindBy(css = "form[id='node_delete_confirm'] button[value='מחק']")
     public WebElement finalDelete;
 
+    @FindBy (css = "div[class='toast-message']")
+    public WebElement invalidPostErrorMessage;
 
+    @FindBy (css = "div[class='form-group'] div label")
+    public WebElement invalidHeadlineErrorMessage;
+
+    @FindBy (css = "div[class='cke_inner cke_reset'] label")
+    public WebElement invalidContentErrorMessage;
+
+    @FindBy (css = "ul[id='saved_locs_display'] li a span")
+    public WebElement removeDestinationTag;
+
+    @FindBy (css ="div[id='form_choose_dest_wrapper'] label[class='error']")
+    public WebElement invalidDestinationTagErrorMessage;
 
 
     public void searchBlogPost(String searchPostAbout) throws InterruptedException {
@@ -181,14 +194,14 @@ public class BlogsPage {
 
             driver.navigate().to("https://www.lametayel.co.il/blogs/176606");
             System.out.println("Yay! I've also been to this destination. Check out my blog :) " + myBlog.getText());
-            Assert.assertEquals(myBlog.getText(),  "הבלוג של sivanki");
+            Assert.assertEquals(myBlog.getText(), "הבלוג של sivanki");
 
 
         }
     }
 
 
-    public void scroll(WebElement waitForVisibilityOf){
+    public void scroll(WebElement waitForVisibilityOf) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -196,7 +209,7 @@ public class BlogsPage {
     }
 
 
-    public void suggestedBlogs(){
+    public void suggestedBlogs() {
         HomePage homePage = new HomePage(driver);
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -225,6 +238,7 @@ public class BlogsPage {
 
         HomePage homePage = new HomePage(driver);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        homePage.logInButton.click();
         homePage.logIntoSite();
         homePage.userMenu.click();
         homePage.userMenuAddNewBlogPost.click();
@@ -246,11 +260,11 @@ public class BlogsPage {
         //destination tags
         addDestinationTags(insertDestinationTag, 1, 1, 1, 1);
 
-        saveBlogPost.click();
+        saveBlogPostButton.click();
 
-        WebDriverWait wait = new WebDriverWait(driver,10);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(postHeader)));
-        Assert.assertEquals(postHeader.getText(), insertPostHeadline );
+        Assert.assertEquals(postHeader.getText(), insertPostHeadline);
         System.out.println("Blog created");
 
         //delete post
@@ -259,12 +273,78 @@ public class BlogsPage {
     }
 
 
-    public void makePostPrivate(){
+
+    public void createInvalidBlogPost(String emptyPostHeadline, String insertValidPostHeadline, String insertEmptyPostContent, String insertValidPostContent, String insertDestinationTag) throws InterruptedException {
+
+        HomePage homePage = new HomePage(driver);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        homePage.logInButton.click();
+        homePage.logIntoSite();
+        homePage.userMenu.click();
+        homePage.userMenuAddNewBlogPost.click();
+
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+
+        // make post private
+        makePostPrivate();
+
+        //post content
+        scroll(postHeadline);
+        postHeadline.sendKeys(emptyPostHeadline);
+        postContent.sendKeys(insertValidPostContent);
+        //destination tag
+        blogDestinations.sendKeys(insertDestinationTag);
+        Thread.sleep(3000);
+        blogDestinations.sendKeys(Keys.ARROW_DOWN);
+        Thread.sleep(3000);
+        blogDestinations.sendKeys(Keys.ENTER);
+        Thread.sleep(5000);
+
+        scroll(saveBlogPostButton);
+        saveBlogPostButton.click();
+        scroll(postHeadline);
+        Assert.assertTrue(invalidPostErrorMessage.isDisplayed());
+        invalidPostErrorMessage.click();
+        Assert.assertTrue(invalidHeadlineErrorMessage.getText().equals("לא לשכוח לתת כותרת"));
+        System.out.println("Post can't be saved without a headline");
+
+        postHeadline.sendKeys(insertValidPostHeadline);
+        postContent.clear();
+        postContent.sendKeys(insertEmptyPostContent);
+        scroll(saveBlogPostButton);
+        saveBlogPostButton.click();
+
+        scroll(postContent);
+        Assert.assertTrue(invalidPostErrorMessage.isDisplayed());
+        invalidPostErrorMessage.click();
+        Assert.assertTrue(invalidContentErrorMessage.getText().equals("אופס, צריך לכתוב כאן משהו"));
+        System.out.println("Post can't be saved without a content");
+
+        postContent.sendKeys(insertValidPostContent);
+        removeDestinationTag.click();
+        scroll(saveBlogPostButton);
+        saveBlogPostButton.click();
+        scroll(blogDestinations);
+        Assert.assertTrue(invalidPostErrorMessage.isDisplayed());
+        invalidPostErrorMessage.click();
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(invalidDestinationTagErrorMessage.getText().equals("צריך לבחור לפחות יעד אחד"));
+        System.out.println("Post can't be saved without at least 1 Destination Tag");
+
+    }
+
+
+        public void makePostPrivate(){
         scroll(blogPermissions);
         makeBlogPostPrivate.click();
         Assert.assertTrue(blogPermissionsPrivateDiv.getAttribute("class").contains("icon-radio-checked"));
         System.out.println("Blog post is private");
     }
+
 
     public void addDestinationTags (String destinationTag, int typeOfDestinationIndex, int continentIndex, int countryIndex, int cityIndex) throws InterruptedException {
         blogDestinations.sendKeys(destinationTag);
