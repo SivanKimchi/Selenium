@@ -17,7 +17,11 @@ public class HomePage {
     //members
     private WebDriver driver;
 
-    @FindBy(id="hp_user_details")
+    @FindBy(id="login_form_wrapper")
+    public WebElement logInForm;
+
+    //regular expression    //button has different id in other pages
+    @FindBy (xpath = "//span[contains(@class, 'icon-user')]")
     public WebElement logInButton;
 
     @FindBy(id="edit-name")
@@ -169,14 +173,10 @@ public class HomePage {
 
 
     public void logIntoSite(){
-        logInButton.click();
         logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
         logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
         logInSubmit.click();
         System.out.println("Logged in as existing user");
-
-        Assert.assertTrue(userMenu.isDisplayed());
-
 
     }
 

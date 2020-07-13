@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.ls.LSOutput;
+import pageObjects.BlogsPage;
 import pageObjects.HomePage;
 
 import java.util.Iterator;
@@ -55,11 +56,14 @@ public class SanityTest {
 
 
     @Test
-    public void loginToSite(){
+    public void loginToSite() {
 
         HomePage homePage = new HomePage(driver);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        homePage.logInButton.click();
         homePage.logIntoSite();
+        Assert.assertTrue(homePage.userMenu.isDisplayed());
+
 
     }
 
@@ -72,7 +76,7 @@ public class SanityTest {
 
 
     @Test
-    public void userMenuValues(){
+    public void userMenuValues() {
         loginToSite();
         HomePage homePage = new HomePage(driver);
         homePage.userMenu.click();

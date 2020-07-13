@@ -8,5 +8,6 @@ public class GeneralProperties {
     public static final String SiteURL1 = "https://www.lametayel.co.il/";
     public static final String LoginEmail ="testseleniumwebdriver9@gmail.com";
     public static final String LoginPassword ="sivantest123456";
+    public static final String username ="earth_trekker";
 
 }

@@ -78,6 +78,23 @@ public class BlogsTest {
 
 
     @Test
+    public void createABlogFromBlogsPage() throws InterruptedException {
+
+        // if user is signed in
+
+//        HomePage homePage = new HomePage(driver);
+//        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+//        homePage.logInButton.click();
+//        homePage.logIntoSite();
+//        Thread.sleep(3000);
+
+        BlogsPage blogs = new BlogsPage(driver);
+        blogs.createANewBlogFromBlogsPage();
+
+    }
+
+
+    @Test
     public void invalidBlogPost() {
 
     }

@@ -310,6 +310,39 @@ public class BlogsPage {
 
 
 
+    public void createANewBlogFromBlogsPage() throws InterruptedException {
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        homepage.mainMenuBlogs.click();
+
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+
+        try {
+            if (userMenuFromBlogsPage.isDisplayed()){
+                scroll(writeABlog);
+                writeABlog.click();
+                Thread.sleep(2000);
+                Assert.assertTrue(driver.getCurrentUrl().contains("add/blog"));
+            }
+        } catch (Exception e) {
+            System.out.println("User is not logged in");
+            Thread.sleep(2000);
+            scroll(writeABlog);
+            writeABlog.click();
+
+            wait.until(ExpectedConditions.visibilityOf(homepage.logInForm));
+            homepage.logIntoSite();
+            Thread.sleep(3000);
+            Assert.assertTrue(driver.getCurrentUrl().contains("add/blog"));
+        }
+
+    }
+
     //constructor
     public BlogsPage(WebDriver driver) {
 
