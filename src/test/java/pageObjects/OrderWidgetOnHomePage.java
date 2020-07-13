@@ -26,7 +26,7 @@ public class OrderWidgetOnHomePage {
     public WebElement orderWidgetBar;
 
     //RE
-    @FindBy (css = "div[contains(@id, 'swiper-1594065332666')] ul li:nth-child(1)")
+    @FindBy (css = "div[id*='swiper')] ul li:nth-child(1)")
     public WebElement orderWidgetFlights;
 
     @FindBy (css = "section[class='market-widget relative homepage-widget shadow-lg'] div ul li:nth-of-type(2)")

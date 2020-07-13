@@ -1,16 +1,12 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.BlogsPage;
@@ -68,37 +64,22 @@ public class BlogsTest {
 
 
     @Test
-    public void createABlogPost() {
+    public void createABlogPost() throws InterruptedException {
           //with logged-in user
+
         BlogsPage blogs = new BlogsPage(driver);
-        HomePage homePage = new HomePage(driver);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-        homePage.logIntoSite();
-        homePage.userMenu.click();
-        homePage.userMenuAddNewBlogPost.click();
-        try {
-            blogs.skipToPageButton.click();
-        } catch (Exception e) {
-            System.out.println("no ad page was skipped");
-        }
-        // make post private
-        blogs.scrollDown(blogs.blogPermissions);
-        blogs.makeBlogPostPrivate.click();
-        Assert.assertTrue(blogs.blogPermissionsPrivateDiv.getAttribute("class").contains("icon-radio-checked"));
-        System.out.println("Blog post is private");
-
-
-
-
-
-
-        //with user that is not logged in
-
-
-
+        blogs.createABlogPost("יומן מסע", "איזה כיף בחו\"ל", "אירלנד");
 
     }
 
 
+
+    //with user that is not logged in
+
+
+    @Test
+    public void invalidBlogPost() {
+
+    }
 
 }

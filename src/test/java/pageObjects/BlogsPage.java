@@ -55,6 +55,9 @@ public class BlogsPage {
     @FindBy (css = "div:nth-of-type(1) main section:nth-of-type(1) div:nth-of-type(2) h2")
     public WebElement blogPostsHeader;
 
+    @FindBy (xpath = "//*[@id='app']/section[3]/main/h1")
+    public WebElement postHeader;
+
     @FindBy (css = "section[class='mb-10'] div:nth-of-type(2) label input")
     public  WebElement searchBlogFreeText;
 
@@ -75,6 +78,67 @@ public class BlogsPage {
 
     @FindBy (xpath = "//*[@id='blog_permissions']/label[2]/div")
     public WebElement blogPermissionsPrivateDiv;
+
+    @FindBy (css = "input[name='edit[title]']")
+    public WebElement postHeadline;
+
+    @FindBy (css = "input[name='uploadfile']")
+    public WebElement addPictureToPost;
+
+    @FindBy (css = "div[id='cke_1_contents'] div[role='textbox']")
+    public WebElement postContent;
+
+    @FindBy (id = "form_dest_autocomplete")
+    public WebElement blogDestinations;
+
+    @FindBy (css = "a[id='form_dest_show_selects']")
+    public WebElement blogDestinationPickFromList;
+
+    @FindBy (css = "div[id='form_dest_selects_wrapper']")
+    public WebElement blogDestinationListDiv;
+
+    @FindBy (css = "div[id='dests_chained_select'] span span")
+    public List<WebElement> blogDestinationTagList;   //4
+
+    @FindBy (css = "div[id='dests_chained_select'] span ul li")
+    public List<WebElement> blogDestinationContinentOptions;
+
+    @FindBy (css = "ul[id='search_countrySelectBoxItOptions'] li")
+    public List<WebElement> blogDestinationCountryOptions;
+
+    @FindBy (css = "ul[id='search_citySelectBoxItOptions'] li")
+    public List<WebElement> blogDestinationCityOptions;
+
+    @FindBy (id = "form_dest_add_selection")
+    public WebElement addDestinationTag;
+
+    @FindBy (id = "saved_locs_display")
+    public WebElement destinationTagsChosen;
+
+
+    @FindBy (css = "button[type='submit'][name='op']")
+    public WebElement saveBlogPost;
+
+
+    @FindBy (xpath = "//*[contains(@id,'dropdown')]/div/div/span[1]")
+    public WebElement userMenuFromBlogsPage;
+
+
+    @FindBy (css = "div[id='modals'] div:nth-child(2) li:nth-child(8)")
+    public WebElement userMenuMyBlogFromBlogsPage;
+
+    @FindBy (xpath = "//*[@id='app']/section[4]/main/div[2]/a")
+    public WebElement myDrafts;
+
+
+    @FindBy (xpath = "//*[@id='app']/section[3]/main/div[1]/div/article/a[2]/span")
+    public WebElement editPost;
+
+    @FindBy (css = "button[value='מחק']")
+    public WebElement deletePost;
+
+    @FindBy (css = "form[id='node_delete_confirm'] button[value='מחק']")
+    public WebElement finalDelete;
 
 
 
@@ -124,12 +188,10 @@ public class BlogsPage {
     }
 
 
-    public void scrollDown(WebElement waitForVisibilityOf){
+    public void scroll(WebElement waitForVisibilityOf){
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-
 
     }
 
@@ -141,15 +203,15 @@ public class BlogsPage {
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.mainMenuBlogs.click();
         wait.until(ExpectedConditions.visibilityOf(systemSuggestions));
-        scrollDown(systemSuggestions);
+        scroll(systemSuggestions);
         Assert.assertEquals(suggestedBlogPosts.size(), 9);
         System.out.println("There are default " + suggestedBlogPosts.size() + " suggested blog posts");
 
-        scrollDown(postsFromBlogs);
+        scroll(postsFromBlogs);
         Assert.assertEquals(recentBlogPosts.size(), 30);      //should be 30
         System.out.println("There are default " + recentBlogPosts.size() + " recent posts from blogs");
 
-        scrollDown(nextSectionOfBlogPostsButton);
+        scroll(nextSectionOfBlogPostsButton);
         nextSectionOfBlogPostsButton.click();
         driver.navigate().refresh();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -157,6 +219,95 @@ public class BlogsPage {
         System.out.println("The number of blog posts in the next page is also " + nextPageBlogPosts.size());
 
     }
+
+
+    public void createABlogPost(String insertPostHeadline, String insertPostContent, String insertDestinationTag) throws InterruptedException {
+
+        HomePage homePage = new HomePage(driver);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        homePage.logIntoSite();
+        homePage.userMenu.click();
+        homePage.userMenuAddNewBlogPost.click();
+
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+
+        // make post private
+        makePostPrivate();
+
+        //post content
+        scroll(postHeadline);
+        postHeadline.sendKeys(insertPostHeadline);
+        postContent.sendKeys(insertPostContent);
+
+        //destination tags
+        addDestinationTags(insertDestinationTag, 1, 1, 1, 1);
+
+        saveBlogPost.click();
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(postHeader)));
+        Assert.assertEquals(postHeader.getText(), insertPostHeadline );
+        System.out.println("Blog created");
+
+        //delete post
+        deletePost();
+
+    }
+
+
+    public void makePostPrivate(){
+        scroll(blogPermissions);
+        makeBlogPostPrivate.click();
+        Assert.assertTrue(blogPermissionsPrivateDiv.getAttribute("class").contains("icon-radio-checked"));
+        System.out.println("Blog post is private");
+    }
+
+    public void addDestinationTags (String destinationTag, int typeOfDestinationIndex, int continentIndex, int countryIndex, int cityIndex) throws InterruptedException {
+        blogDestinations.sendKeys(destinationTag);
+        Thread.sleep(3000);
+        blogDestinations.sendKeys(Keys.ARROW_DOWN);
+        Thread.sleep(3000);
+        blogDestinations.sendKeys(Keys.ENTER);
+        Thread.sleep(5000);
+        blogDestinationPickFromList.click();
+        Thread.sleep(3000);
+
+        scroll(blogDestinationListDiv);
+        blogDestinationTagList.get(typeOfDestinationIndex).click();  //יבשת
+        blogDestinationContinentOptions.get(continentIndex).click(); //אירופה
+        blogDestinationCountryOptions.get(countryIndex).click(); //אוסטריה
+        blogDestinationCityOptions.get(cityIndex).click(); //אינסברוק
+        addDestinationTag.click();
+
+        Assert.assertTrue(destinationTagsChosen.getText().contains(destinationTag));
+        Assert.assertTrue(destinationTagsChosen.getText().contains( blogDestinationCityOptions.get(cityIndex).getText()));
+
+    }
+
+
+    public void deletePost() throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(driver,10);
+
+        userMenuFromBlogsPage.click();
+        Thread.sleep(3000);
+        userMenuMyBlogFromBlogsPage.click();
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(myDrafts)));
+        myDrafts.click();
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(editPost)));
+        editPost.click();
+        Thread.sleep(5000);
+        scroll(deletePost);
+        Thread.sleep(8000);
+        deletePost.click();
+        Thread.sleep(3000);
+        finalDelete.click();
+        System.out.println("Blog deleted");
+    }
+
 
 
     //constructor
