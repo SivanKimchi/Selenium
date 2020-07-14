@@ -159,7 +159,7 @@ public class BlogsPage {
     @FindBy (css = "div[class='flex items-start'] div:nth-of-type(2) div a")
     public WebElement blogName;
 
-    @FindBy (css = "//*[@id='dropdown-319']/div/img")
+    @FindBy (xpath = "//*[contains(@id, 'dropdown')]/div/img")
     public WebElement blogAuthorImg;
 
     @FindBy (css = "div[class='flex items-start'] div:nth-of-type(2) div:nth-of-type(2) button")
@@ -168,13 +168,15 @@ public class BlogsPage {
     @FindBy (xpath = "//div[class='flex items-start']/following-sibling::div[1]")
     public WebElement blogDescription;  // optional
 
-    @FindBy (xpath= "//*[@id='dropdown-329']/div/img")
+    //relative xpath
+    @FindBy (xpath= "//div[@class='flex items-center']//div[contains(@id, 'dropdown')]/div/img")
     public WebElement blogAuthorImgInsidePost;
 
-    @FindBy (xpath= "//*[@id='dropdown-365']/div/img")
+
+    @FindBy (xpath= "//div[contains(@class,'py-8 border-b border-grey-300')]//div[contains(@id, 'dropdown')]/div/img")
     public WebElement blogAuthorImgBottom;
 
-    @FindBy (xpath= "//*[@id='dropdown-333']/div/address/span")
+    @FindBy (xpath= "//*[contains(@id, 'dropdown-')]/div/address/span")
     public WebElement blogAuthorNameInsidePost;
 
     @FindBy (xpath ="//*[@id='app']/section[3]/main/div[5]/div/div[2]/div[1]/a")
@@ -193,23 +195,33 @@ public class BlogsPage {
     @FindBy (xpath = "//*[@id='app']/section[3]/main/div[2]/div[1]/div[2]/div[2]/div[2]/div/span[2]")
     public WebElement viewCount;
 
-    @FindBy (css = "div[id='dropdown-344'] button")
+    @FindBy (xpath = "//div[1]/section[3]/main/div[2]/div[2]/div/div[1]/button")
     public WebElement saveForLater;
 
-    @FindBy (css = "div[id='dropdown-356'] button")
+    @FindBy (xpath = "//div[1]/section[3]/main/div[4]/div[2]/div[1]/div/div[1]/button")
     public WebElement saveForLaterBottom;
 
-    @FindBy (css = "span[class='icon icon-facebook text-2xl']")
-    public WebElement shareOnFacebook;    //visible also at the bottom
+    @FindBy (css = "div[class='flex items-center print:hidden mr-3 mt-3 lg:mt-0'] a span[class='icon icon-facebook text-2xl']")
+    public WebElement shareOnFacebook;
 
-    @FindBy (css = "span[class='icon icon-whatsapp text-2xl']")
-    public WebElement shareOnWhatsapp;   //visible also at the bottom
+    @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-facebook text-2xl']")
+    public WebElement shareOnFacebookBottom;
 
-    @FindBy (css = "span[class='icon icon-printer text-2xl']")
-    public WebElement printPost;       //visible also at the bottom
+    @FindBy (css = "div[class='flex items-center print:hidden mr-3 mt-3 lg:mt-0'] a span[class='icon icon-whatsapp text-2xl']")
+    public WebElement shareOnWhatsapp;
+
+    @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-whatsapp text-2xl']")
+    public WebElement shareOnWhatsappBottom;
+
+    @FindBy (css = "div[class='flex items-center print:hidden mr-3 mt-3 lg:mt-0'] a span[class='icon icon-printer text-2xl']")
+    public WebElement printPost;
+
+    @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-printer text-2xl']")
+    public WebElement printPostBottom;
 
     @FindBy (css = "figure img")
     public WebElement mainPostImg;
+
 
     @FindBy (xpath = "//div[contains(@class, 'post-content')]")
     public WebElement content;
@@ -543,6 +555,138 @@ public class BlogsPage {
         }
 
     }
+
+
+
+
+    public void checkForMandatoryBlogAttributes(String blog) {
+
+        HomePage homepage = new HomePage(driver);
+
+        // blog attributes:
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(blogName));
+        Assert.assertEquals(blogName.getText(), blog);
+        Assert.assertTrue(blogAuthorImg.isDisplayed());
+        Assert.assertTrue(followBlog.isDisplayed());
+
+        try {
+            Assert.assertTrue(blogDescription.isDisplayed());
+            System.out.println("In this blog, there is also blog description");
+        } catch (Exception e){
+            System.out.println("There is no description to blog");
+        }
+
+        Assert.assertTrue(blogAuthorImgInsidePost.isDisplayed());
+        System.out.println("Author image also appears under post headline");
+        Assert.assertTrue(blogAuthorNameInsidePost.isDisplayed());
+        Assert.assertTrue(blogName.getText().contains(blogAuthorNameInsidePost.getText()));
+        System.out.println("Author name also appears under post headline");
+        Assert.assertTrue(followBlogInsidePost.isDisplayed());
+        System.out.println("You can 'follow' blog from top");
+        Assert.assertTrue(publishedDate.isDisplayed());
+        System.out.println("Blog post was published on " + publishedDate.getText());
+        Assert.assertTrue(viewCount.isDisplayed());
+        System.out.println("Blog post has " + viewCount.getText() + " views");
+        Assert.assertTrue(saveForLater.isDisplayed());
+
+        try {
+            Assert.assertTrue(numOfLikes.isDisplayed());
+            System.out.println("Post has " + numOfLikes + " likes");
+
+        } catch (Exception e) {
+            System.out.println("Post has no 'likes' yet");
+        }
+
+        System.out.println("SaveForLater appears on top");
+        Assert.assertTrue(shareOnFacebook.isDisplayed());
+        System.out.println("Facebook share button is displayed on top");
+        Assert.assertTrue(shareOnWhatsapp.isDisplayed());
+        System.out.println("WhatsApp share button is displayed on top");
+        Assert.assertTrue(printPost.isDisplayed());
+        System.out.println("Print button is displayed on top");
+
+        scroll(mainPostImg);
+        Assert.assertFalse(mainPostImg.getAttribute("class").contains("--hidden"));
+        mainPostImg.click();
+        wait.until(ExpectedConditions.attributeContains(mainPostImg, "class", "--hidden"));
+        System.out.println("Image is zoomed");
+        driver.navigate().refresh();
+
+        Assert.assertTrue(content.isDisplayed());
+        System.out.println("Post content is displayed");
+
+        scroll(postDestinations.get(1));
+        Assert.assertFalse(postDestinations.isEmpty());
+        System.out.println("There are " + postDestinations.size() + " destinations in this blog post");
+        Assert.assertTrue(likePost.isDisplayed());
+        System.out.println("'Like' post is also visible on bottom");
+        Assert.assertTrue(saveForLaterBottom.isDisplayed());
+        System.out.println("'SaveForLater' is also visible on bottom");
+        Assert.assertTrue(shareOnFacebookBottom.isDisplayed());
+        System.out.println("'Facebook share' is also visible on bottom");
+        Assert.assertTrue(shareOnWhatsappBottom.isDisplayed());
+        System.out.println("'WhatsApp share' is also visible on bottom");
+        Assert.assertTrue(printPostBottom.isDisplayed());
+        System.out.println("Print is also visible on bottom");
+        Assert.assertTrue(flagPost.isDisplayed());
+        System.out.println("Flag post is visible on bottom");
+        Assert.assertTrue(blogAuthorImgBottom.isDisplayed());
+        System.out.println("Author image is also visible on bottom");
+        Assert.assertTrue(blogAuthorNameBottom.isDisplayed());
+        System.out.println("Author name is also visible on bottom");
+        Assert.assertTrue(followBlogBottom.isDisplayed());
+        System.out.println("'Follow' blog is also visible on bottom");
+
+        scroll(commentsHeadline);
+
+        try {
+            Assert.assertTrue(addComment.isDisplayed());
+            Assert.assertTrue(sendCommentButton.isDisplayed());
+            System.out.println("Comments box is visible --user is logged in");
+
+        } catch (Exception e) {
+            System.out.println("User must log in to add a comment");
+            Assert.assertTrue(loginToComment.isDisplayed());
+            loginToComment.click();
+            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+            Assert.assertTrue(homepage.logInForm.isDisplayed());
+            driver.navigate().back();
+            wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToComment));
+            scroll(loginViaFacebookToComment);
+            loginViaFacebookToComment.click();
+            Assert.assertTrue(driver.getTitle().contains("Facebook"));
+            driver.navigate().back();
+        }
+
+        try {
+            scroll(publishedComments.get(1));
+            System.out.println("Number of comments to post: " + publishedComments.size() );
+
+        } catch (Exception e) {
+
+            System.out.println("There are currently no comments to post");
+        }
+
+        try {
+            scroll(mostViewedPostSection);
+            System.out.println("Most Viewed user posts list has " + mostViewedPostsList.size() + "posts" );
+            scroll(linkToAllAuthorsPosts);
+            Assert.assertTrue(linkToAllAuthorsPosts.isDisplayed());
+            System.out.println("User has even more posts in blog");
+
+        } catch (Exception e) {
+            System.out.println("User does not have more posts");
+        }
+
+        scroll(relatedPostsSection);
+        Assert.assertEquals(relatedPostsList.size(), 4);
+        Assert.assertTrue(linkToAllRelatedPosts.isDisplayed());
+        System.out.println("There are " + relatedPostsList.size() + " more recommended posts about this destination, and a link to even more posts");
+
+    }
+
+
 
     //constructor
     public BlogsPage(WebDriver driver) {
