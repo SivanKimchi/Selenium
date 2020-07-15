@@ -162,7 +162,7 @@ public class BlogsPage {
     @FindBy (xpath = "//*[contains(@id, 'dropdown')]/div/img")
     public WebElement blogAuthorImg;
 
-    @FindBy (css = "div[class='flex items-start'] div:nth-of-type(2) div:nth-of-type(2) button")
+    @FindBy (xpath = "//*[@id='app']/section[3]/main/div[2]/div[1]/div[2]/div[1]/div[2]/button")
     public WebElement followBlog;
 
     @FindBy (xpath = "//div[class='flex items-start']/following-sibling::div[1]")
@@ -198,6 +198,13 @@ public class BlogsPage {
     @FindBy (xpath = "//div[1]/section[3]/main/div[2]/div[2]/div/div[1]/button")
     public WebElement saveForLater;
 
+    @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]")
+    public WebElement saveForLaterAddFolderBox;
+    //    (xpath = "//*[@id='modals']/div[7]/div[2]")
+
+    @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]/div[2]/div/div[2]/div/div[1]/input")
+    public WebElement saveForLaterAddFolder;
+
     @FindBy (xpath = "//div[1]/section[3]/main/div[4]/div[2]/div[1]/div/div[1]/button")
     public WebElement saveForLaterBottom;
 
@@ -216,6 +223,13 @@ public class BlogsPage {
     @FindBy (css = "div[class='flex items-center print:hidden mr-3 mt-3 lg:mt-0'] a span[class='icon icon-printer text-2xl']")
     public WebElement printPost;
 
+    @FindBy (xpath = "//*[@id='sidebar']/print-preview-header//h1")
+    public WebElement printerAlertTitle;
+
+
+    @FindBy (className = "cancel-button")
+    public WebElement printerCancel;
+
     @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-printer text-2xl']")
     public WebElement printPostBottom;
 
@@ -232,6 +246,13 @@ public class BlogsPage {
     @FindBy (xpath = "//*[contains(@class, 'icon icon-thumbs-up')]")
     public WebElement likePost;
 
+    @FindBy (xpath = "//*[@id='app']/section[3]/main/div[4]/div[1]/div/button/span[2]")
+    public WebElement likePostBottom;
+
+    @FindBy (xpath = "//*[@id='app']/section[3]/main/div[4]/div[1]/div/span")
+    public WebElement likePostNumberBottom;
+
+
     @FindBy (xpath = "//span[contains(@class, 'icon icon-thumbs-up')/following-sibling::span[1]]")
     public WebElement numOfLikes;  //optional
 
@@ -241,11 +262,11 @@ public class BlogsPage {
     @FindBy (css = "[id='app'] section:nth-child(7) main section h2")
     public WebElement commentsHeadline;
 
-    @FindBy (xpath = "//a[contains(@class, 'add-favorite-login')]")
-    public WebElement loginToComment;
+    @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]/div[2]/div/div/a[1]")
+    public WebElement loginToInteract;
 
-    @FindBy (xpath = "//a[contains(@class, 'add-tip-login-facebook')]")
-    public WebElement loginViaFacebookToComment;
+    @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]/div[2]/div/div/a[2]")
+    public WebElement loginViaFacebookToInteract;
 
     @FindBy (css = "div[id='comments'] div div div textarea")
     public WebElement addComment;
@@ -274,6 +295,13 @@ public class BlogsPage {
     @FindBy (xpath = "//*[@id='app']/section[4]/div[2]/a")
     public WebElement linkToAllRelatedPosts;
 
+    @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]")
+    public WebElement needToSignIn;
+
+
+
+    @FindBy (css = "#modals > div:nth-child(7) > div.dropdown-surface.max-w-screen.absolute.top-right > div.bg-white.shadow-surface.focus\\:outline-none.overflow-auto.rounded-lg")
+    public WebElement test2;
 
     //and more articles and Things To Do in the city
 
@@ -374,11 +402,7 @@ public class BlogsPage {
         homePage.userMenu.click();
         homePage.userMenuAddNewBlogPost.click();
 
-        try {
-            skipToPageButton.click();
-        } catch (Exception e) {
-            System.out.println("no ad page was skipped");
-        }
+        skipAd();
 
         // make post private
         makePostPrivate();
@@ -414,11 +438,7 @@ public class BlogsPage {
         homePage.userMenu.click();
         homePage.userMenuAddNewBlogPost.click();
 
-        try {
-            skipToPageButton.click();
-        } catch (Exception e) {
-            System.out.println("no ad page was skipped");
-        }
+        skipAd();
 
         // make post private
         makePostPrivate();
@@ -529,11 +549,7 @@ public class BlogsPage {
 
         homepage.mainMenuBlogs.click();
 
-        try {
-            skipToPageButton.click();
-        } catch (Exception e) {
-            System.out.println("no ad page was skipped");
-        }
+        skipAd();
 
         try {
             if (userMenuFromBlogsPage.isDisplayed()){
@@ -647,14 +663,14 @@ public class BlogsPage {
 
         } catch (Exception e) {
             System.out.println("User must log in to add a comment");
-            Assert.assertTrue(loginToComment.isDisplayed());
-            loginToComment.click();
+            Assert.assertTrue(loginToInteract.isDisplayed());
+            loginToInteract.click();
             driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
             Assert.assertTrue(homepage.logInForm.isDisplayed());
             driver.navigate().back();
-            wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToComment));
-            scroll(loginViaFacebookToComment);
-            loginViaFacebookToComment.click();
+            wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteract));
+            scroll(loginViaFacebookToInteract);
+            loginViaFacebookToInteract.click();
             Assert.assertTrue(driver.getTitle().contains("Facebook"));
             driver.navigate().back();
         }
@@ -684,6 +700,87 @@ public class BlogsPage {
         Assert.assertTrue(linkToAllRelatedPosts.isDisplayed());
         System.out.println("There are " + relatedPostsList.size() + " more recommended posts about this destination, and a link to even more posts");
 
+    }
+
+    //** print doesn't work , views-no way to test number being changed , comment-I don't want to comment on my posts
+    public void interactWithBlogPost(){
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(followBlog));
+
+        //follow
+        followBlog.click();
+        wait.until(ExpectedConditions.visibilityOf(needToSignIn));
+        wait.until(ExpectedConditions.visibilityOf(loginToInteract));
+        wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteract));
+        System.out.println("User needs to log in to interact with blog");
+
+        loginToInteract.click();
+        homepage.logIntoSite();
+
+        skipAd();
+
+        wait.until(ExpectedConditions.visibilityOf(blogName));
+
+        followBlog.click();
+        wait.until(ExpectedConditions.attributeContains(followBlog, "class", "bg-orange"));
+        System.out.println("'Follow' button has been clicked. User is now following blog.");
+
+        //save post
+        saveForLater.click();
+        wait.until(ExpectedConditions.visibilityOf(saveForLaterAddFolderBox));
+        saveForLaterAddFolder.sendKeys("SavedPosts",(Keys.ENTER));
+        wait.until(ExpectedConditions.attributeContains(followBlog, "class", "bg-orange"));
+        System.out.println("'Save For Later' button has been clicked. Post is saved.");
+
+        //facebook share
+        shareOnFacebook.click();
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        OrderWidgetOnHomePage o = new OrderWidgetOnHomePage(driver);
+        o.moveToNextTab();
+        Assert.assertTrue(driver.getCurrentUrl().contains("facebook.com"));
+        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+        driver.close();
+        driver.switchTo().window(windows.get(0));
+        //whatsapp share
+        wait.until(ExpectedConditions.visibilityOf(shareOnWhatsapp));
+        shareOnWhatsapp.click();
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        o.moveToNextTab();
+        Assert.assertTrue(driver.getCurrentUrl().contains("api.whatsapp.com"));
+
+        driver.close();
+        driver.switchTo().window(windows.get(0));
+
+        //like post
+        scroll(likePostBottom);
+
+        try {
+            Assert.assertTrue(likePostNumberBottom.isDisplayed());
+            int numberOfLikes = Integer.parseInt(likePostNumberBottom.getText());
+            System.out.println("This post has " + numberOfLikes + "'likes'");
+            likePostBottom.click();
+            wait.until(ExpectedConditions.attributeContains(likePostBottom, "class", "text-green"));
+            wait.until(ExpectedConditions.visibilityOf(likePostNumberBottom));
+            System.out.println("Now the post has " + numberOfLikes+1 + " 'likes'");
+
+        } catch (Exception e){
+            System.out.println("This post doesn't have 'likes' yet");
+            likePostBottom.click();
+            wait.until(ExpectedConditions.attributeContains(likePostBottom, "class", "text-green"));
+            wait.until(ExpectedConditions.visibilityOf(likePostNumberBottom));
+            System.out.println("Now the post has 1 'like'");
+        }
+
+    }
+
+
+    public void skipAd(){
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
     }
 
 

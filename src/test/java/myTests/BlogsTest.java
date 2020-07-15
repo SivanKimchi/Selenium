@@ -4,17 +4,21 @@ import Lametayel.GeneralProperties;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.BlogsPage;
 import pageObjects.HomePage;
+import pageObjects.OrderWidgetOnHomePage;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class BlogsTest {
@@ -22,7 +26,6 @@ public class BlogsTest {
 
     //members
     private static WebDriver driver;
-
 
 
     @Before
@@ -113,16 +116,17 @@ public class BlogsTest {
 
 
 
-    @Test     //follow , like, view count , save for later , share facebook, share whatsapp, print ** same on bottom of post ** , comment
-    public void interactWithBlogPost() {
+    @Test     // ** print doesn't work , views-no way to test number being changed , comment-I don't want to comment on my posts
+    public void interactWithBlogPost() throws InterruptedException {
 
+        BlogsPage blogs = new BlogsPage(driver);
 
+        blogs.searchBlog("נורווגיה");
+        blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
+        driver.navigate().refresh();
+        blogs.myBlogPosts.get(1).click();
 
-
+        blogs.interactWithBlogPost();
 
     }
-
-
-
-
 }
