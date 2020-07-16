@@ -57,7 +57,7 @@ public class OnlineStoreTest {
 
 
     @Test
-    public void searchForItem(){
+    public void searchForItem() throws InterruptedException {
         OnlineStorePage store = new OnlineStorePage(driver);
         HomePage homepage = new HomePage(driver);
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -68,6 +68,22 @@ public class OnlineStoreTest {
         store.moveToNextTab();
 
         store.searchItem("מקלות הליכה");
+
+    }
+
+
+    @Test
+    public void searchForItemPickAutoSuggestion() throws InterruptedException {
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
+        homepage.mainMenuLametayelOnlineShop.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        store.moveToNextTab();
+
+        store.searchItemChooseFromList("נעלי");
 
     }
 
