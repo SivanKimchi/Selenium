@@ -56,5 +56,21 @@ public class OnlineStoreTest {
 
 
 
+    @Test
+    public void searchForItem(){
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
+        homepage.mainMenuLametayelOnlineShop.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        store.moveToNextTab();
+
+        store.searchItem("מקלות הליכה");
+
+    }
+
+
 
 }

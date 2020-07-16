@@ -5,12 +5,12 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -31,16 +31,12 @@ public class OnlineStorePage {
     @FindBy (xpath= "//*[@id=\"index\"]/div[10]/div/div[1]")
     public WebElement closeiframe;
 
-
-
-
     @FindBy (css = "section[class='products_section']")   //0 is first section
     public List<WebElement> productSectionItem;
 
 
     @FindBy (css = "section[class='products_section'] div[class*='product_list_item'] h3") //0 is first item's title
     public List<WebElement> productitemsh3;
-
 
     @FindBy (css = "div[class='product_name_wrap flex_container flex_start hidden-md-down'] div h1")
     public WebElement itemTitle;
@@ -66,6 +62,40 @@ public class OnlineStorePage {
 
     @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li")
     public List<WebElement> cartItem;
+
+    @FindBy (css = "input[class='form-control search_widget_text js-child-focus']")
+    public WebElement searchBar;
+
+    @FindBy (css = "div[id='search_products']" )
+    public WebElement searchResultsDiv;
+
+    @FindBy (css = "div[class='products product_list  row grid'] div article")
+    public List<WebElement> searchResultsList;
+
+    @FindBy (css = "div[class='product_count']")
+    public WebElement itemsCountString;
+
+    @FindBy (css = "ul[class='pagination'] li" )
+    public List<WebElement> nextPage;
+
+    @FindBy (css = "div[class='products-sort-order dropdown_wrap mar_r1']")
+    public WebElement sortingBeforeHoover;
+
+    @FindBy (css = "ul[class='dropdown_list_ul dropdown_box'] li")
+    public List<WebElement> sortingAfterHoover;
+
+
+    @FindBy (css = "div[class*='product_list_item']")
+    public List<WebElement> resultList;
+
+    @FindBy (css = "div[class*='product_list_item'] span[class='price ']")
+    public List<WebElement> resultPriceList;
+
+//    //
+//    @FindBy (css = "div[class*='product_list_item'] article div div[class='pro_second_box pro_block_align_0'] div:nth-child(3) div span[class='price ']")
+//    public List<WebElement> resultPriceList;
+
+
 
 
     public void scroll(WebElement waitForVisibilityOf) {
@@ -137,6 +167,71 @@ public class OnlineStorePage {
             Assert.assertTrue(itemAdded);
 
         }
+
+    }
+
+
+    public void searchItem(String searchFor){
+
+        WebDriverWait wait = new WebDriverWait(driver, 30);
+        wait.until(ExpectedConditions.visibilityOf(searchBar));
+        searchBar.clear();
+
+        //general ENTER  ..**try with clicking on icon?
+        searchBar.sendKeys(searchFor, Keys.ENTER);
+        wait.until(ExpectedConditions.visibilityOf(searchResultsDiv));
+        String itemsCount = itemsCountString.getText();
+        String[] itemsCountSplitArray = itemsCount.split(" ");
+        int numOfItems = Integer.parseInt(itemsCountSplitArray[0]);
+
+        if (numOfItems > 95) {
+            Assert.assertTrue(nextPage.size() > 1);   //there are more pages to show items
+            System.out.println("More results in the next page. Each page holds up to 95 results");
+        }
+
+        Assert.assertTrue(sortingBeforeHoover.isDisplayed());
+        Actions actions = new Actions(driver);
+        actions.moveToElement(sortingBeforeHoover).build().perform();
+       // System.out.println(sortingBeforeHoover.getAttribute("class"));
+        //wait.until(ExpectedConditions.refreshed(ExpectedConditions.attributeContains(sortingBeforeHoover, "class", "open")));
+        driver.manage().timeouts().implicitlyWait(2000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(sortingAfterHoover.get(1).isDisplayed());
+        System.out.println("Sorting filter is hoovered on and open");
+        sortingAfterHoover.get(3).click();
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(resultPriceList)));
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+
+
+        try {
+            if ((resultPriceList.size() > 1)) {
+
+                double price = 0.0;
+                // trying only 2 rows for visibility issues
+                for (int i = 0; i <= 5; i++) {
+                    double itemPrice = Double.parseDouble(resultPriceList.get(i).getAttribute("content"));
+                    Assert.assertTrue(itemPrice >= price);
+                    System.out.println("price- " + price + " itemprice- "+ itemPrice);
+                    double a = itemPrice;
+                    price = a;
+                }
+                } else if (resultPriceList.size() == 1) {
+                System.out.println("There is only 1 item in results");
+            }
+
+            System.out.println("Results are ordered as asked - lowest price to highest");
+
+        } catch (Exception e) {
+            System.out.println("There are no results");
+        }
+
+
+
+
+        // scroll(nextPage.get(0));
+
+
+
+        //arrow down
 
     }
 
