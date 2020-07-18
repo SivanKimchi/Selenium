@@ -508,6 +508,19 @@ public class OrderWidgetOnHomePage {
     }
 
 
+    public void cantOrderHotelWithoutInput(){
+
+        try {
+            hotelSearchButton.click();
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+            moveToNextTab();
+        } catch (Exception e){
+            System.out.println("No city or hotel inserted- can't continue search. Please type Hotel name or City.");
+        }
+
+    }
+
 
     public void moveToNextTab(){
 

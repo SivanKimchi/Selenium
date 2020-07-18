@@ -2,12 +2,14 @@ package pageObjects;
 
 import org.junit.Assert;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.nio.channels.ScatteringByteChannel;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -20,96 +22,113 @@ public class OnlineStorePage {
     private WebDriver driver;
 
 
-    @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
+    @FindBy(xpath = "//button[contains(text(), 'דלג לאתר')]")
     public WebElement skipToPageButton;
 
-    @FindBy (id="_hjRemoteVarsFrame")
+    @FindBy(id = "_hjRemoteVarsFrame")
     public WebElement popUpSummerSaleId;
 
-    @FindBy (xpath= "//*[@id=\"index\"]/div[10]/div/div[1]")
+    @FindBy(xpath = "//*[@id=\"index\"]/div[10]/div/div[1]")
     public WebElement closeiframe;
 
-    @FindBy (css = "section[class='products_section']")   //0 is first section
+    @FindBy(css = "section[class='products_section']")   //0 is first section
     public List<WebElement> productSectionItem;
 
 
-    @FindBy (css = "section[class='products_section'] div[class*='product_list_item'] h3") //0 is first item's title
+    @FindBy(css = "section[class='products_section'] div[class*='product_list_item'] h3") //0 is first item's title
     public List<WebElement> productitemsh3;
 
-    @FindBy (css = "div[class='product_name_wrap flex_container flex_start hidden-md-down'] div h1")
+    @FindBy(css = "div[class='product_name_wrap flex_container flex_start hidden-md-down'] div h1")
     public WebElement itemTitle;
 
-    @FindBy (css = "button[data-button-action='add-to-cart']")
+    @FindBy(css = "button[data-button-action='add-to-cart']")
     public WebElement addItemToCart;
 
-    @FindBy (css = "div[class='modal-content'] div[class='modal-body modal_cart general_border']")
+    @FindBy(css = "div[class='modal-content'] div[class='modal-body modal_cart general_border']")
     public WebElement itemAddedToCartMessageBox;
 
-    @FindBy (css = "div[class='modal-content'] div[class='modal-body modal_cart general_border'] div[class='alert alert-success']")
+    @FindBy(css = "div[class='modal-content'] div[class='modal-body modal_cart general_border'] div[class='alert alert-success']")
     public WebElement itemAddedToCartMessageHeadline;
 
-    @FindBy (css = "div[class='col-md-6'] a")
+    @FindBy(css = "div[class='col-md-6'] a")
     public WebElement goToCart;
 
 
-    @FindBy (css = "div[class='card-header']")
+    @FindBy(css = "div[class='card-header']")
     public WebElement cartHeader;
 
-    @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1']")
+    @FindBy(css = "ul[class='cart-items base_list_line mb-3 m-t-1']")
     public WebElement cartItemsList;
 
-    @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li")
+    @FindBy(css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li")
     public List<WebElement> cartItem;
 
-    @FindBy (css = "input[class='form-control search_widget_text js-child-focus']")
+    @FindBy(css = "input[class='form-control search_widget_text js-child-focus']")
     public WebElement searchBar;
 
-    @FindBy (css = "div[id='search_products']" )
+    @FindBy(css = "div[id='search_products']")
     public WebElement searchResultsDiv;
 
-    @FindBy (css = "div[class='products product_list  row grid'] div article")
+    @FindBy(css = "div[class='products product_list  row grid'] div article")
     public List<WebElement> searchResultsList;
 
-    @FindBy (css = "div[class='product_count']")
+    @FindBy(css = "div[class='product_count']")
     public WebElement itemsCountString;
 
-    @FindBy (css = "ul[class='pagination'] li" )
+    @FindBy(css = "ul[class='pagination'] li")
     public List<WebElement> nextPage;
 
-    @FindBy (css = "div[class='products-sort-order dropdown_wrap mar_r1']")
+    @FindBy(css = "div[class='products-sort-order dropdown_wrap mar_r1']")
     public WebElement sortingBeforeHoover;
 
-    @FindBy (css = "ul[class='dropdown_list_ul dropdown_box'] li")
+    @FindBy(css = "ul[class='dropdown_list_ul dropdown_box'] li")
     public List<WebElement> sortingAfterHoover;
 
 
-    @FindBy (css = "div[class*='product_list_item']")
+    @FindBy(css = "div[class*='product_list_item']")
     public List<WebElement> resultList;
 
-    @FindBy (css = "div[class*='product_list_item'] span[class='price ']")
+    @FindBy(css = "div[class*='product_list_item'] span[class='price ']")
     public List<WebElement> resultPriceList;
 
 //    //
 //    @FindBy (css = "div[class*='product_list_item'] article div div[class='pro_second_box pro_block_align_0'] div:nth-child(3) div span[class='price ']")
 //    public List<WebElement> resultPriceList;
 
-    @FindBy (id="cbar_w0_header_s")
+    @FindBy(id = "cbar_w0_header_s")
     public WebElement bottomSuggestionsHeader;
 
 
-    @FindBy (id = "cbar_widget0")
+    @FindBy(id = "cbar_widget0")
     public WebElement bottomSuggestionsWidget;
 
-    @FindBy (css = "div[id='cbar_w0_items_s'] div div div[class='owl-item']")
+    @FindBy(css = "div[id='cbar_w0_items_s'] div div div[class='owl-item']")
     public List<WebElement> bottomSuggestionsList;
 
-    @FindBy (css = "div[class='autocomplete-suggestions']")
+    @FindBy(css = "div[class='autocomplete-suggestions']")
     public WebElement suggestedAutocompleteItemSearch;
 
-    @FindBy (css = "div[class='autocomplete-suggestions'] div[class*='autocomplete-suggestion']")
+    @FindBy(css = "div[class='autocomplete-suggestions'] div[class*='autocomplete-suggestion']")
     public List<WebElement> searchSuggestionsList;
 
+    @FindBy(css = "div[id='st_mega_menu_header_container'] nav[id='st_mega_menu_wrap'] ul li[id*='st_menu']")
+    public List<WebElement> shopTopBarList;   //נשים גברים ציוד טיולים
 
+
+    @FindBy(css = "div[class*='stmenu_sub style_wide col-md'][style*='display: block; overflow: visible'] div[class='row m_column_row'] div[id*='st_menu_column'] div[id*='st_menu_block'] div[class='row']")
+    public List<WebElement> shopTopBarChoiceRowList;
+
+    @FindBy(css = "div[class*='stmenu_sub style_wide col-md'][style*='display: block; overflow: visible'] div[class='row m_column_row'] div[id*='st_menu_column'] div[id*='st_menu_block'] div[class='row'] div[class*='col-md']")
+    public List<WebElement> shopTopBarChoiceRowColumnList;
+
+    @FindBy(css = "div[class*='stmenu_sub style_wide col-md'][style*='display: block; overflow: visible'] div[id*='st_menu_column'] div[id*='st_menu_block'] div[class='row'] li[class*='ml_level'] a[class='ma_level_1 ma_item']")
+    public List<WebElement> shopTopBarChoiceRowColumnHeadlineList;
+
+    @FindBy(css = "div[class*='stmenu_sub style_wide col-md'][style*='display: block; overflow: visible'] div[id*='st_menu_column'] div[id*='st_menu_block'] div[class='row'] ul[class*='p_granditem'] a")
+    public List<WebElement> shopTopBarChoiceRowColumnCategoryList;
+
+    @FindBy (css = "section[id='main'] h1")
+    public WebElement categoryTitle;
 
 
 
@@ -120,7 +139,7 @@ public class OnlineStorePage {
 
     }
 
-    public void moveToNextTab(){
+    public void moveToNextTab() {
 
         Set<String> windowsIds = driver.getWindowHandles();
         Iterator<String> it = windowsIds.iterator();
@@ -130,7 +149,7 @@ public class OnlineStorePage {
 
     }
 
-    public void skipAd(){
+    public void skipAd() {
         try {
             skipToPageButton.click();
         } catch (Exception e) {
@@ -165,7 +184,7 @@ public class OnlineStorePage {
     }
 
 
-    public void checkItemAddedToCart(String itemTitle){
+    public void checkItemAddedToCart(String itemTitle) {
 
         boolean itemAdded = false;
 
@@ -261,7 +280,7 @@ public class OnlineStorePage {
                 for (int i = 0; i <= 5; i++) {
                     double itemPrice = Double.parseDouble(resultPriceList.get(i).getAttribute("content"));
                     Assert.assertTrue(itemPrice >= price);
-                    System.out.println("price- " + price + " itemprice- "+ itemPrice);
+                    System.out.println("price- " + price + " itemprice- " + itemPrice);
                     double a = itemPrice;
                     price = a;
                 }
@@ -275,6 +294,47 @@ public class OnlineStorePage {
             System.out.println("There are no results");
         }
     }
+
+
+    public void pickAnItemFromTopBar(int mainCategoryIndex, int categoryHeadlineIndex, int categoryIndex) {
+
+        Actions actions = new Actions(driver);
+        try {
+            actions.moveToElement(shopTopBarList.get(mainCategoryIndex)).build().perform();   //1=גברים
+
+            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+
+            try {
+                actions.moveToElement(shopTopBarChoiceRowColumnHeadlineList.get(categoryHeadlineIndex)).build().perform(); //2=סנדלים לגברים
+                System.out.println("Category headline- " + shopTopBarChoiceRowColumnHeadlineList.get(categoryHeadlineIndex).getText());
+
+                // ** MINI SCOPE for categories column (mini driver)
+                WebElement column = shopTopBarChoiceRowColumnList.get(categoryHeadlineIndex);
+                List<WebElement> itemCategory = column.findElements(By.cssSelector("ul[class*='p_granditem'] a"));
+
+                try {
+                    String category = itemCategory.get(categoryIndex).getText();
+                    actions.moveToElement(itemCategory.get(categoryIndex)).click().build().perform();
+
+                    driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+                    Assert.assertEquals(categoryTitle.getText(), category);
+                    System.out.println("Items category was chosen from top bar (" + categoryTitle.getText() + ")");
+                } catch (Exception e) {
+                    System.out.println("Index is out of bound for this item category scope. Please run the test again with small index.");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Index is out of bound for this category scope. Please run the test again with small index.");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Main category index is too big and out of scope. Please run the test again with a smaller index.");
+        }
+    }
+
+
+
+
 
     //constructor
     public OnlineStorePage(WebDriver driver) {

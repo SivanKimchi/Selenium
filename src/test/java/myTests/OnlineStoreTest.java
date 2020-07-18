@@ -1,7 +1,6 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
@@ -84,6 +83,61 @@ public class OnlineStoreTest {
         store.moveToNextTab();
 
         store.searchItemChooseFromList("נעלי");
+
+    }
+
+
+
+    @Test
+    public void pickAnItemFromTopBar(){
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
+        homepage.mainMenuLametayelOnlineShop.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        store.moveToNextTab();
+        wait.until(ExpectedConditions.visibilityOf(store.shopTopBarList.get(5)));
+
+        store.pickAnItemFromTopBar(1, 3, 1);
+
+    }
+
+    @Test    //color(if exists) , size(if exists) , amount, save(+my saved products), branches, add to cart(exists already), brand
+    public void itemPageInteraction(){
+
+
+
+
+
+
+    }
+
+
+    @Test
+    public void itemReviews(){
+
+
+    }
+
+
+
+    @Test  //items and amounts, summary of amount and payment
+    public void shoppingCartUpdateItems(){
+
+
+
+
+    }
+
+
+
+    @Test  //items and amounts, summary of amount and payment
+    public void paymentWithoutPaying(){
+
+
+
 
     }
 

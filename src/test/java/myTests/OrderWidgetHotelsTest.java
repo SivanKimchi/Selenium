@@ -57,13 +57,7 @@ public class OrderWidgetHotelsTest {
         orderWidget.orderWidgetHotels.click();
         orderWidget.moveToiframe();
 
-        try {
-            orderWidget.hotelSearchButton.click();
-            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-            orderWidget.moveToNextTab();
-        } catch (Exception e){
-            System.out.println("No city or hotel inserted- can't continue search. Please type Hotel name or City.");
-        }
+        orderWidget.cantOrderHotelWithoutInput();
 
         orderWidget.pickDestinationOrHotelName("Paris");   // english-first letter in CAPS)
 
