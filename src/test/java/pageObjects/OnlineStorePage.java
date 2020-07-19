@@ -573,57 +573,74 @@ public class OnlineStorePage {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(saveProduct));
 
-        String productTitle = itemTitle.getText();
         saveProduct.click();
 
-            System.out.println("User need to log in");
-            wait.until(ExpectedConditions.visibilityOf(loginToStoreBox));
-            loginToStoreButton.click();
-            wait.until(ExpectedConditions.visibilityOf(loginFromStore_email));
-            loginFromStore_email.sendKeys(GeneralProperties.LoginEmail);
-            Thread.sleep(3000);
-            loginFromStore_password.sendKeys(GeneralProperties.LoginPassword);
-            Thread.sleep(3000);
-            loginButton.click();
-            wait.until(ExpectedConditions.visibilityOf(usersSavedItems));
-            usersSavedItems.click();
-            wait.until(ExpectedConditions.visibilityOf(savedItemsPageContent));
-//            Assert.assertTrue(notificationNoSavedItems.isDisplayed());
+        System.out.println("User need to log in");
+        wait.until(ExpectedConditions.visibilityOf(loginToStoreBox));
+        loginToStoreButton.click();
+        signInToStore();
+
+        wait.until(ExpectedConditions.visibilityOf(usersSavedItems));
+        usersSavedItems.click();
+        wait.until(ExpectedConditions.visibilityOf(savedItemsPageContent));
+//      Assert.assertTrue(notificationNoSavedItems.isDisplayed());
             try {
                 Assert.assertFalse(userSavedItemsRow.isDisplayed());
             } catch (Exception e) {
                 System.out.println("Item was not added to 'Saved items' because user was not signed in to store");
             }
-            //going back to save item as Logged In user
-            driver.navigate().back();
-            driver.navigate().back();
-            driver.navigate().back();
-            wait.until(ExpectedConditions.visibilityOf(saveProduct));
-            saveProduct.click();
-//            wait.until(ExpectedConditions.attributeContains(saveProduct, "class","st_added"));
-            Assert.assertTrue(saveProductSaved.getAttribute("class").contains("st_added"));
-            Actions a = new Actions(driver);
-            a.moveToElement(userMenuInStore).build().perform();
-            a.moveToElement(userMenuInStoreOptions.get(1)).click().build().perform();
-//            Assert.assertTrue(savedItemsPageContent.getText().contains("המוצרים ששמרתי"));
-            Assert.assertTrue(userSavedItemsRow.getText().contains(productTitle));
-            System.out.println("Logged in user- Item was successfully added to Saved Items");
-            deleteSavedItem.click();
-            try {
-                Assert.assertFalse(userSavedItemsRow.getText().contains(productTitle));
-                System.out.println("Item was successfully deleted from Saved Items");
+         //going back to save item as Logged In user
+        driver.navigate().back();
+        driver.navigate().back();
+        driver.navigate().back();
 
-            } catch (Exception f) {
-                System.out.println("Logged in user- Item was successfully deleted from Saved Items");
-            }
+        saveItemAsLoggedInUserInStore();
 
         }
 
 
 
+     public void signInToStore() throws InterruptedException {
+
+         WebDriverWait wait = new WebDriverWait(driver, 10);
+         wait.until(ExpectedConditions.visibilityOf(loginFromStore_email));
+         loginFromStore_email.sendKeys(GeneralProperties.LoginEmail);
+         Thread.sleep(3000);
+         loginFromStore_password.sendKeys(GeneralProperties.LoginPassword);
+         Thread.sleep(3000);
+         loginButton.click();
+
+     }
 
 
+    public void saveItemAsLoggedInUserInStore() throws InterruptedException{
 
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(saveProduct));
+
+        String productTitle = itemTitle.getText();
+
+        saveProduct.click();
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+//      wait.until(ExpectedConditions.attributeContains(saveProduct, "class","st_added"));
+        Assert.assertTrue(saveProductSaved.getAttribute("class").contains("st_added"));
+        Actions a = new Actions(driver);
+        a.moveToElement(userMenuInStore).build().perform();
+        a.moveToElement(userMenuInStoreOptions.get(1)).click().build().perform();
+//      Assert.assertTrue(savedItemsPageContent.getText().contains("המוצרים ששמרתי"));
+        Assert.assertTrue(userSavedItemsRow.getText().contains(productTitle));
+        System.out.println("Logged in user- Item was successfully added to Saved Items");
+        deleteSavedItem.click();
+        Thread.sleep(3000);
+        try {
+            Assert.assertFalse(userSavedItemsRow.getText().contains(productTitle));
+            System.out.println("Item was successfully deleted from Saved Items");
+
+        } catch (Exception f) {
+            System.out.println("Logged in user- Item was successfully deleted from Saved Items");
+        }
+
+    }
 
 
 
