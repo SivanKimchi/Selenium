@@ -106,7 +106,7 @@ public class OnlineStoreTest {
 
 
 
-    @Test    // , size(if exists) , amount, save(+my saved products), branches, add to cart(exists already), brand
+    @Test    //  , amount, save(+my saved products), branches, , brand
     public void itemChangeColor() throws InterruptedException {
 
         OnlineStorePage store = new OnlineStorePage(driver);
@@ -114,7 +114,6 @@ public class OnlineStoreTest {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
         homepage.mainMenuLametayelOnlineShop.click();
-
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         store.moveToNextTab();
 
@@ -133,7 +132,6 @@ public class OnlineStoreTest {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
         homepage.mainMenuLametayelOnlineShop.click();
-
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         store.moveToNextTab();
 
@@ -142,6 +140,27 @@ public class OnlineStoreTest {
 
         store.changeItemSize();
     }
+
+    @Test
+    public void changeQuantityOfItem() throws InterruptedException {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
+        homepage.mainMenuLametayelOnlineShop.click();
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        store.moveToNextTab();
+
+        wait.until(ExpectedConditions.visibilityOf(store.searchBar));
+        store.searchItemChooseFromList("נעלי נשים", 1);
+
+        store.changeQuantityOfItem();
+    }
+
+
+
+
 
 
     @Test

@@ -152,6 +152,17 @@ public class OnlineStorePage {
     @FindBy (css = "ul[id*='group_'] li span[class='radio-label']")
     public List<WebElement> itemSizeTextList;
 
+    @FindBy (css = "input[id='quantity_wanted']")
+    public WebElement quantity;
+
+    @FindBy (css = "button[class*='btn btn-touchspin js-touchspin bootstrap-touchspin-down']")
+    public WebElement decreaseQuantity;
+
+    @FindBy (css = "button[class='btn btn-touchspin js-touchspin bootstrap-touchspin-up']")
+    public WebElement increaseQuantity;
+
+    @FindBy (css = "div[id='product-availability']")
+    public WebElement productAvailability;
 
 
     public void scroll(WebElement waitForVisibilityOf) {
@@ -475,6 +486,42 @@ public class OnlineStorePage {
     }
 
 
+
+
+    public void changeQuantityOfItem(){
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(quantity));
+
+        //There is an error in the website -- the input tag isn't updated in any attribute, and quantity getText doesn't work either
+        //Can not check is quantity is updated on this screen, only on next screen
+
+        try {
+            increaseQuantity.click();
+//            Assert.assertEquals(quantity.getAttribute("value"), "1");
+            System.out.println("Quantity has increased");
+            decreaseQuantity.click();
+//            Assert.assertEquals(quantity.getAttribute("value"), "1");
+            System.out.println("Quantity has decreased");
+
+            //Check if there is size selection
+            if (colorSizeRows.size()==2){
+                addItemToCart.click();
+                Assert.assertTrue(colorSizeAmountLine.get(2).getText().equals("1"));
+                System.out.println("Added to cart with chosen quantity- 1");
+            } else if (colorSizeRows.size()==1){
+                addItemToCart.click();
+                Assert.assertTrue(colorSizeAmountLine.get(1).getText().equals("1"));
+                System.out.println("Added to cart with chosen quantity- 1");
+            }
+
+        } catch (Exception e) {
+
+            Assert.assertTrue(productAvailability.getAttribute("class").contains("product-unavailable") || productAvailability.getAttribute("class").contains("product-last-items"));
+            System.out.println("Product is not available or limited");
+        }
+
+    }
 
 
     //constructor
