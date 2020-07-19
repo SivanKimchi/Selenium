@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.nio.channels.ScatteringByteChannel;
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +50,9 @@ public class OnlineStorePage {
 
     @FindBy(css = "div[class='modal-content'] div[class='modal-body modal_cart general_border'] div[class='alert alert-success']")
     public WebElement itemAddedToCartMessageHeadline;
+
+    @FindBy (css = "ul[class='list_detail_item m-b-1'] li")
+    public List<WebElement> colorSizeAmountLine;
 
     @FindBy(css = "div[class='col-md-6'] a")
     public WebElement goToCart;
@@ -130,11 +134,24 @@ public class OnlineStorePage {
     @FindBy (css = "section[id='main'] h1")
     public WebElement categoryTitle;
 
-    @FindBy (css = "ul[id='group_1'] li input")
+    @FindBy (css = "div[class='product-variants'] div[class='clearfix product-variants-item']")
+    public List<WebElement> colorSizeRows;
+
+    @FindBy (css = "ul[id*='group_'] li input")
     public List<WebElement> itemColorList;
 
-    @FindBy (css = "ul[id='group_1'] li span[class='radio-label']")
+    @FindBy (css = "ul[id*='group_'] li span[class='radio-label']")
     public List<WebElement> itemColorTextList;
+
+    @FindBy (css = "ul[id*='group_']")
+    public WebElement sizeRow;
+
+    @FindBy (css = "ul[id*='group_'] li input[class='input-radio']")
+    public List<WebElement> itemSizeList;
+
+    @FindBy (css = "ul[id*='group_'] li span[class='radio-label']")
+    public List<WebElement> itemSizeTextList;
+
 
 
     public void scroll(WebElement waitForVisibilityOf) {
@@ -241,7 +258,7 @@ public class OnlineStorePage {
     }
 
 
-    public void searchItemChooseFromList(String searchFor) throws InterruptedException {
+    public void searchItemChooseFromList(String searchFor, int itemIndex) throws InterruptedException {
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(searchBar));
@@ -252,13 +269,13 @@ public class OnlineStorePage {
         Assert.assertTrue(suggestedAutocompleteItemSearch.isDisplayed());
 
         Actions actions = new Actions(driver);
-        actions.moveToElement(searchSuggestionsList.get(2)).build().perform();
-        Assert.assertTrue(searchSuggestionsList.get(2).getAttribute("class").contains("autocomplete-selected"));
-        String itemName = searchSuggestionsList.get(2).getText();
-        searchSuggestionsList.get(2).click();
+        actions.moveToElement(searchSuggestionsList.get(itemIndex)).build().perform();
+        Assert.assertTrue(searchSuggestionsList.get(itemIndex).getAttribute("class").contains("autocomplete-selected"));
+        String itemName = searchSuggestionsList.get(itemIndex).getText();
+        searchSuggestionsList.get(itemIndex).click();
         wait.until(ExpectedConditions.visibilityOf(itemTitle));
         Assert.assertTrue(itemName.contains(itemTitle.getText()));
-        System.out.println("Item was chosen from autocomplete search suggestion");
+        System.out.println("Item was chosen from autocomplete search suggestion: " + itemName);
     }
 
 
@@ -338,23 +355,25 @@ public class OnlineStorePage {
     }
 
 
-    public void itemPageInteraction(String searchItem) throws InterruptedException {
 
-        searchItemChooseFromList(searchItem);
+    public void changeItemColor() throws InterruptedException {
 
-        changeItemColor();
-
-    }
-
-
-
-    public void changeItemColor(){
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        String newColor ="";
 
         try {
+
+            wait.until(ExpectedConditions.visibilityOf(colorSizeRows.get(0)));
+            // MINI DRIVER
+            WebElement colors = colorSizeRows.get(0);
+            List<WebElement> itemColorList = colors.findElements(By.cssSelector("ul[id*='group_'] li input[class='input-radio']"));
+            List<WebElement> itemColorTextList = colors.findElements(By.cssSelector("ul[id*='group_'] li span[class='radio-label']"));
+
 
             System.out.println(itemColorList.size());
 
             if ((itemColorList.size() > 0) && (itemColorList.size() > 1)) {
+
                 for (int i = 0; i < itemColorList.size(); i++) {
 
                     if (itemColorList.get(i).isSelected()) {
@@ -362,24 +381,30 @@ public class OnlineStorePage {
                         try {
                             System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
                             itemColorList.get(i + 1).click();
-                            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
                             Assert.assertTrue(itemColorList.get(i + 1).isSelected());
                             System.out.println("Now the next color is selected- " + itemColorTextList.get(i + 1).getText());
+                            newColor = itemColorTextList.get(i + 1).getText();
                             break;
-
                         } catch (Exception e) {
                             System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
                             itemColorList.get(i - 1).click();
-                            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+                            driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
                             Assert.assertTrue(itemColorList.get(i - 1).isSelected());
                             System.out.println("Now the previous color is selected- " + itemColorTextList.get(i - 1).getText());
+                            newColor = itemColorTextList.get(i - 1).getText();
                             break;
-
                         }
+
+
                     } else {
                         System.out.println("Color not selected: " + itemColorTextList.get(i).getText());
                     }
                 }
+                Thread.sleep(5000);
+                addItemToCart.click();
+                wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
+                Assert.assertTrue(colorSizeAmountLine.get(0).getText().contains(newColor));
+
             } else {
                 System.out.println("There is only one color available");
                 Assert.assertTrue(itemColorList.get(0).isSelected());
@@ -388,8 +413,66 @@ public class OnlineStorePage {
             System.out.println("Item probably not in stock, and there is no color to choose.");
         }
 
+
     }
 
+
+    public void changeItemSize(){
+
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.visibilityOf(colorSizeRows.get(1)));
+            // MINI DRIVER
+            WebElement sizes = colorSizeRows.get(1);
+            List<WebElement> itemSizeList = sizes.findElements(By.cssSelector("ul[id*='group_'] li input[class='input-radio']"));
+            List<WebElement> itemSizeTextList = sizes.findElements(By.cssSelector("ul[id*='group_'] li span[class='radio-label']"));
+
+                System.out.println(itemSizeList.size());
+
+                if (itemSizeList.size() > 1) {
+
+                    String newSize="";
+
+                    for (int i = 0; i < itemSizeList.size(); i++) {
+
+                        if (itemSizeList.get(i).isSelected()) {
+
+                            try {
+                                System.out.println("Size selected now- " + itemSizeTextList.get(i).getText());
+                                itemSizeList.get(i+1).click();
+                                driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+                                Assert.assertTrue(itemSizeList.get(i+1).isSelected());
+                                System.out.println("Now the next size is selected- " + itemSizeTextList.get(i+1).getText());
+                                newSize = itemSizeTextList.get(i+1).getText();
+                                break;
+
+                            } catch (Exception e) {
+                                System.out.println("Size selected now- " + itemSizeTextList.get(i).getText());
+                                itemSizeList.get(i - 1).click();
+                                driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+                                Assert.assertTrue(itemSizeList.get(i - 1).isSelected());
+                                System.out.println("Now the previous size is selected- " + itemSizeTextList.get(i - 1).getText());
+                                newSize = itemSizeTextList.get(i - 1).getText();
+                                break;
+
+                            }
+                        } else {
+                            System.out.println("Size not selected: " + itemSizeTextList.get(i).getText());
+                        }
+                    }
+                        Thread.sleep(5000);
+                        addItemToCart.click();
+                        wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
+                        Assert.assertTrue(colorSizeAmountLine.get(1).getText().contains(newSize));
+                } else {
+                    System.out.println("There is only one size available");
+                    Assert.assertTrue(itemSizeList.get(0).isSelected());
+                }
+        } catch (Exception e) {
+            System.out.println("There are no size options to this items");
+        }
+
+    }
 
 
 
