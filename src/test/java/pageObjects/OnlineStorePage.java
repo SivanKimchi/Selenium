@@ -1,5 +1,6 @@
 package pageObjects;
 
+import Lametayel.GeneralProperties;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
@@ -164,8 +165,50 @@ public class OnlineStorePage {
     @FindBy (css = "div[id='product-availability']")
     public WebElement productAvailability;
 
+    @FindBy (css = "div[class='flex_box'] i[class='fto-heart-4 icon_btn']")
+    public WebElement saveProduct;
 
-    public void scroll(WebElement waitForVisibilityOf) {
+    @FindBy (css = "div[class='flex_box'] a[class*='add_to_love']")
+    public WebElement saveProductSaved;
+
+    @FindBy (css = "div[id='loved_go_login']")
+    public WebElement loginToStoreBox;
+
+    @FindBy (css = "div[id='loved_go_login'] a[class='go']")
+    public WebElement loginToStoreButton;
+
+    @FindBy (css = "form[id='login-form'] input[name='email']")
+    public WebElement loginFromStore_email;
+
+    @FindBy (css = "form[id='login-form'] input[name='password']")
+    public WebElement loginFromStore_password;
+
+    @FindBy (css = "form[id='login-form'] button[id='SubmitLogin']")
+    public WebElement loginButton;
+
+    @FindBy (css = "div[class='row myacount_dashbord_list'] div[class='list-group-item'] a[class='love-link']")
+    public WebElement usersSavedItems;
+
+    @FindBy (css = "section[id='content'] div:nth-of-type(2)")
+    public WebElement savedItemsPageContent;
+
+    @FindBy (xpath = "//*[text()='עדיין לא שמרת מוצרים לרשימת המוצרים השמורים']")
+    public WebElement notificationNoSavedItems;
+
+    @FindBy (css = "div[class='userinfo_mod_top dropdown_wrap top_bar_item']")
+    public WebElement userMenuInStore;
+
+    @FindBy (css = "ul[class='dropdown_list_ul dropdown_box custom_links_list'] li a")
+    public List<WebElement> userMenuInStoreOptions;
+
+    @FindBy (css = "ul[class='com_grid_view row']")
+    public WebElement userSavedItemsRow;
+
+    @FindBy (css = "a[title='מחק']")
+    public WebElement deleteSavedItem;
+
+
+            public void scroll(WebElement waitForVisibilityOf) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -522,6 +565,66 @@ public class OnlineStorePage {
         }
 
     }
+
+
+
+    public void saveProduct() throws InterruptedException {
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(saveProduct));
+
+        String productTitle = itemTitle.getText();
+        saveProduct.click();
+
+            System.out.println("User need to log in");
+            wait.until(ExpectedConditions.visibilityOf(loginToStoreBox));
+            loginToStoreButton.click();
+            wait.until(ExpectedConditions.visibilityOf(loginFromStore_email));
+            loginFromStore_email.sendKeys(GeneralProperties.LoginEmail);
+            Thread.sleep(3000);
+            loginFromStore_password.sendKeys(GeneralProperties.LoginPassword);
+            Thread.sleep(3000);
+            loginButton.click();
+            wait.until(ExpectedConditions.visibilityOf(usersSavedItems));
+            usersSavedItems.click();
+            wait.until(ExpectedConditions.visibilityOf(savedItemsPageContent));
+//            Assert.assertTrue(notificationNoSavedItems.isDisplayed());
+            try {
+                Assert.assertFalse(userSavedItemsRow.isDisplayed());
+            } catch (Exception e) {
+                System.out.println("Item was not added to 'Saved items' because user was not signed in to store");
+            }
+            //going back to save item as Logged In user
+            driver.navigate().back();
+            driver.navigate().back();
+            driver.navigate().back();
+            wait.until(ExpectedConditions.visibilityOf(saveProduct));
+            saveProduct.click();
+//            wait.until(ExpectedConditions.attributeContains(saveProduct, "class","st_added"));
+            Assert.assertTrue(saveProductSaved.getAttribute("class").contains("st_added"));
+            Actions a = new Actions(driver);
+            a.moveToElement(userMenuInStore).build().perform();
+            a.moveToElement(userMenuInStoreOptions.get(1)).click().build().perform();
+//            Assert.assertTrue(savedItemsPageContent.getText().contains("המוצרים ששמרתי"));
+            Assert.assertTrue(userSavedItemsRow.getText().contains(productTitle));
+            System.out.println("Logged in user- Item was successfully added to Saved Items");
+            deleteSavedItem.click();
+            try {
+                Assert.assertFalse(userSavedItemsRow.getText().contains(productTitle));
+                System.out.println("Item was successfully deleted from Saved Items");
+
+            } catch (Exception f) {
+                System.out.println("Logged in user- Item was successfully deleted from Saved Items");
+            }
+
+        }
+
+
+
+
+
+
+
 
 
     //constructor

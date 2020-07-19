@@ -153,7 +153,7 @@ public class HomePage {
     @FindBy (id = "m-shops-li")
     public WebElement mainMenuLametayelBranches;
 
-    @FindBy (id = "m-internet-shop-li")
+    @FindBy (css = "li[id='m-internet-shop-li'] a")
     public WebElement mainMenuLametayelOnlineShop;
 
 
