@@ -104,12 +104,24 @@ public class OnlineStoreTest {
 
     }
 
+
+
     @Test    //color(if exists) , size(if exists) , amount, save(+my saved products), branches, add to cart(exists already), brand
-    public void itemPageInteraction(){
+    public void itemPageInteraction() throws InterruptedException {
 
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(homepage.centralBar));
+        homepage.mainMenuLametayelOnlineShop.click();
 
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        store.moveToNextTab();
 
+        wait.until(ExpectedConditions.visibilityOf(store.searchBar));
 
+        store.itemPageInteraction("מכנסיים מתקצרים");   //הולך קדימה בצבע
+//        store.itemPageInteraction("סנדלי גברים");  //הולך אחורה בצבע
 
 
     }

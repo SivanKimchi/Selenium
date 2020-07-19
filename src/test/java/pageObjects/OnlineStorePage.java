@@ -130,6 +130,11 @@ public class OnlineStorePage {
     @FindBy (css = "section[id='main'] h1")
     public WebElement categoryTitle;
 
+    @FindBy (css = "ul[id='group_1'] li input")
+    public List<WebElement> itemColorList;
+
+    @FindBy (css = "ul[id='group_1'] li span[class='radio-label']")
+    public List<WebElement> itemColorTextList;
 
 
     public void scroll(WebElement waitForVisibilityOf) {
@@ -330,6 +335,59 @@ public class OnlineStorePage {
         } catch (Exception e) {
             System.out.println("Main category index is too big and out of scope. Please run the test again with a smaller index.");
         }
+    }
+
+
+    public void itemPageInteraction(String searchItem) throws InterruptedException {
+
+        searchItemChooseFromList(searchItem);
+
+        changeItemColor();
+
+    }
+
+
+
+    public void changeItemColor(){
+
+        try {
+
+            System.out.println(itemColorList.size());
+
+            if ((itemColorList.size() > 0) && (itemColorList.size() > 1)) {
+                for (int i = 0; i < itemColorList.size(); i++) {
+
+                    if (itemColorList.get(i).isSelected()) {
+
+                        try {
+                            System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
+                            itemColorList.get(i + 1).click();
+                            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+                            Assert.assertTrue(itemColorList.get(i + 1).isSelected());
+                            System.out.println("Now the next color is selected- " + itemColorTextList.get(i + 1).getText());
+                            break;
+
+                        } catch (Exception e) {
+                            System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
+                            itemColorList.get(i - 1).click();
+                            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+                            Assert.assertTrue(itemColorList.get(i - 1).isSelected());
+                            System.out.println("Now the previous color is selected- " + itemColorTextList.get(i - 1).getText());
+                            break;
+
+                        }
+                    } else {
+                        System.out.println("Color not selected: " + itemColorTextList.get(i).getText());
+                    }
+                }
+            } else {
+                System.out.println("There is only one color available");
+                Assert.assertTrue(itemColorList.get(0).isSelected());
+            }
+        } catch (Exception e) {
+            System.out.println("Item probably not in stock, and there is no color to choose.");
+        }
+
     }
 
 
