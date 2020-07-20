@@ -211,6 +211,16 @@ public class OnlineStorePage {
     @FindBy (xpath = "//div[@id='medproductwarehouses']/div/span/ul/li/a")
     public List<WebElement> itemAvailabilityInBranchesList;
 
+    @FindBy (css = "div[class='hidden-md-down'] a[itemprop='brand']")
+    public WebElement itemBrand;
+
+    @FindBy (css = "section[id='main'] h1[class*='page_heading mb']")
+    public WebElement brandPageTitle;
+
+    @FindBy(css = "div[class*='product_list_item'] div[class*='pro_list_manufacturer']")
+    public List<WebElement> resultBrandList;
+
+
 
 
      public void scroll(WebElement waitForVisibilityOf) {
@@ -689,6 +699,35 @@ public class OnlineStorePage {
 
     }
 
+
+    public void moreProductsFromBrand(){
+
+        WebDriverWait w = new WebDriverWait(driver, 10);
+        w.until(ExpectedConditions.visibilityOf(itemBrand));
+        String itemsBrand = itemBrand.getText();
+        itemBrand.click();
+        w.until(ExpectedConditions.visibilityOf(brandPageTitle));
+        Assert.assertEquals(brandPageTitle.getText(),  "רשימת מוצרים לפי מותג "+ itemsBrand);
+        System.out.println("Relevant brand page loaded");
+
+        w.until(ExpectedConditions.visibilityOfAllElements(resultBrandList));//sometimes it still goes to another item. why??
+
+            if ((resultBrandList.size() > 0)) {
+
+                String brand = "";
+                // trying only 2 rows for visibility issues
+                for (int i = 0; i <= 5; i++) {
+                    String itemBrandFromList = resultBrandList.get(i).getText();
+                    Assert.assertEquals(itemBrandFromList, itemsBrand);
+                }
+
+            System.out.println("Items have the same brand- " + itemsBrand);
+
+        } else  {
+            System.out.println("There are no results");
+        }
+
+    }
 
 
 
