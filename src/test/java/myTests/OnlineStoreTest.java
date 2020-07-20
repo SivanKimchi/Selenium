@@ -106,7 +106,7 @@ public class OnlineStoreTest {
 
 
 
-    @Test    //  save(+my saved products), branches, , brand
+    @Test
     public void itemChangeColor() throws InterruptedException {
 
         OnlineStorePage store = new OnlineStorePage(driver);
@@ -179,6 +179,34 @@ public class OnlineStoreTest {
     }
 
 
+    @Test
+    public void availabilityInBranches() throws InterruptedException {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait w = new WebDriverWait(driver, 10);
+
+        w.until(ExpectedConditions.visibilityOf(homepage.mainMenuLametayelOnlineShop));
+        homepage.mainMenuLametayelOnlineShop.click();
+        w.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        store.moveToNextTab();
+
+        w.until(ExpectedConditions.visibilityOf(store.searchBar));
+        store.searchItemChooseFromList("סנדלי שורש", 1);
+
+        store.availabilityInBranches(2);
+
+    }
+
+
+
+    @Test
+    public void itemMoreOfSameBrand(){
+
+
+
+    }
 
 
     @Test
