@@ -221,12 +221,33 @@ public class OnlineStoreTest {
     }
 
 
+
     @Test
-    public void itemReviews(){
+    public void itemReviewsCounts() throws InterruptedException {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait w = new WebDriverWait(driver, 10);
+
+        w.until(ExpectedConditions.visibilityOf(homepage.mainMenuLametayelOnlineShop));
+        homepage.mainMenuLametayelOnlineShop.click();
+        w.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        store.moveToNextTab();
+
+        w.until(ExpectedConditions.visibilityOf(store.searchBar));
+        store.searchItemChooseFromList("אוהל קמפינג", 1);   //נעלי טיולים לגברים Northside Weston Mid
+        store.itemReviewsCount();
+    }
+
+
+    @Test
+    public void addReviewToItem(){
+
+
 
 
     }
-
 
 
     @Test  //items and amounts, summary of amount and payment

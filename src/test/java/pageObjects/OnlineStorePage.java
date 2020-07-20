@@ -220,6 +220,26 @@ public class OnlineStorePage {
     @FindBy(css = "div[class*='product_list_item'] div[class*='pro_list_manufacturer']")
     public List<WebElement> resultBrandList;
 
+    @FindBy (css = "div[class='gotorev hidden-md-down'] span span span:nth-child(1) i")
+    public List<WebElement> reviewStarsOnTopList;
+
+    @FindBy (css = "div[class='gotorev hidden-md-down'] span[class='stamped-badge']")
+    public WebElement reviewLineTop;
+
+    @FindBy (css = "div[class='gotorev hidden-md-down'] span[class='stamped-badge'] span:nth-child(2)")
+    public WebElement numberOfReviewsSubmittedTop;
+
+    @FindBy (css = "div[class='summary-overview'] span:nth-child(3) span")
+    public WebElement numberOfReviewsSubmittedBottom;
+
+    @FindBy (css = "div[class='summary-overview'] span:nth-child(1) span[class*='stamped-summary-text']")
+    public WebElement exactReviewStarsBottom;
+
+    @FindBy (css = "div[class='stamped-summary-ratings'] div[class='summary-rating']")
+    public List<WebElement> ratingList;
+
+    @FindBy (css = "div[class='stamped-summary-ratings'] div[class='summary-rating'] div:nth-child(2)")
+    public List<WebElement> ratingStarAmountList;
 
 
 
@@ -726,6 +746,70 @@ public class OnlineStorePage {
         } else  {
             System.out.println("There are no results");
         }
+
+    }
+
+
+    public void itemReviewsCount(){
+
+        WebDriverWait w = new WebDriverWait(driver, 10);
+        w.until(ExpectedConditions.visibilityOf(reviewLineTop));
+
+        //number of stars
+
+        boolean starIsChecked;
+        double amountOfStarsChecked=0.0;
+        double halfStar = 0.0;
+
+        for (int i=0; i<reviewStarsOnTopList.size(); i++) {
+            if (reviewStarsOnTopList.get(i).getAttribute("class").equals("stamped-fa stamped-fa-star")){
+                starIsChecked = true;
+                amountOfStarsChecked = amountOfStarsChecked+1.0;
+            } else if (reviewStarsOnTopList.get(i).getAttribute("class").equals("stamped-fa stamped-fa-star-o")) {
+                starIsChecked = false;
+            } else if (reviewStarsOnTopList.get(i).getAttribute("class").equals("stamped-fa stamped-fa-star-half-o")){
+                halfStar = 0.5;
+            }
+        }
+
+        amountOfStarsChecked = amountOfStarsChecked + halfStar;
+        if (amountOfStarsChecked > 0) {
+
+            System.out.println("Review to this item (round) is: " + amountOfStarsChecked + " stars");
+
+            String[] numOfReviewsArray = numberOfReviewsSubmittedTop.getText().split(" חוות דעת");
+            String numOfReviews = numOfReviewsArray[0];
+
+            reviewLineTop.click();
+            w.until(ExpectedConditions.visibilityOf(exactReviewStarsBottom));
+            Assert.assertEquals(numberOfReviewsSubmittedBottom.getAttribute("data-count"), numOfReviews);
+            double numOfReviewsDouble = Double.parseDouble(numOfReviews);
+
+
+            //actual stars - average of reviews
+            double exactStarReview = Double.parseDouble(exactReviewStarsBottom.getText());
+
+            double sumOfStars = 0.0;
+            for (int i = 0; i < ratingList.size(); i++) {
+                double numberOfReviews = Double.parseDouble(ratingList.get(i).getAttribute("data-count"));
+                double ratingStars = Double.parseDouble(ratingStarAmountList.get(i).getAttribute("data-rating"));
+                sumOfStars = sumOfStars + (numberOfReviews * ratingStars);
+            }
+
+            double calculatedAverageStarsRounded = (double) Math.round( sumOfStars/numOfReviewsDouble * 10.0) /10.0;
+
+            Assert.assertTrue(exactStarReview == calculatedAverageStarsRounded);
+            System.out.println("Exact review Stars are accurately calculated- " + calculatedAverageStarsRounded);
+
+        } else {
+            System.out.println("There are no reviews to this item, no review average count exists.");
+        }
+
+    }
+
+
+    public void addReviewToItem(){
+
 
     }
 
