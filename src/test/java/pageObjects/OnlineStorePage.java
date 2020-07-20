@@ -3,7 +3,6 @@ package pageObjects;
 import Lametayel.GeneralProperties;
 import org.junit.Assert;
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -11,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-import java.nio.channels.ScatteringByteChannel;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +22,7 @@ public class OnlineStorePage {
     private WebDriver driver;
 
 
-    @FindBy(xpath = "//button[contains(text(), 'דלג לאתר')]")
+    @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
     public WebElement skipToPageButton;
 
     @FindBy(id = "_hjRemoteVarsFrame")
@@ -207,23 +205,34 @@ public class OnlineStorePage {
     @FindBy (css = "a[title='מחק']")
     public WebElement deleteSavedItem;
 
+    @FindBy (xpath = "//a[@id='medproductwarehouses-show-list']")
+    public WebElement itemAvailabilityInBranchesDropDown;
 
-            public void scroll(WebElement waitForVisibilityOf) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+    @FindBy (xpath = "//div[@id='medproductwarehouses']/div/span/ul/li/a")
+    public List<WebElement> itemAvailabilityInBranchesList;
 
+
+
+     public void scroll(WebElement waitForVisibilityOf) {
+         JavascriptExecutor js = (JavascriptExecutor) driver;
+         js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
+         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
     }
 
+    //works for 2 or MORE windows
     public void moveToNextTab() {
 
+        String parentId = driver.getWindowHandle();
         Set<String> windowsIds = driver.getWindowHandles();
         Iterator<String> it = windowsIds.iterator();
-        String parentId = it.next();
-        String childId = it.next();
-        driver.switchTo().window(childId);
+        String childWindow= "";
 
+        while (it.hasNext()){
+                childWindow = it.next();
+            }
+        driver.switchTo().window(childWindow);
     }
+
 
     public void skipAd() {
         try {
@@ -570,7 +579,7 @@ public class OnlineStorePage {
 
     public void saveProduct() throws InterruptedException {
 
-        WebDriverWait wait = new WebDriverWait(driver, 10);
+        WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(saveProduct));
 
         saveProduct.click();
@@ -641,6 +650,46 @@ public class OnlineStorePage {
         }
 
     }
+
+
+    public void availabilityInBranches(int branchIndex){
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(itemAvailabilityInBranchesDropDown));
+        itemAvailabilityInBranchesDropDown.click();
+        String branch="";
+
+        try {
+            wait.until(ExpectedConditions.visibilityOf(itemAvailabilityInBranchesList.get(0)));
+            System.out.println("Item is available in " + itemAvailabilityInBranchesList.size() + " branches");
+
+            try {
+                String[] branchName = itemAvailabilityInBranchesList.get(branchIndex).getText().split("עודפים - ");
+                branch = branchName[1];
+            } catch (Exception e) {
+                branch = itemAvailabilityInBranchesList.get(branchIndex).getText();
+            }
+
+            itemAvailabilityInBranchesList.get(branchIndex).click();
+
+            wait.until(ExpectedConditions.numberOfWindowsToBe(3));
+
+            moveToNextTab();
+
+            skipAd();
+
+            wait.until(ExpectedConditions.visibilityOf(orderWidget.firstBranchMoreInfoPageHeadline));
+            Assert.assertTrue(orderWidget.firstBranchMoreInfoPageHeadline.getText().contains(branch));
+            System.out.println("Branch info page open");
+
+        } catch (Exception e) {
+            System.out.println("Item is unavailable in all branches");
+        }
+
+    }
+
+
 
 
 
