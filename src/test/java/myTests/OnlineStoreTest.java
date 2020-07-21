@@ -261,8 +261,26 @@ public class OnlineStoreTest {
     }
 
 
-    @Test  //items and amounts, summary of amount and payment
-    public void shoppingCartUpdateItems(){
+    @Test
+    public void shoppingCartUpdateQuantity() throws InterruptedException {
+
+        addItemToCart();
+        OnlineStorePage store = new OnlineStorePage(driver);
+
+        store.lametayelShopLogo.click();
+        //WebDriverWait w = new WebDriverWait(driver, 10);
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+
+        store.addItemToCart(2);
+
+        store.changeCartItemsQuantity();
+
+
+    }
+
+
+    @Test  //summary of amount and payment, delivery
+    public void shoppingCartSummary() {
 
 
 

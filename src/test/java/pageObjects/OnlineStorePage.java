@@ -61,10 +61,10 @@ public class OnlineStorePage {
     public WebElement cartHeader;
 
     @FindBy(css = "ul[class='cart-items base_list_line mb-3 m-t-1']")
-    public WebElement cartItemsList;
+    public WebElement cartItems;
 
-    @FindBy(css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li")
-    public List<WebElement> cartItem;
+    @FindBy(css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li a[class='label']")
+    public List<WebElement> cartItemTitleList;
 
     @FindBy(css = "input[class='form-control search_widget_text js-child-focus']")
     public WebElement searchBar;
@@ -154,11 +154,24 @@ public class OnlineStorePage {
     @FindBy (css = "input[id='quantity_wanted']")
     public WebElement quantity;
 
-    @FindBy (css = "button[class*='btn btn-touchspin js-touchspin bootstrap-touchspin-down']")
+
+    @FindBy (css = "button[class*='bootstrap-touchspin-down']")
     public WebElement decreaseQuantity;
 
-    @FindBy (css = "button[class='btn btn-touchspin js-touchspin bootstrap-touchspin-up']")
+    @FindBy (css = "button[class*='bootstrap-touchspin-down']")
+    public List<WebElement> decreaseQuantityList;
+
+    @FindBy (css = "button[class*='bootstrap-touchspin-up']")
     public WebElement increaseQuantity;
+
+    @FindBy (css = "button[class*='bootstrap-touchspin-up']")
+    public List<WebElement> increaseQuantityList;
+
+    @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li input[name='product-quantity-spin']")
+    public List<WebElement> quantityInCartList;
+
+
+
 
     @FindBy (css = "div[id='product-availability']")
     public WebElement productAvailability;
@@ -251,6 +264,9 @@ public class OnlineStorePage {
     @FindBy (css = "form[id*='new-review-form_'] fieldset[class='stamped-form-review']")
     public WebElement newReviewMainBox;
 
+    @FindBy (css = "a[class='shop_logo'] img[class='logo']")
+    public WebElement lametayelShopLogo;
+
 
 
 
@@ -289,16 +305,17 @@ public class OnlineStorePage {
     public void addItemToCart(int itemIndex) {
 
 
-        scroll(productSectionItem.get(0));   //first section of products
+        scroll(productSectionItem.get(0));   //first SECTION of products
 
-        String itemName = productitemsh3.get(itemIndex).getText();   //first product
+        String itemName = productitemsh3.get(itemIndex).getText();
+        System.out.println("Item: " + itemName);
         productitemsh3.get(itemIndex).click();
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(itemTitle));
 
         Assert.assertEquals(itemName, itemTitle.getText());
-        System.out.println("Clicked on first item amd opened it in a new window");
+        System.out.println("Clicked on item amd opened it in a new window");
 
         addItemToCart.click();
 
@@ -318,17 +335,16 @@ public class OnlineStorePage {
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(cartHeader));
-        Assert.assertTrue(cartItemsList.isDisplayed());
+        Assert.assertTrue(cartItems.isDisplayed());
 
-        for (int i = 0; i < cartItem.size(); i++) {
-            if (cartItem.get(i).getText().contains(itemTitle)) {
+        for (int i = 0; i < cartItemTitleList.size(); i++) {
+
+            if (cartItemTitleList.get(i).getText().contains(itemTitle)) {
                 System.out.println("Item was successfully added to cart.");
                 itemAdded = true;
             }
 
-            Assert.assertTrue(itemAdded);
-
-        }
+        }       Assert.assertTrue(itemAdded);
 
     }
 
@@ -836,6 +852,59 @@ public class OnlineStorePage {
         System.out.println("'Add Review' form was opened and closed (test does not include actual submitting)");
 
     }
+
+
+
+    public void changeCartItemsQuantity() throws InterruptedException {
+
+        for (int i=0; i<quantityInCartList.size(); i++){
+            decreaseCartQuantity(i);
+//            Thread.sleep(3000);
+            increaseCartItemQuantityToMax(i);
+        }
+
+      }
+
+
+
+        public void increaseCartItemQuantityToMax(int quantityIndex) throws InterruptedException {
+
+            String maxQuantity = quantityInCartList.get(quantityIndex).getAttribute("data-quantity");
+            int maxQuantityInt = Integer.parseInt(maxQuantity);
+
+            int valueQuantity = Integer.parseInt(quantityInCartList.get(quantityIndex).getAttribute("value")); //1
+
+            while (!(maxQuantityInt == valueQuantity)) {
+                increaseQuantityList.get(quantityIndex).click();
+//          driver.navigate().refresh();
+                Thread.sleep(3000);
+                valueQuantity = Integer.parseInt(quantityInCartList.get(quantityIndex).getAttribute("value"));
+            }
+
+            increaseQuantityList.get(quantityIndex).click();
+//          driver.navigate().refresh();
+            Assert.assertTrue(valueQuantity == maxQuantityInt);
+            System.out.println("Item (" + cartItemTitleList.get(quantityIndex).getText() + ") quantity reached its maximum- " + maxQuantityInt + " and wasn't increased again");
+        }
+
+
+
+        public void decreaseCartQuantity(int quantityIndex) throws InterruptedException {
+
+            if (quantityInCartList.get(quantityIndex).getAttribute("value").contains("1")) {
+                System.out.println("Default quantity of second item- 1");
+                decreaseQuantityList.get(quantityIndex).click();
+                Thread.sleep(3000);
+                Assert.assertEquals(quantityInCartList.get(quantityIndex).getAttribute("value"), "1");
+                System.out.println("Can not decrease from quantity:1");
+                increaseQuantityList.get(quantityIndex).click();
+                decreaseQuantityList.get(quantityIndex).click();
+                Thread.sleep(3000);
+                Assert.assertEquals(quantityInCartList.get(quantityIndex).getAttribute("value"), "1");
+                System.out.println("Decrease works for quantity > 1");
+            }
+        }
+
 
 
 
