@@ -241,6 +241,19 @@ public class OnlineStorePage {
     @FindBy (css = "div[class='stamped-summary-ratings'] div[class='summary-rating'] div:nth-child(2)")
     public List<WebElement> ratingStarAmountList;
 
+    @FindBy (css = "span[class='stamped-summary-actions'] span[class='stamped-summary-actions-newreview']")
+    public WebElement addReview;
+
+    @FindBy (css = "div[class='stamped-content'] form[id*='new-review-form_']")
+    public WebElement newReviewForm;
+
+
+    @FindBy (css = "form[id*='new-review-form_'] fieldset[class='stamped-form-review']")
+    public WebElement newReviewMainBox;
+
+
+
+
 
 
      public void scroll(WebElement waitForVisibilityOf) {
@@ -810,6 +823,17 @@ public class OnlineStorePage {
 
     public void addReviewToItem(){
 
+        WebDriverWait w = new WebDriverWait(driver, 10);
+        w.until(ExpectedConditions.visibilityOf(reviewLineTop));
+        scroll(addReview);
+        addReview.click();
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+        w.until(ExpectedConditions.visibilityOf(newReviewForm));
+        Assert.assertTrue(newReviewMainBox.isDisplayed());
+        scroll(addReview);
+        addReview.click();
+        Assert.assertTrue(!newReviewForm.isDisplayed());
+        System.out.println("'Add Review' form was opened and closed (test does not include actual submitting)");
 
     }
 
