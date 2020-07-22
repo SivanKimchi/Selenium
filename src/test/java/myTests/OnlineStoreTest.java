@@ -294,11 +294,13 @@ public class OnlineStoreTest {
 
 
 
-    @Test  //items and amounts, summary of amount and payment
-    public void paymentWithoutPaying(){
+    @Test  //payment
+    public void paymentWithoutPaying() throws InterruptedException {
 
-
-
+        addItemToCart();
+        OnlineStorePage store = new OnlineStorePage(driver);
+        store.continueToPaymentButton.click();
+        store.paymentWithoutPayment("Buyme");  //paying methods: Buyme, Credit Card , PayPal
 
     }
 

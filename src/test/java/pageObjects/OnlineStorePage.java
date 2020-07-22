@@ -285,10 +285,80 @@ public class OnlineStorePage {
     @FindBy (css = "section[id='main'] div[class*='cart-grid-right'] div[class='cart-summary-line clearfix cart-total'] span:nth-child(2)")
     public WebElement totalPriceWithDelivery;
 
+    @FindBy (css = "section[id='main'] div[class*='cart-grid-right'] a[class*='btn_to_checkout']")
+    public WebElement continueToPaymentButton;
+
+
+    @FindBy (css = "div[id='delivery-address']")
+    public WebElement addressForm;
+
+    @FindBy (css = "form[id='login-form'] button[name='continue']")
+    public WebElement continueWithPaymentProcess;
+
+    @FindBy (css = "div[id='delivery-address'] input[name='firstname']")
+    public WebElement addressFormFirstName;
+
+    @FindBy (css = "div[id='delivery-address'] input[name='lastname']")
+    public WebElement addressFormLastName;
+
+    @FindBy (css = "div[id='delivery-address'] input[name='phone_mobile']")
+    public WebElement addressFormMobilePhone;
+
+    @FindBy (css = "div[id='delivery-address'] input[name='city']")
+    public WebElement addressFormCity;
+
+    @FindBy (css = "div[id='delivery-address'] input[name='address1']")
+    public WebElement addressFormAddress;
+
+    @FindBy (css = "div[id='delivery-address'] input[name='use_same_address']")
+    public WebElement addressFormSameAddressCheckbox;
+
+    @FindBy (css = "div[class='card-block'] div[class='address']")
+    public WebElement addressBox;
+
+    @FindBy (css = "p[id*='id-failure-address-']")
+    public WebElement addressFailureAlert;
+
+    @FindBy (css = "a[class*='edit-address']")
+    public WebElement editAddress;
+
+    @FindBy (css = "button[name='confirm-addresses']")
+    public WebElement continueAfterAddress;
+
+    @FindBy (css = "div[class*='delivery-option']")
+    public WebElement deliveryOptionDiv;
+
+
+    @FindBy (css = "button[name='confirmDeliveryOption']")
+    public WebElement continueAfterDelivery;
+
+
+    @FindBy (xpath = "//*[text()='תשלום באמצעות Buyme']")
+    public WebElement payWithBuyme;
+
+
+    @FindBy (xpath = "//*[text()='תשלום בכרטיס אשראי מאובטח']")
+    public WebElement payWithCreditCard;
+
+    @FindBy (xpath = "//*[text()='שלם עם PayPal ']")
+    public WebElement payWithPayPal;
+
+    @FindBy (css = "input[id*='payment-option-']")
+    public List<WebElement> paymentOptionRadio;
+
+    @FindBy (css = "input[id='buy-me-card-number']")
+    public WebElement buymeCardNumberInput;
+
+    @FindBy (css = "input[id='conditions_to_approve[terms-and-conditions]']")
+    public WebElement agreeToTermsCheckbox;
+
+    @FindBy (css = "div[id='payment-confirmation'] button")
+    public WebElement orderConfirmation;
 
 
 
-     public void scroll(WebElement waitForVisibilityOf) {
+
+    public void scroll(WebElement waitForVisibilityOf) {
          JavascriptExecutor js = (JavascriptExecutor) driver;
          js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
          driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -941,6 +1011,7 @@ public class OnlineStorePage {
 
 
         public void shoppingCartPaymentSummary() {
+
             //total items
             String[] totalItems = shoppingCartPaymentTotalItems.getText().split(" פריטים");
             int totalItemsInt = Integer.parseInt(totalItems[0]);
@@ -978,6 +1049,166 @@ public class OnlineStorePage {
             Assert.assertTrue(totalWithDelivery == deliveryFee + sumItemsPrices );
             System.out.println("Total of prices WITH delivery is calculated correctly: "+ totalWithDelivery );
 
+        }
+
+
+
+
+        public void paymentWithoutPayment(String paymentMethod) throws InterruptedException {
+
+            //login
+            WebDriverWait w = new WebDriverWait(driver, 10);
+            w.until(ExpectedConditions.visibilityOf(loginFromStore_email));
+            loginFromStore_email.clear();
+            Thread.sleep(3000);
+            loginFromStore_email.sendKeys(GeneralProperties.LoginEmail);
+            Thread.sleep(3000);
+            loginFromStore_password.clear();
+            Thread.sleep(3000);
+            loginFromStore_password.sendKeys(GeneralProperties.LoginPassword);
+            Thread.sleep(3000);
+            continueWithPaymentProcess.click();
+
+            //address
+            try {
+                w.until(ExpectedConditions.visibilityOf(addressBox));
+                System.out.println("User has details saved in account");
+
+                String[] details = {GeneralProperties.userFirstName,
+                        GeneralProperties.userLastName,
+                        GeneralProperties.userMobilePhone,
+                        GeneralProperties.userCity,
+                        GeneralProperties.userAddress
+                };
+
+                try {
+                    if (addressFailureAlert.isDisplayed()) {
+                        editAddress.click();
+                        paymentEditAddressForm();    //  goes to delivery section
+                    }
+
+                } catch (Exception exception) {
+                    Assert.assertTrue(addressBox.getText().contains(details[0 - 4]));
+                    System.out.println("All address details exist and are valid");
+                    continueAfterAddress.click();    //  goes to delivery section
+                }
+
+
+            } catch (Exception p) {
+                paymentEditAddressForm();  //  goes to delivery section
+            }
+
+            //delivery
+            w.until(ExpectedConditions.visibilityOf(deliveryOptionDiv));
+            Assert.assertTrue(deliveryOptionDiv.getText().contains("שליח עד הבית"));
+            System.out.println("There is currently only 1 delivery method");
+            continueAfterDelivery.click();
+
+            //payment
+            paymentOptions(paymentMethod);
+
+        }
+
+
+
+    //paying methods: Buyme, Credit Card , PayPal
+        public void paymentOptions(String paymentMethod) throws InterruptedException {
+
+            WebDriverWait w = new WebDriverWait(driver, 10);
+
+            if (paymentMethod.equals("Buyme")){
+
+                WebElement parentOfWebElement_payWithBuyme = payWithBuyme.findElement(By.xpath(".."));
+
+                String buymeOptionNumber = parentOfWebElement_payWithBuyme.getAttribute("for");
+
+                for (int i = 0; i< paymentOptionRadio.size(); i++){
+
+                    if (paymentOptionRadio.get(i).getAttribute("id").equals(buymeOptionNumber)) {
+                        paymentOptionRadio.get(i).click();
+                        Thread.sleep(2000);
+                        Assert.assertTrue(buymeCardNumberInput.isDisplayed());
+                        System.out.println("Buyme card input box is displayed, but site has a bug when continuing without input -- order is CONFIRMED.. end of test");
+                    }
+                }
+
+            } else if (paymentMethod.equals("Credit Card")) {
+
+                WebElement parentOfWebElement_payWithCreditCard = payWithCreditCard.findElement(By.xpath(".."));
+
+                String creditCardOptionNumber = parentOfWebElement_payWithCreditCard.getAttribute("for");
+
+                for (int i = 0; i< paymentOptionRadio.size(); i++){
+                    if (paymentOptionRadio.get(i).getAttribute("id").equals(creditCardOptionNumber)) {
+                        paymentOptionRadio.get(i).click();
+                        Thread.sleep(2000);
+
+                        Actions actions = new Actions(driver);
+                        actions.moveToElement(orderConfirmation);
+                        Assert.assertFalse(orderConfirmation.isEnabled());
+                        System.out.println("Can not confirm order without checking 'agree to terms...'");
+                        agreeToTermsCheckbox.click();
+                        orderConfirmation.click();
+                        Thread.sleep(3000);
+                        Assert.assertTrue(driver.getCurrentUrl().contains("icom.yaad.net"));
+                        System.out.println("Credit Card secured payment url opened");
+                    }
+                }
+
+            } else if (paymentMethod.equals("PayPal")) {
+
+                WebElement parentOfWebElement_payWithPayPal = payWithPayPal.findElement(By.xpath(".."));
+                String paypalOptionNumber = parentOfWebElement_payWithPayPal.getAttribute("for");
+
+                for (int i = 0; i< paymentOptionRadio.size(); i++){
+
+                    if (paymentOptionRadio.get(i).getAttribute("id").equals(paypalOptionNumber)) {
+                        paymentOptionRadio.get(i).click();
+                        Thread.sleep(2000);
+
+                        Actions actions = new Actions(driver);
+                        actions.moveToElement(orderConfirmation);
+
+                        Assert.assertFalse(orderConfirmation.isEnabled());
+                        System.out.println("Can not confirm order without checking 'agree to terms...'");
+                        agreeToTermsCheckbox.click();
+                        orderConfirmation.click();
+                        w.until(ExpectedConditions.numberOfWindowsToBe(3));
+                        moveToNextTab();
+                        Assert.assertTrue(driver.getTitle().contains("PayPal"));
+                        System.out.println("A new window was opened for PayPal payment");
+                    }
+                }
+            } else {
+                System.out.println("Payment method does not exist yet");
+            }
+
+    }
+
+
+
+
+
+        public void paymentEditAddressForm(){     //logged in user
+
+            WebDriverWait w = new WebDriverWait(driver, 10);
+            w.until(ExpectedConditions.visibilityOf(addressForm));
+            System.out.println("User doesn't have FULL address details in account and must insert them");
+            Assert.assertEquals(addressFormFirstName.getAttribute("value"), GeneralProperties.userFirstName);
+            Assert.assertEquals(addressFormLastName.getAttribute("value"), GeneralProperties.userLastName);
+            if (addressFormMobilePhone.getAttribute("value").isEmpty()) {
+                addressFormMobilePhone.sendKeys(GeneralProperties.userMobilePhone);
+            }
+            addressFormCity.clear();
+            addressFormCity.sendKeys("תל אביב");
+            addressFormAddress.clear();
+            addressFormAddress.sendKeys("דיזינגוף 100");
+            if (!addressFormSameAddressCheckbox.isSelected()){
+                addressFormSameAddressCheckbox.click();
+            }
+
+            continueAfterAddress.click();
+            continueAfterAddress.click();
         }
 
 
