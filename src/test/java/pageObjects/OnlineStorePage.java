@@ -170,6 +170,12 @@ public class OnlineStorePage {
     @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li input[name='product-quantity-spin']")
     public List<WebElement> quantityInCartList;
 
+    @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li span[class='price']")
+    public List<WebElement> priceInCartList;
+
+    @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li span[class='product-price price']")
+    public List<WebElement> sumPriceTotalInCartList;
+
 
 
 
@@ -267,7 +273,17 @@ public class OnlineStorePage {
     @FindBy (css = "a[class='shop_logo'] img[class='logo']")
     public WebElement lametayelShopLogo;
 
+    @FindBy (css = "section[id='main'] div[class*='cart-grid-right'] span[class='label js-subtotal']")
+    public WebElement shoppingCartPaymentTotalItems;
 
+    @FindBy (css = "section[id='main'] div[class*='cart-grid-right'] div[class='value price']")
+    public WebElement shoppingCartPaymentTotalPriceForItems;
+
+    @FindBy (css = "section[id='main'] div[class*='cart-grid-right'] div[id='cart-subtotal-shipping'] div[class='value price']")
+    public WebElement deliveryFee;
+
+    @FindBy (css = "section[id='main'] div[class*='cart-grid-right'] div[class='cart-summary-line clearfix cart-total'] span:nth-child(2)")
+    public WebElement totalPriceWithDelivery;
 
 
 
@@ -906,6 +922,63 @@ public class OnlineStorePage {
         }
 
 
+
+
+        public void shoppingCartItemTotalPrice(){
+
+         for (int i=0; i<quantityInCartList.size(); i++ ) {
+             String[] priceArray = priceInCartList.get(i).getText().split("₪");
+             String[] totalPriceArray = sumPriceTotalInCartList.get(i).getText().split("₪");
+             int quantity = Integer.parseInt(quantityInCartList.get(i).getAttribute("value"));
+             int price = Integer.parseInt(priceArray[1]);
+             int totalPrice = Integer.parseInt(totalPriceArray[1]);
+             Assert.assertTrue(totalPrice == quantity * price);
+
+             System.out.println("Total item price is "+ totalPrice + " (equals price*quantity: " + price + "*" + quantity + ")");
+         }
+        }
+
+
+
+        public void shoppingCartPaymentSummary() {
+            //total items
+            String[] totalItems = shoppingCartPaymentTotalItems.getText().split(" פריטים");
+            int totalItemsInt = Integer.parseInt(totalItems[0]);
+            int sumItemsQuantity =0;
+
+            for (int i=0; i<quantityInCartList.size(); i++) {
+                int quantity = Integer.parseInt(quantityInCartList.get(i).getAttribute("value"));
+                sumItemsQuantity = sumItemsQuantity + quantity;
+            }
+
+            Assert.assertTrue(sumItemsQuantity == totalItemsInt);
+            System.out.println("Total of items is calculated correctly: "+ sumItemsQuantity );
+
+            //total price for order
+            String[] totalPriceForItems = shoppingCartPaymentTotalPriceForItems.getText().split("₪");
+            int totalPriceForItemsInt = Integer.parseInt(totalPriceForItems[1]);
+            int sumItemsPrices =0;
+
+            for (int i=0; i<quantityInCartList.size(); i++) {
+                String[] totalPriceArray = sumPriceTotalInCartList.get(i).getText().split("₪");
+                int totalPrice = Integer.parseInt(totalPriceArray[1]);
+                sumItemsPrices = sumItemsPrices + totalPrice;
+            }
+
+            Assert.assertTrue(sumItemsPrices == totalPriceForItemsInt);
+            System.out.println("Total of prices without delivery is calculated correctly: "+ sumItemsPrices );
+
+            //total price with delivery
+            String[] deliveryFeeArray = deliveryFee.getText().split("₪");
+            int deliveryFee = Integer.parseInt(deliveryFeeArray[1]);
+
+            String[] totalWithDeliveryArray = totalPriceWithDelivery.getText().split("₪");
+            int totalWithDelivery = Integer.parseInt(totalWithDeliveryArray[1]);
+
+            Assert.assertTrue(totalWithDelivery == deliveryFee + sumItemsPrices );
+            System.out.println("Total of prices WITH delivery is calculated correctly: "+ totalWithDelivery );
+
+        }
 
 
 

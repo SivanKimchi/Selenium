@@ -266,24 +266,29 @@ public class OnlineStoreTest {
 
         addItemToCart();
         OnlineStorePage store = new OnlineStorePage(driver);
-
         store.lametayelShopLogo.click();
-        //WebDriverWait w = new WebDriverWait(driver, 10);
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
-
         store.addItemToCart(2);
 
         store.changeCartItemsQuantity();
-
-
     }
 
 
-    @Test  //summary of amount and payment, delivery
-    public void shoppingCartSummary() {
+    @Test  //sum of quantity and payment, delivery
+    public void shoppingCartSummary() throws InterruptedException {
 
+        addItemToCart();
+        OnlineStorePage store = new OnlineStorePage(driver);
+        //increase +1 quantity
+        store.increaseQuantityList.get(0).click();
+        Thread.sleep(5000);
 
+        store.lametayelShopLogo.click();
+        Thread.sleep(5000);
+        store.addItemToCart(2);
 
+        store.shoppingCartItemTotalPrice();
+        store.shoppingCartPaymentSummary();
 
     }
 
