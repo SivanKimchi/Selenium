@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,10 +33,10 @@ public class OrderWidgetInsuranceTest {
 
     }
 
-//    @After
-//    public void closeTest(){
-//        driver.close();
-//    }
+    @After
+    public void closeTest(){
+        driver.quit();
+    }
 
 
     @Test
@@ -43,16 +44,7 @@ public class OrderWidgetInsuranceTest {
 
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        orderWidget.scrollDownToWidget(orderWidget.orderWidgetInsurance);
-
-        WebDriverWait wait = new WebDriverWait(driver,5);
-
-        orderWidget.orderWidgetInsurance.click();
-        orderWidget.orderInsuranceButton.click();
-
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-
-        orderWidget.moveToNextTab();
+        orderWidget.enterOrderWidgetSection(orderWidget.orderWidgetInsurance, orderWidget.orderInsuranceButton);
 
         Assert.assertTrue(driver.getCurrentUrl().contains("insurance.lametayel.co.il"));
     }

@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,10 +32,10 @@ public class OrderWidgetStoreBranchesTest {
 
     }
 
-//    @After
-//    public void closeTest(){
-//        driver.close();
-//    }
+    @After
+    public void closeTest(){
+        driver.quit();
+    }
 
 
     @Test
@@ -42,17 +43,8 @@ public class OrderWidgetStoreBranchesTest {
 
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        orderWidget.scrollDownToWidget(orderWidget.orderWidgetStores);
 
-        WebDriverWait wait = new WebDriverWait(driver,5);
-
-        orderWidget.orderWidgetStores.click();
-        orderWidget.orderStoreBranchesButton.click();
-
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-
-        orderWidget.moveToNextTab();
-        orderWidget.skipToPageButton.click();    //skip ad
+        orderWidget.enterOrderWidgetSection(orderWidget.orderWidgetStores, orderWidget.orderStoreBranchesButton);
 
         Assert.assertTrue(orderWidget.firstBranch.getText().contains("דיזנגוף סנטר"));
         Assert.assertTrue(orderWidget.firstBranchLowerMenu.getText().contains("דיזנגוף סנטר"));

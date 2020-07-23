@@ -42,57 +42,57 @@ public class OrderWidgetHotelsTest {
 
     @After
     public void closeTest(){
-        driver.close();
+        driver.quit();
     }
 
 
     @Test
-    public void orderHotelDefaultDatesAndRoom() throws InterruptedException {     //1 room 2 adults
+    public void orderHotelByCityDefaultDatesAndRoom() throws InterruptedException {     //1 room 2 adults
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        orderWidget.scrollDownToWidget(orderWidget.orderWidgetHotels);
-
-        WebDriverWait wait = new WebDriverWait(driver,10);
-
-        orderWidget.orderWidgetHotels.click();
-        orderWidget.moveToiframe();
+        orderWidget.scrollToHotelsiframe();
 
         orderWidget.cantOrderHotelWithoutInput();
 
         orderWidget.pickDestinationOrHotelName("Paris");   // english-first letter in CAPS)
 
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         orderWidget.moveToNextTab();
+
+        Assert.assertTrue(driver.getCurrentUrl().contains("Paris"));
+        System.out.println("Search successful for hotel by city" );
 
         //  ?? doesn't work when trying to check in HOTELS tab search results (even after switching to iframe)
         // orderWidget.moveToHotelsPageiframe();
         // wait.until(ExpectedConditions.visibilityOf(orderWidget.hotelsPageSearchBreadcrumb));
        // Assert.assertTrue(orderWidget.hotelsPageSearchBreadcrumb.getText().contains("פריז"));
 
-        Assert.assertTrue(driver.getCurrentUrl().contains("Paris"));
+    }
 
-        ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
-        driver.close();
-        driver.switchTo().window(windows.get(0));
 
-        //Check the same with HOTEL name
-        orderWidget.orderWidgetHotels.click();
-        orderWidget.moveToiframe();
+
+    @Test
+    public void orderHotelByNameDefaultDatesAndRoom() throws InterruptedException {     //1 room 2 adults
+
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        orderWidget.scrollToHotelsiframe();
+
         orderWidget.pickDestinationOrHotelName("Ibis");   // english-first letter in CAPS)
+        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         orderWidget.moveToNextTab();
         Assert.assertTrue(driver.getCurrentUrl().contains("Ibis"));
+        System.out.println("Search successful for hotel by hotel name");
 
     }
 
 
     @Test
     public void orderHotelChangeRoomOption() {
-        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        orderWidget.scrollDownToWidget(orderWidget.orderWidgetHotels);
 
-        orderWidget.orderWidgetHotels.click();
-        orderWidget.moveToiframe();
+        OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
+        orderWidget.scrollToHotelsiframe();
 
         orderWidget.changeRoomAndGuestsNumbers("חדר אחד, 2 אורחים", "4", "2", "1", "2 חדרים, 8 אורחים", "חדר אחד, 6 אורחים");  //format:  "2 חדרים, 8 אורחים"
     }
@@ -103,10 +103,7 @@ public class OrderWidgetHotelsTest {
     public void orderHotelPickDates(){
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        orderWidget.scrollDownToWidget(orderWidget.orderWidgetHotels);
-
-        orderWidget.orderWidgetHotels.click();
-        orderWidget.moveToiframe();
+        orderWidget.scrollToHotelsiframe();
 
         orderWidget.hotelsDates.click();
 
@@ -119,5 +116,6 @@ public class OrderWidgetHotelsTest {
         Assert.assertTrue(orderWidget.hotelsDates.getText().contains("20 דצמ"));
         Assert.assertTrue(orderWidget.hotelsDates.getText().contains("25 דצמ"));
 
+        //invalid calendar is tested in OrderWidgetFlightsTest
     }
 }

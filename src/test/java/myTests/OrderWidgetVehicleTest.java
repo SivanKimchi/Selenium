@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,10 +29,10 @@ public class OrderWidgetVehicleTest {
 
     }
 
-//    @After
-//    public void closeTest(){
-//        driver.close();
-//    }
+    @After
+    public void closeTest(){
+        driver.quit();
+    }
 
 
     @Test
@@ -39,16 +40,7 @@ public class OrderWidgetVehicleTest {
 
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
-        orderWidget.scrollDownToWidget(orderWidget.orderWidgetCar);
-
-        WebDriverWait wait = new WebDriverWait(driver,5);
-
-        orderWidget.orderWidgetCar.click();
-        orderWidget.orderVehicleButton.click();
-
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-
-        orderWidget.moveToNextTab();
+        orderWidget.enterOrderWidgetSection(orderWidget.orderWidgetCar, orderWidget.orderVehicleButton);
 
         Assert.assertTrue(driver.getCurrentUrl().contains("car-rental.lametayel.co.il"));
     }

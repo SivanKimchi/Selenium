@@ -56,10 +56,10 @@ public class OrderWidgetOnHomePage {
     public WebElement flightsDirectionChoices;
 
     @FindBy (css = "ul[class='mdc-list'] li:nth-child(1)")
-    public WebElement flightsDirectionFirstChoice;
+    public WebElement flightsDirectionOneWay;
 
     @FindBy (css = "ul[class='mdc-list'] li:nth-child(2)")
-    public WebElement flightsDirectionSecondChoice;
+    public WebElement flightsDirectionTwoWay;
 
     @FindBy (xpath = "//*[@id=\"fly-app\"]/div/article/div/div/div[1]/button/div")
     public WebElement flightsNumberOfPassengers;
@@ -159,7 +159,7 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "td[class='asd__day asd__day--enabled asd__day--disabled']")
     public List<WebElement> flightsCalenderDisabledDate;
 
-    @FindBy (css = "div[class='asd__inner-wrapper'] div:nth-of-type(2) div")
+    @FindBy (css = "div[class='asd__inner-wrapper'] div div:nth-of-type(2) div")
     public WebElement calendarMonth;
 
     @FindBy (id="search_engine_search_engine_flight_outbound_date")
@@ -179,9 +179,6 @@ public class OrderWidgetOnHomePage {
 
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--next']")
     public WebElement calenderMoveToNextMonth;
-
-    @FindBy (css = "button[class='asd__mobile-close'] div:")
-    public WebElement flightsCalenderClose;
 
     @FindBy (css = "table[class='asd__month-table'] button[class='asd__day-button']")
     public List<WebElement> dates;
@@ -206,10 +203,8 @@ public class OrderWidgetOnHomePage {
     @FindBy (id = "H7mf")
     public WebElement hotelsPageSearchBreadcrumb;
 
-
     @FindBy (id="YK5l-SearchLocation")
     public WebElement hotelsPageSearchDestination;
-
 
     @FindBy (css = "div[class='mb-1'] button")
     public WebElement numOfRooms;
@@ -223,17 +218,8 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex']")
     public WebElement selectAgeOfKids;
 
-
     @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex'] div select")
     public List<WebElement> childrenAgesToFill;
-
-
-//    @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex'] div:nth-child(1) select")
-//    public WebElement selectAgeOfChild1;
-//
-//
-//    @FindBy (css = "div[class='w-full mt-2 lg:w-auto lg:mt-0'] div[class='flex'] div:nth-child(2) select")
-//    public WebElement selectAgeOfChild2;
 
     @FindBy (css = "button[class='appearance-none cursor-pointer flex items-center hover:text-brand mt-3 mb-4']")
     public WebElement addRoom;
@@ -259,7 +245,6 @@ public class OrderWidgetOnHomePage {
 
 
     //stores
-    //car
     @FindBy (xpath = "//*[contains(@id,'market-widget-stores')]/section/div[2]/a")
     public WebElement orderStoreBranchesButton;
 
@@ -272,7 +257,6 @@ public class OrderWidgetOnHomePage {
     @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
     public WebElement skipToPageButton;
 
-
     @FindBy (css = "ul[class='m-stores_list list-unstyled'] li:nth-of-type(1) a")
     public WebElement firstBranch;
 
@@ -284,6 +268,52 @@ public class OrderWidgetOnHomePage {
 
 
 
+    //constructor
+    public OrderWidgetOnHomePage(WebDriver driver) {
+
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+
+    //works for 2 or MORE windows
+    public void moveToNextTab() {
+
+        String parentId = driver.getWindowHandle();
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String childWindow= "";
+
+        while (it.hasNext()){
+            childWindow = it.next();
+        }
+        driver.switchTo().window(childWindow);
+    }
+
+
+
+    public void scrollDownToWidget (WebElement waitForVisibilityOf){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", orderWidget);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(waitForVisibilityOf));
+
+    }
+
+    public void moveToiframe(){
+        scrollDownToWidget(widgetiframe);
+        driver.switchTo().frame(widgetiframe);
+    }
+
+
+    public void skipAd() {
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+    }
+
     //choose destination
     public void pickDestination (String destination) throws InterruptedException {
         flightsTo.click();
@@ -293,6 +323,13 @@ public class OrderWidgetOnHomePage {
         Thread.sleep(3000);
         flightsTo_InputBox.sendKeys(Keys.ENTER);
         Thread.sleep(5000);
+    }
+
+
+    public void scrollToHotelsiframe(){
+        scrollDownToWidget(orderWidgetHotels);
+        orderWidgetHotels.click();
+        moveToiframe();
     }
 
     //insert destination for hotels search
@@ -319,7 +356,7 @@ public class OrderWidgetOnHomePage {
     }
 
 
-    //pick specific flight date
+    //pick specific flight / hotel date
     public void pickADateInCalendar (String month, String day) {
 
         String visibleMonth = calendarMonth.getText();
@@ -343,12 +380,24 @@ public class OrderWidgetOnHomePage {
     }
 
 
-    // *** same method as the next method - pastDateIsInvalid() - using Calendar ***
+    // *** same method as the next method - pastDateInCurrentMonthIsInvalid() - using Calendar (int)***
     public void dontAllowPastDates(String month, int day) throws ParseException {
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
 
         String visibleMonth = calendarMonth.getText();
 
-        if (visibleMonth.contains(month)) {
+        if (!visibleMonth.contains(month)) {
+
+            System.out.println("It's probably close to the end of the month, and the calendar's default order-flights-month moved to next month");
+
+            flightsCalenderMoveToPreviousMonth.click();
+
+            wait.until(ExpectedConditions.visibilityOf(calendarMonth));
+
+            visibleMonth = calendarMonth.getText();
+
+            }
 
             Date pdate = new Date();
             Calendar lCal = Calendar.getInstance();
@@ -359,6 +408,7 @@ public class OrderWidgetOnHomePage {
 
             for (int i = 0; i < dates.size(); i++) {
                 String text = dates.get(i).getText();
+
                 if (text.equals(dayString) && today > day) {  // day is smaller or before today's day){
                     System.out.println("invalid date");
                     Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
@@ -368,53 +418,62 @@ public class OrderWidgetOnHomePage {
 
             }
         }
-    }
 
 
 
 
-        public void pastDateIsInvalid(String month, int day) {
+        public void pastDateInCurrentMonthIsInvalid(String month, int day) {
+
+            WebDriverWait wait = new WebDriverWait(driver,10);
 
             String visibleMonth = calendarMonth.getText();
 
-            if (visibleMonth.contains(month)){
+            if (!visibleMonth.contains(month)){
 
-                String dayString = String.valueOf(day);
+                System.out.println("It's probably close to the end of the month, and the calendar's default order-flights-month moved to next month");
 
-                SimpleDateFormat viewedDateSDF = new SimpleDateFormat("yyyy-MM-dd");
-                Date todayDate = new Date();
-                String todayDateString = viewedDateSDF.format(todayDate);
-                Date todayDateFormatted = null;
+                flightsCalenderMoveToPreviousMonth.click();
+
+                wait.until(ExpectedConditions.visibilityOf(calendarMonth));
+
+                visibleMonth = calendarMonth.getText();
+            }
+
+            //validate past date in current month isn't valid
+            String dayString = String.valueOf(day);
+
+            SimpleDateFormat viewedDateSDF = new SimpleDateFormat("yyyy-MM-dd");
+            Date todayDate = new Date();
+            String todayDateString = viewedDateSDF.format(todayDate);
+            Date todayDateFormatted = null;
+
+            try {
+                todayDateFormatted = viewedDateSDF.parse(todayDateString);    // Today's date in DATE type, formatted
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < dates.size(); i++) {
+
+                String viewedDate = dates.get(i).getAttribute("date");
 
                 try {
-                    todayDateFormatted = viewedDateSDF.parse(todayDateString);    // Today's date in DATE type, formatted
+
+                    Date viewedDateDateType = viewedDateSDF.parse(viewedDate);   // date picked on website, DATE type, formatted
+
+                    if ((dates.get(i).getText().equals(dayString)) && todayDateFormatted.after(viewedDateDateType)) {
+                        System.out.println("invalid date- " + viewedDateDateType);
+                        Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
+                    } else if (dates.get(i).getText().equals(dayString)) {
+                        dates.get(i).click();
+                        System.out.println("valid date");
+                    }
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-                for (int i = 0; i < dates.size(); i++) {
-
-                    String viewedDate = dates.get(i).getAttribute("date");
-
-                    try {
-
-                        Date viewedDateDateType = viewedDateSDF.parse(viewedDate);   // Date picked on website, DATE type, formatted
-
-                        if ((dates.get(i).getText().equals(dayString)) && todayDateFormatted.after(viewedDateDateType)) {
-                            System.out.println("invalid date- " + viewedDateDateType);
-                            Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
-                        } else if (dates.get(i).getText().equals(dayString)) {
-                            dates.get(i).click();
-                            System.out.println("valid date");
-                        }
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
             }
-        }  else {
-                System.out.println("This is probably a future month, so it is irrelevant to the test.");
-            }
+
     }
 
 
@@ -431,6 +490,7 @@ public class OrderWidgetOnHomePage {
 
             visibleMonth = calendarMonth.getText();
         }
+            //entire month isn't valid
             for (int i = 0; i < dates.size(); i++) {
                 Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
             }
@@ -522,29 +582,6 @@ public class OrderWidgetOnHomePage {
     }
 
 
-    public void moveToNextTab(){
-
-        Set<String> windowsIds = driver.getWindowHandles();
-        Iterator<String> it = windowsIds.iterator();
-        String parentId = it.next();
-        String childId = it.next();
-        driver.switchTo().window(childId);
-
-    }
-
-
-    public void scrollDownToWidget (WebElement waitForVisibilityOf){
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", orderWidget);
-        WebDriverWait wait = new WebDriverWait(driver,10);
-        wait.until(ExpectedConditions.visibilityOf(waitForVisibilityOf));
-
-    }
-
-    public void moveToiframe(){
-        scrollDownToWidget(widgetiframe);
-        driver.switchTo().frame(widgetiframe);
-    }
 
     public void moveToHotelsPageiframe(){
         WebDriverWait wait = new WebDriverWait(driver,10);
@@ -554,10 +591,17 @@ public class OrderWidgetOnHomePage {
 
 
 
-    //constructor
-    public OrderWidgetOnHomePage(WebDriver driver) {
+     public void enterOrderWidgetSection(WebElement section, WebElement buttonToEnterSection){
 
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
+         scrollDownToWidget(section);
+         WebDriverWait wait = new WebDriverWait(driver,5);
+
+         section.click();
+         buttonToEnterSection.click();
+         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+         moveToNextTab();
+         skipAd();
+     }
+
 }

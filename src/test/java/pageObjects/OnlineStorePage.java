@@ -352,6 +352,13 @@ public class OnlineStorePage {
 
 
 
+    //constructor
+    public OnlineStorePage(WebDriver driver) {
+
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
 
     public void scroll(WebElement waitForVisibilityOf) {
          JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -462,7 +469,7 @@ public class OnlineStorePage {
     }
 
 
-    public void searchItemChooseFromList(String searchFor, int itemIndex) throws InterruptedException {
+    public void searchItemChooseFromAutocompleteList(String searchFor, int itemIndex) throws InterruptedException {
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(searchBar));
@@ -1228,12 +1235,4 @@ public class OnlineStorePage {
             continueAfterAddress.click();
         }
 
-
-
-    //constructor
-    public OnlineStorePage(WebDriver driver) {
-
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
 }

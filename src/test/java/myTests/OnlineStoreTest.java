@@ -65,7 +65,7 @@ public class OnlineStoreTest {
     public void searchForItemPickAutoSuggestion() throws InterruptedException {
 
         OnlineStorePage store = new OnlineStorePage(driver);
-        store.searchItemChooseFromList("נעלי", 3);
+        store.searchItemChooseFromAutocompleteList("נעלי", 3);
 
     }
 
@@ -90,7 +90,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("מכנסיים מתקצרים", 2); //  ("סנדלי גברים") הולך אחורה בצבע / "מכנסיים מתקצרים"-הולך קדימה
+        store.searchItemChooseFromAutocompleteList("מכנסיים מתקצרים", 2); //  ("סנדלי גברים") הולך אחורה בצבע / "מכנסיים מתקצרים"-הולך קדימה
 
         store.changeItemColor();
 
@@ -101,7 +101,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("נעלי נשים", 1);
+        store.searchItemChooseFromAutocompleteList("נעלי נשים", 1);
 
         store.changeItemSize();
     }
@@ -111,7 +111,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("בקבוק", 1);
+        store.searchItemChooseFromAutocompleteList("בקבוק", 1);
 
         store.changeQuantityOfItem();
     }
@@ -122,7 +122,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("סנדלי שורש", 1);
+        store.searchItemChooseFromAutocompleteList("סנדלי שורש", 1);
 
         store.tryToSaveProductUserNotLoggedIn();
         //goes to user's STORE account and then navigates back to item page as logged in user
@@ -141,7 +141,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("סנדלי שורש", 1);
+        store.searchItemChooseFromAutocompleteList("סנדלי שורש", 1);
 
         store.availabilityInBranches(2);
 
@@ -154,7 +154,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("סנדלי שורש", 1);
+        store.searchItemChooseFromAutocompleteList("סנדלי שורש", 1);
 
         store.moreProductsFromBrand();
 
@@ -167,7 +167,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("נעלי טיולים לגברים Northside Weston Mid", 1);   //נעלי טיולים לגברים Northside Weston Mid ,  אוהל קמפינג
+        store.searchItemChooseFromAutocompleteList("נעלי טיולים לגברים Northside Weston Mid", 1);   //נעלי טיולים לגברים Northside Weston Mid ,  אוהל קמפינג
 
         store.exactAverage0fStarsRating();
     }
@@ -178,7 +178,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
 
-        store.searchItemChooseFromList("סנדלי שורש", 1);
+        store.searchItemChooseFromAutocompleteList("סנדלי שורש", 1);
 
         store.addReviewToItem();
 

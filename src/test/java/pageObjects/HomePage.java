@@ -3,13 +3,19 @@ package pageObjects;
 import Lametayel.GeneralProperties;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class HomePage {
 
@@ -156,20 +162,61 @@ public class HomePage {
     @FindBy (css = "li[id='m-internet-shop-li'] a")
     public WebElement mainMenuLametayelOnlineShop;
 
-
     @FindBy(id="m-dests")
     public WebElement mainMenuDestinationsMenu;
 
-    @FindBy(id="m-dests-n_america")
-    public WebElement mainMenuDestinationNorthAmerica;
+    @FindBy(css = "ul[id='m-dests'] li[class='dropdown_menu_dests']")
+    public List<WebElement> mainMenuDestinationList;
 
-    @FindBy(css = "div[id='m-n_america'] span:nth-child(3) li:nth-child(2)")
-    public WebElement mainMenuDestinationCanada;
+
+    @FindBy(css = "div[class='dropdown_content_menu_dests m_dest_ul is_submenu'] span:nth-child(3) li a")
+    public List<WebElement> mainMenuDestinationPopularCountriesList;
+
+    @FindBy (css = "h1 span[class='relative text-shadow pr-3 md:pr-6']")
+    public WebElement destinationPageh1;
+
+
+    @FindBy (xpath = "//button[contains(text(), 'דלג לאתר')]")
+    public WebElement skipToPageButton;
 
 
     //members- "like" box at the scroll down
     @FindBy (css = "div[id='hp_like_box'] h2[class='heading heading-sm']")
     public WebElement facebookLikeBox;
+
+
+
+
+    //constructor
+    public HomePage(WebDriver driver) {
+
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+
+    public void skipAd() {
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+    }
+
+
+    //works for 2 or MORE windows
+    public void moveToNextTab() {
+
+        String parentId = driver.getWindowHandle();
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String childWindow= "";
+
+        while (it.hasNext()){
+            childWindow = it.next();
+        }
+        driver.switchTo().window(childWindow);
+    }
 
 
     public void logIntoSite(){
@@ -239,24 +286,70 @@ public class HomePage {
         Assert.assertEquals(userMenuAddNewContent.getAttribute("role"), "presentation");
         Assert.assertEquals(userMenuMyContents.getAttribute("role"), "presentation");
 
+    }
+
+
+
+    public void searchBarAutoComplete(String search, String expectedResult){
+
+        searchBar.sendKeys(search);
+        WebDriverWait wait = new WebDriverWait(driver,20);
+        wait.until(ExpectedConditions.visibilityOf(searchAutocomplete));
+
+        //autocomplete dropdown
+        searchBar.sendKeys(Keys.ARROW_DOWN);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        searchBar.sendKeys(Keys.ENTER);
+        Assert.assertTrue(driver.getCurrentUrl().contains(expectedResult));
+    }
+
+
+    public void searchBarInstantEnter(String partialSearchString, String expectedResult){
+
+        searchBar.sendKeys(partialSearchString);
+        searchBar.sendKeys(Keys.ENTER);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        skipAd();
+        Assert.assertEquals(searchResultsPageH1.getText(),expectedResult);
 
     }
 
 
-    public void moveToNextTab(){
+    public void mainMenuDestinationDropDown(int continentIndex, int countryIndex){
 
-        Set<String> windowsIds = driver.getWindowHandles();
-        Iterator<String> it = windowsIds.iterator();
-        String parentId = it.next();
-        String childId = it.next();
-        driver.switchTo().window(childId);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        Actions actions = new Actions(driver);
+
+        actions.moveToElement(mainMenuDestinations).build().perform();
+        wait.until(ExpectedConditions.visibilityOf(mainMenuDestinationList.get(1)));   //0 is not visible
+
+        try {
+
+            actions.moveToElement(mainMenuDestinationList.get(continentIndex)).build().perform();     //max 8
+
+            // * MINI SCOPE *
+            WebElement miniScopeChosenContinent = mainMenuDestinationList.get(continentIndex);
+            List<WebElement> popularCountries = miniScopeChosenContinent.findElements(By.cssSelector("span:nth-child(3) li a"));
+
+            try {
+                actions.moveToElement(popularCountries.get(countryIndex)).build().perform();
+
+                String country = popularCountries.get(countryIndex).getText();
+                popularCountries.get(countryIndex).click();
+
+                wait.until(ExpectedConditions.visibilityOf(destinationPageh1));
+
+                Assert.assertTrue(destinationPageh1.getText().contains(country));
+                System.out.println("Selected popular country from main drop down menu Destinations (" + country + ")");
+
+            } catch (Exception a) {
+                System.out.println("Country index is out of bound. Please run test again with a smaller index");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Continent index is out of bound. Please run test again with a smaller index");
+        }
 
     }
 
-    //constructor
-    public HomePage(WebDriver driver) {
-
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
 }
