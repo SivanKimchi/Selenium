@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.GeneralProperties;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,10 +41,10 @@ public class BlogsTest {
 
     }
 
-//    @After
-//    public void closeTest(){
-//        driver.close();
-//    }
+    @After
+    public void closeTest(){
+        driver.quit();
+    }
 
 
     @Test
@@ -61,8 +62,6 @@ public class BlogsTest {
 
 
 
-
-
     @Test
     public void createABlogPost() throws InterruptedException {
           //with logged-in user
@@ -71,8 +70,6 @@ public class BlogsTest {
         blogs.createABlogPost("יומן מסע", "איזה כיף בחו\"ל", "אירלנד");
 
     }
-
-
 
 
     @Test
@@ -116,8 +113,9 @@ public class BlogsTest {
 
 
 
-    @Test     // ** print doesn't work , views-no way to test number being changed , comment-I don't want to comment on my posts
-    public void interactWithBlogPost() throws InterruptedException {
+    @Test     // ** interaction: print doesn't work , views-there is no way to test number being changed , comments-I don't want to comment on my posts
+
+    public void followBlogPost() throws InterruptedException {
 
         BlogsPage blogs = new BlogsPage(driver);
 
@@ -126,7 +124,55 @@ public class BlogsTest {
         driver.navigate().refresh();
         blogs.myBlogPosts.get(1).click();
 
-        blogs.interactWithBlogPost();
+        blogs.followBlog();
 
     }
+
+
+    @Test
+    public void saveBlogPost() throws InterruptedException {
+
+        BlogsPage blogs = new BlogsPage(driver);
+
+        blogs.searchBlog("נורווגיה");
+        blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
+        driver.navigate().refresh();
+        blogs.myBlogPosts.get(1).click();
+
+        blogs.savePost();
+
+    }
+
+
+    @Test
+    public void shareBlogPost() throws InterruptedException {
+
+        BlogsPage blogs = new BlogsPage(driver);
+
+        blogs.searchBlog("נורווגיה");
+        blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
+        driver.navigate().refresh();
+        blogs.myBlogPosts.get(1).click();
+
+        blogs.sharePost();
+
+    }
+
+
+    @Test
+    public void likeBlogPost() throws InterruptedException {
+
+        BlogsPage blogs = new BlogsPage(driver);
+
+        blogs.searchBlog("נורווגיה");
+        blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
+        driver.navigate().refresh();
+        blogs.myBlogPosts.get(1).click();
+
+        blogs.likePost();
+
+    }
+
+
+
 }

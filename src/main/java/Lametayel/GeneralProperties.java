@@ -16,4 +16,6 @@ public class GeneralProperties {
     public static final String userCity ="תל אביב";
     public static final String userAddress ="דיזינגוף 100";
 
+
+
 }

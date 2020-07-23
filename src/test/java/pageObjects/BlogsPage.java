@@ -262,11 +262,30 @@ public class BlogsPage {
     @FindBy (css = "[id='app'] section:nth-child(7) main section h2")
     public WebElement commentsHeadline;
 
-    @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]/div[2]/div/div/a[1]")
+    @FindBy (css = "div[id='app'] div[id='comments'] div[class='flex justify-center'] a:nth-of-type(1)")
     public WebElement loginToInteract;
 
-    @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]/div[2]/div/div/a[2]")
+    @FindBy (css = "div[id='app'] div[id='comments'] div[class='flex justify-center'] a:nth-of-type(2)")
     public WebElement loginViaFacebookToInteract;
+
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[7]/div[2]/div[2]/div/div/a[1]")
+    public WebElement loginToInteractFollowPost;
+
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[7]/div[2]/div[2]/div/div/a[2]")
+    public WebElement loginViaFacebookToInteractFollowPost;
+
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[8]/div[2]/div[2]/div/div/div/a[1]")
+    public WebElement loginToInteractSavePost;
+
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[8]/div[2]/div[2]/div/div/div/a[2]")
+    public WebElement loginViaFacebookToInteractSavePost;
+
+    @FindBy (xpath = " //*[@id=\"modals\"]/div[9]/div[2]/div[2]/div/div/a[1]")
+    public WebElement loginToInteractLikePost;
+
+    @FindBy (xpath = " //*[@id=\"modals\"]/div[9]/div[2]/div[2]/div/div/a[2]")
+    public WebElement loginViaFacebookToInteractLikePost;
+
 
     @FindBy (css = "div[id='comments'] div div div textarea")
     public WebElement addComment;
@@ -298,18 +317,44 @@ public class BlogsPage {
     @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]")
     public WebElement needToSignIn;
 
+    @FindBy (xpath = "//*[@id='modals']/div[9]/div[2]")
+    public WebElement needToSignInBottomLike;
+
+    @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]")
+    public WebElement needToSignInFromSavePost;
+
+    @FindBy (xpath = "//*[@id='modals']/div[8]/div[contains(@aria-labelledby, 'dropdown')]//ul[@class='p-4 overflow-auto']/li//input")
+    public List<WebElement> savedPostsFolderCheckedBox;  //last
 
 
-    @FindBy (css = "#modals > div:nth-child(7) > div.dropdown-surface.max-w-screen.absolute.top-right > div.bg-white.shadow-surface.focus\\:outline-none.overflow-auto.rounded-lg")
-    public WebElement test2;
 
-    //and more articles and Things To Do in the city
+    //constructor
+    public BlogsPage(WebDriver driver) {
+
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
+
+    public void skipAd(){
+        try {
+            skipToPageButton.click();
+        } catch (Exception e) {
+            System.out.println("no ad page was skipped");
+        }
+    }
+
+    public void scroll(WebElement waitForVisibilityOf) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+
+    }
 
 
     public void searchBlogPost(String searchPostAbout) throws InterruptedException {
 
         searchBlog(searchPostAbout);
-
 
         if (searchPostAbout.equals("איסלנד")) {
             //  ** search for MY Iceland blog posts **
@@ -332,12 +377,12 @@ public class BlogsPage {
             System.out.println("Yay! I've also been to this destination. Check out my blog :) " + myBlog.getText());
             Assert.assertEquals(myBlog.getText(), "הבלוג של sivanki");
 
-
         }
     }
 
 
     public void searchBlog(String searchFor) throws InterruptedException {
+
         HomePage homePage = new HomePage(driver);
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -358,16 +403,9 @@ public class BlogsPage {
 
 
 
-    public void scroll(WebElement waitForVisibilityOf) {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-
-    }
-
-
 
     public void suggestedBlogs() {
+
         HomePage homePage = new HomePage(driver);
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -491,6 +529,7 @@ public class BlogsPage {
 
 
         public void makePostPrivate(){
+
         scroll(blogPermissions);
         makeBlogPostPrivate.click();
         Assert.assertTrue(blogPermissionsPrivateDiv.getAttribute("class").contains("icon-radio-checked"));
@@ -500,6 +539,7 @@ public class BlogsPage {
 
 
     public void addDestinationTags (String destinationTag, int typeOfDestinationIndex, int continentIndex, int countryIndex, int cityIndex) throws InterruptedException {
+
         blogDestinations.sendKeys(destinationTag);
         Thread.sleep(3000);
         blogDestinations.sendKeys(Keys.ARROW_DOWN);
@@ -544,6 +584,7 @@ public class BlogsPage {
 
 
     public void createANewBlogFromBlogsPage() throws InterruptedException {
+
         HomePage homepage = new HomePage(driver);
         WebDriverWait wait = new WebDriverWait(driver,10);
 
@@ -582,6 +623,23 @@ public class BlogsPage {
         // blog attributes:
         WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(blogName));
+
+        topOfPostElements(blog);
+
+        bottomOfPostElements();
+
+        postComments();
+
+        moreOfUserPosts();
+
+        relatedPosts();
+
+    }
+
+
+    public void topOfPostElements(String blog){
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
         Assert.assertEquals(blogName.getText(), blog);
         Assert.assertTrue(blogAuthorImg.isDisplayed());
         Assert.assertTrue(followBlog.isDisplayed());
@@ -605,6 +663,7 @@ public class BlogsPage {
         Assert.assertTrue(viewCount.isDisplayed());
         System.out.println("Blog post has " + viewCount.getText() + " views");
         Assert.assertTrue(saveForLater.isDisplayed());
+        System.out.println("SaveForLater appears on top");
 
         try {
             Assert.assertTrue(numOfLikes.isDisplayed());
@@ -614,7 +673,6 @@ public class BlogsPage {
             System.out.println("Post has no 'likes' yet");
         }
 
-        System.out.println("SaveForLater appears on top");
         Assert.assertTrue(shareOnFacebook.isDisplayed());
         System.out.println("Facebook share button is displayed on top");
         Assert.assertTrue(shareOnWhatsapp.isDisplayed());
@@ -631,10 +689,16 @@ public class BlogsPage {
 
         Assert.assertTrue(content.isDisplayed());
         System.out.println("Post content is displayed");
+    }
+
+
+
+    public void bottomOfPostElements(){
 
         scroll(postDestinations.get(1));
-        Assert.assertFalse(postDestinations.isEmpty());
+        Assert.assertFalse(postDestinations.isEmpty());    //must have at least 1 destination tag
         System.out.println("There are " + postDestinations.size() + " destinations in this blog post");
+
         Assert.assertTrue(likePost.isDisplayed());
         System.out.println("'Like' post is also visible on bottom");
         Assert.assertTrue(saveForLaterBottom.isDisplayed());
@@ -654,7 +718,15 @@ public class BlogsPage {
         Assert.assertTrue(followBlogBottom.isDisplayed());
         System.out.println("'Follow' blog is also visible on bottom");
 
+    }
+
+
+    public void postComments(){
+
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver,10);
         scroll(commentsHeadline);
+        wait.until(ExpectedConditions.visibilityOf(commentsHeadline));
 
         try {
             Assert.assertTrue(addComment.isDisplayed());
@@ -671,6 +743,7 @@ public class BlogsPage {
             wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteract));
             scroll(loginViaFacebookToInteract);
             loginViaFacebookToInteract.click();
+            driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
             Assert.assertTrue(driver.getTitle().contains("Facebook"));
             driver.navigate().back();
         }
@@ -683,6 +756,10 @@ public class BlogsPage {
 
             System.out.println("There are currently no comments to post");
         }
+    }
+
+
+    public void moreOfUserPosts(){
 
         try {
             scroll(mostViewedPostSection);
@@ -694,44 +771,117 @@ public class BlogsPage {
         } catch (Exception e) {
             System.out.println("User does not have more posts");
         }
+    }
+
+
+    public void relatedPosts(){
 
         scroll(relatedPostsSection);
         Assert.assertEquals(relatedPostsList.size(), 4);
         Assert.assertTrue(linkToAllRelatedPosts.isDisplayed());
         System.out.println("There are " + relatedPostsList.size() + " more recommended posts about this destination, and a link to even more posts");
-
     }
+
+
+
 
     //** print doesn't work , views-no way to test number being changed , comment-I don't want to comment on my posts
     public void interactWithBlogPost(){
-        HomePage homepage = new HomePage(driver);
+
         WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(followBlog));
 
         //follow
+        followBlog();
+
+        //save post
+        savePost();
+
+        //sharing
+        sharePost();
+
+        //like post
+        likePost();
+    }
+
+
+    public void followBlog(){
+
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(followBlog));
+
         followBlog.click();
-        wait.until(ExpectedConditions.visibilityOf(needToSignIn));
-        wait.until(ExpectedConditions.visibilityOf(loginToInteract));
-        wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteract));
-        System.out.println("User needs to log in to interact with blog");
 
-        loginToInteract.click();
-        homepage.logIntoSite();
+        try {
+            wait.until(ExpectedConditions.visibilityOf(needToSignIn));
+            wait.until(ExpectedConditions.visibilityOf(loginToInteractFollowPost));
+            wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractFollowPost));
+            System.out.println("User needs to log in to interact with blog");
 
-        skipAd();
+            loginToInteractFollowPost.click();
+            homepage.logIntoSite();
 
-        wait.until(ExpectedConditions.visibilityOf(blogName));
+            skipAd();
 
-        followBlog.click();
+            wait.until(ExpectedConditions.visibilityOf(followBlog));
+            followBlog.click();
+
+        } catch (Exception e) {
+            System.out.println("User is already signed in and can follow blog");
+        }
+
         wait.until(ExpectedConditions.attributeContains(followBlog, "class", "bg-orange"));
         System.out.println("'Follow' button has been clicked. User is now following blog.");
 
-        //save post
+        //undo
+        followBlog.click();
+        System.out.println("end of test - cancelled 'follow blog'");
+
+    }
+
+
+    public void savePost(){
+
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(saveForLater));
         saveForLater.click();
+
+        try {
+            wait.until(ExpectedConditions.visibilityOf(needToSignInFromSavePost));
+            wait.until(ExpectedConditions.visibilityOf(loginToInteractSavePost));
+            wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractSavePost));
+            System.out.println("User needs to log in to interact with blog");
+
+            loginToInteractSavePost.click();
+            homepage.logIntoSite();
+            skipAd();
+
+            wait.until(ExpectedConditions.visibilityOf(saveForLater));
+            saveForLater.click();
+
+        } catch (Exception e) {
+            System.out.println("User is already signed in and can save blog post");
+        }
+
         wait.until(ExpectedConditions.visibilityOf(saveForLaterAddFolderBox));
         saveForLaterAddFolder.sendKeys("SavedPosts",(Keys.ENTER));
-        wait.until(ExpectedConditions.attributeContains(followBlog, "class", "bg-orange"));
+        wait.until(ExpectedConditions.attributeContains(saveForLater, "class", "bg-orange"));
         System.out.println("'Save For Later' button has been clicked. Post is saved.");
+
+        //undo
+        saveForLater.click();
+        wait.until(ExpectedConditions.visibilityOf(saveForLaterAddFolderBox));
+        savedPostsFolderCheckedBox.get(savedPostsFolderCheckedBox.size()-1).click();
+        System.out.println("end of test - cancelled 'save for later'");
+    }
+
+
+    public void sharePost(){
+
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(shareOnFacebook));
 
         //facebook share
         shareOnFacebook.click();
@@ -751,8 +901,15 @@ public class BlogsPage {
 
         driver.close();
         driver.switchTo().window(windows.get(0));
+        System.out.println("Navigated to sharing options and back");
+    }
 
-        //like post
+
+    public void likePost() {
+
+        HomePage homepage = new HomePage(driver);
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(likePostBottom));
         scroll(likePostBottom);
 
         try {
@@ -760,6 +917,25 @@ public class BlogsPage {
             int numberOfLikes = Integer.parseInt(likePostNumberBottom.getText());
             System.out.println("This post has " + numberOfLikes + "'likes'");
             likePostBottom.click();
+
+            try {
+                wait.until(ExpectedConditions.visibilityOf(needToSignInBottomLike));
+                wait.until(ExpectedConditions.visibilityOf(loginToInteractLikePost));
+                wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractLikePost));
+                System.out.println("User needs to log in to interact with blog");
+
+                loginToInteractLikePost.click();
+                homepage.logIntoSite();
+                skipAd();
+
+                scroll(likePostBottom);
+                wait.until(ExpectedConditions.visibilityOf(likePostBottom));
+                likePostBottom.click();
+
+            } catch (Exception a) {
+                System.out.println("User is already signed in and can 'like' blog post");
+            }
+
             wait.until(ExpectedConditions.attributeContains(likePostBottom, "class", "text-green"));
             wait.until(ExpectedConditions.visibilityOf(likePostNumberBottom));
             System.out.println("Now the post has " + numberOfLikes+1 + " 'likes'");
@@ -767,28 +943,33 @@ public class BlogsPage {
         } catch (Exception e){
             System.out.println("This post doesn't have 'likes' yet");
             likePostBottom.click();
+
+            try {
+                wait.until(ExpectedConditions.visibilityOf(needToSignInBottomLike));
+                wait.until(ExpectedConditions.visibilityOf(loginToInteractLikePost));
+                wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractLikePost));
+                System.out.println("User needs to log in to interact with blog");
+
+                loginToInteractLikePost.click();
+                homepage.logIntoSite();
+                skipAd();
+
+                scroll(likePostBottom);
+                wait.until(ExpectedConditions.visibilityOf(likePostBottom));
+                likePostBottom.click();
+
+            } catch (Exception a) {
+                System.out.println("User is already signed in and can 'like' blog post");
+            }
+
             wait.until(ExpectedConditions.attributeContains(likePostBottom, "class", "text-green"));
             wait.until(ExpectedConditions.visibilityOf(likePostNumberBottom));
             System.out.println("Now the post has 1 'like'");
         }
 
+        //undo
+        likePostBottom.click();
+        System.out.println("end of test - cancelled 'like post'");
     }
 
-
-    public void skipAd(){
-        try {
-            skipToPageButton.click();
-        } catch (Exception e) {
-            System.out.println("no ad page was skipped");
-        }
-    }
-
-
-
-    //constructor
-    public BlogsPage(WebDriver driver) {
-
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
-    }
 }
