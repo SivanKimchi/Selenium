@@ -94,10 +94,6 @@ public class OnlineStorePage {
     @FindBy(css = "div[class*='product_list_item'] span[class='price ']")
     public List<WebElement> resultPriceList;
 
-//    //
-//    @FindBy (css = "div[class*='product_list_item'] article div div[class='pro_second_box pro_block_align_0'] div:nth-child(3) div span[class='price ']")
-//    public List<WebElement> resultPriceList;
-
     @FindBy(id = "cbar_w0_header_s")
     public WebElement bottomSuggestionsHeader;
 
@@ -154,7 +150,6 @@ public class OnlineStorePage {
     @FindBy (css = "input[id='quantity_wanted']")
     public WebElement quantity;
 
-
     @FindBy (css = "button[class*='bootstrap-touchspin-down']")
     public WebElement decreaseQuantity;
 
@@ -176,9 +171,6 @@ public class OnlineStorePage {
     @FindBy (css = "ul[class='cart-items base_list_line mb-3 m-t-1'] li span[class='product-price price']")
     public List<WebElement> sumPriceTotalInCartList;
 
-
-
-
     @FindBy (css = "div[id='product-availability']")
     public WebElement productAvailability;
 
@@ -193,6 +185,9 @@ public class OnlineStorePage {
 
     @FindBy (css = "div[id='loved_go_login'] a[class='go']")
     public WebElement loginToStoreButton;
+
+    @FindBy (css = "div[id='header_right_top'] a[class='dropdown_tri dropdown_tri_in header_item']")
+    public WebElement loginToStoreFromTopMenu;
 
     @FindBy (css = "form[id='login-form'] input[name='email']")
     public WebElement loginFromStore_email;
@@ -390,8 +385,8 @@ public class OnlineStorePage {
 
     public void addItemToCart(int itemIndex) {
 
-
-        scroll(productSectionItem.get(0));   //first SECTION of products
+        WebElement mainSectionProducts = productSectionItem.get(0);  // ** first section of products
+        scroll(mainSectionProducts);
 
         String itemName = productitemsh3.get(itemIndex).getText();
         System.out.println("Item: " + itemName);
@@ -444,25 +439,26 @@ public class OnlineStorePage {
         //general ENTER
         searchBar.sendKeys(searchFor, Keys.ENTER);
         wait.until(ExpectedConditions.visibilityOf(searchResultsDiv));
+
         String itemsCount = itemsCountString.getText();
         String[] itemsCountSplitArray = itemsCount.split(" ");
         int numOfItems = Integer.parseInt(itemsCountSplitArray[0]);
 
         //there are more pages to show items
-        if (numOfItems > 95) {
+        if (numOfItems > 95) {       // 95 = max results per page
             Assert.assertTrue(nextPage.size() > 1);
             System.out.println("More results in the next page. Each page holds up to 95 results");
         }
 
-        //sort results
-        sortResults();
+    }
 
-        // suggested product at the bottom
+
+    public void suggestedItems() throws InterruptedException {
         scroll(bottomSuggestionsWidget);
         Thread.sleep(5000);
         System.out.println(bottomSuggestionsList.size());
         Assert.assertTrue(bottomSuggestionsList.size() == 6);
-
+        System.out.println("There are 6 suggested items at the bottom of item search results");
     }
 
 
@@ -526,9 +522,10 @@ public class OnlineStorePage {
     }
 
 
-    public void pickAnItemFromTopBar(int mainCategoryIndex, int categoryHeadlineIndex, int categoryIndex) {
+    public void pickAnItemFromTopBarCategories(int mainCategoryIndex, int categoryHeadlineIndex, int categoryIndex) {
 
         Actions actions = new Actions(driver);
+
         try {
             actions.moveToElement(shopTopBarList.get(mainCategoryIndex)).build().perform();   //1=גברים
 
@@ -549,6 +546,7 @@ public class OnlineStorePage {
                     driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
                     Assert.assertEquals(categoryTitle.getText(), category);
                     System.out.println("Items category was chosen from top bar (" + categoryTitle.getText() + ")");
+
                 } catch (Exception e) {
                     System.out.println("Index is out of bound for this item category scope. Please run the test again with small index.");
                 }
@@ -572,7 +570,7 @@ public class OnlineStorePage {
         try {
 
             wait.until(ExpectedConditions.visibilityOf(colorSizeRows.get(0)));
-            // MINI DRIVER
+            // ** MINI DRIVER **
             WebElement colors = colorSizeRows.get(0);
             List<WebElement> itemColorList = colors.findElements(By.cssSelector("ul[id*='group_'] li input[class='input-radio']"));
             List<WebElement> itemColorTextList = colors.findElements(By.cssSelector("ul[id*='group_'] li span[class='radio-label']"));
@@ -580,7 +578,7 @@ public class OnlineStorePage {
 
             System.out.println(itemColorList.size());
 
-            if ((itemColorList.size() > 0) && (itemColorList.size() > 1)) {
+            if (itemColorList.size() > 1) {
 
                 for (int i = 0; i < itemColorList.size(); i++) {
 
@@ -593,7 +591,7 @@ public class OnlineStorePage {
                             System.out.println("Now the next color is selected- " + itemColorTextList.get(i + 1).getText());
                             newColor = itemColorTextList.get(i + 1).getText();
                             break;
-                        } catch (Exception e) {
+                        } catch (Exception e) {       //if there are no more colors forward only backwards
                             System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
                             itemColorList.get(i - 1).click();
                             driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
@@ -620,8 +618,6 @@ public class OnlineStorePage {
         } catch (Exception e) {
             System.out.println("Item probably not in stock, and there is no color to choose.");
         }
-
-
     }
 
 
@@ -630,7 +626,7 @@ public class OnlineStorePage {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.visibilityOf(colorSizeRows.get(1)));
-            // MINI DRIVER
+            // ** MINI DRIVER **
             WebElement sizes = colorSizeRows.get(1);
             List<WebElement> itemSizeList = sizes.findElements(By.cssSelector("ul[id*='group_'] li input[class='input-radio']"));
             List<WebElement> itemSizeTextList = sizes.findElements(By.cssSelector("ul[id*='group_'] li span[class='radio-label']"));
@@ -654,7 +650,7 @@ public class OnlineStorePage {
                                 newSize = itemSizeTextList.get(i+1).getText();
                                 break;
 
-                            } catch (Exception e) {
+                            } catch (Exception e) {     //if there are no more sizes forward only backwards
                                 System.out.println("Size selected now- " + itemSizeTextList.get(i).getText());
                                 itemSizeList.get(i - 1).click();
                                 driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
@@ -679,7 +675,6 @@ public class OnlineStorePage {
         } catch (Exception e) {
             System.out.println("There are no size options to this items");
         }
-
     }
 
 
@@ -691,7 +686,7 @@ public class OnlineStorePage {
         wait.until(ExpectedConditions.visibilityOf(quantity));
 
         //There is an error in the website -- the input tag isn't updated in any attribute, and quantity getText doesn't work either
-        //Can not check is quantity is updated on this screen, only on next screen
+        //Can not check if quantity is updated on this screen, only on next screen
 
         try {
             increaseQuantity.click();
@@ -701,39 +696,43 @@ public class OnlineStorePage {
 //            Assert.assertEquals(quantity.getAttribute("value"), "1");
             System.out.println("Quantity has decreased");
 
-            //Check if there is size selection
-            if (colorSizeRows.size()==2){
+            //Check if there is size selection for this item, to know index number
+            if (colorSizeRows.size()==2){   //there is a size row
                 addItemToCart.click();
-                Assert.assertTrue(colorSizeAmountLine.get(2).getText().equals("1"));
+                Thread.sleep(3000);
+                Assert.assertTrue(colorSizeAmountLine.get(2).getText().contains("1"));
                 System.out.println("Added to cart with chosen quantity- 1");
-            } else if (colorSizeRows.size()==1){
+
+            } else if (colorSizeRows.size()==1){   //there isn't a size row
                 addItemToCart.click();
-                Assert.assertTrue(colorSizeAmountLine.get(1).getText().equals("1"));
+                Thread.sleep(3000);
+                Assert.assertTrue(colorSizeAmountLine.get(1).getText().contains("1"));
                 System.out.println("Added to cart with chosen quantity- 1");
             }
 
-        } catch (Exception e) {
+        } catch (Exception e) {   //can not change quantity to this item
 
             Assert.assertTrue(productAvailability.getAttribute("class").contains("product-unavailable") || productAvailability.getAttribute("class").contains("product-last-items"));
             System.out.println("Product is not available or limited");
         }
-
     }
 
 
 
-    public void saveProduct() throws InterruptedException {
+    public void tryToSaveProductUserNotLoggedIn() throws InterruptedException {
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(saveProduct));
 
         saveProduct.click();
 
+        //log in to save item to favorites
         System.out.println("User need to log in");
         wait.until(ExpectedConditions.visibilityOf(loginToStoreBox));
         loginToStoreButton.click();
-        signInToStore();
+        signInToStoreForm();
 
+        //user's store-account
         wait.until(ExpectedConditions.visibilityOf(usersSavedItems));
         usersSavedItems.click();
         wait.until(ExpectedConditions.visibilityOf(savedItemsPageContent));
@@ -743,18 +742,20 @@ public class OnlineStorePage {
             } catch (Exception e) {
                 System.out.println("Item was not added to 'Saved items' because user was not signed in to store");
             }
-         //going back to save item as Logged In user
-        driver.navigate().back();
-        driver.navigate().back();
-        driver.navigate().back();
-
-        saveItemAsLoggedInUserInStore();
-
         }
 
 
+         // goes to user's store account
+//       public void signInToStoreFromTopMenu() throws InterruptedException {
+//
+//          WebDriverWait wait = new WebDriverWait(driver, 10);
+//          wait.until(ExpectedConditions.visibilityOf(loginToStoreFromTopMenu));
+//          loginToStoreFromTopMenu.click();
+//          signInToStoreForm();
+//      }
 
-     public void signInToStore() throws InterruptedException {
+
+     public void signInToStoreForm() throws InterruptedException {
 
          WebDriverWait wait = new WebDriverWait(driver, 10);
          wait.until(ExpectedConditions.visibilityOf(loginFromStore_email));
@@ -784,16 +785,18 @@ public class OnlineStorePage {
 //      Assert.assertTrue(savedItemsPageContent.getText().contains("המוצרים ששמרתי"));
         Assert.assertTrue(userSavedItemsRow.getText().contains(productTitle));
         System.out.println("Logged in user- Item was successfully added to Saved Items");
+
+        //delete
         deleteSavedItem.click();
         Thread.sleep(3000);
+
         try {
             Assert.assertFalse(userSavedItemsRow.getText().contains(productTitle));
             System.out.println("Item was successfully deleted from Saved Items");
 
-        } catch (Exception f) {
+        } catch (Exception f) {  // element userSavedItemsRow does not exist in dom anymore
             System.out.println("Logged in user- Item was successfully deleted from Saved Items");
         }
-
     }
 
 
@@ -812,13 +815,13 @@ public class OnlineStorePage {
             try {
                 String[] branchName = itemAvailabilityInBranchesList.get(branchIndex).getText().split("עודפים - ");
                 branch = branchName[1];
-            } catch (Exception e) {
+            } catch (Exception e) {    // branch name does not have "עודפים" in it
                 branch = itemAvailabilityInBranchesList.get(branchIndex).getText();
             }
 
             itemAvailabilityInBranchesList.get(branchIndex).click();
 
-            wait.until(ExpectedConditions.numberOfWindowsToBe(3));
+            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
             moveToNextTab();
 
@@ -850,7 +853,7 @@ public class OnlineStorePage {
             if ((resultBrandList.size() > 0)) {
 
                 String brand = "";
-                // trying only 2 rows for visibility issues
+                // trying only 2 rows for visibility&load time issues
                 for (int i = 0; i <= 5; i++) {
                     String itemBrandFromList = resultBrandList.get(i).getText();
                     Assert.assertEquals(itemBrandFromList, itemsBrand);
@@ -865,13 +868,13 @@ public class OnlineStorePage {
     }
 
 
-    public void itemReviewsCount(){
+
+    public double numberOfStarsTopRating(){
 
         WebDriverWait w = new WebDriverWait(driver, 10);
         w.until(ExpectedConditions.visibilityOf(reviewLineTop));
 
         //number of stars
-
         boolean starIsChecked;
         double amountOfStarsChecked=0.0;
         double halfStar = 0.0;
@@ -888,12 +891,24 @@ public class OnlineStorePage {
         }
 
         amountOfStarsChecked = amountOfStarsChecked + halfStar;
-        if (amountOfStarsChecked > 0) {
+        System.out.println("Review to this item (round) is: " + amountOfStarsChecked + " stars");
 
-            System.out.println("Review to this item (round) is: " + amountOfStarsChecked + " stars");
+        return amountOfStarsChecked;
+    }
 
+
+    public void exactAverage0fStarsRating(){
+
+        //rounded visible stars on top
+        double amountOfStarsChecked = numberOfStarsTopRating();
+
+        WebDriverWait w = new WebDriverWait(driver, 10);
+
+        //number of reviews submitted
+        if (amountOfStarsChecked > 0.0) {
             String[] numOfReviewsArray = numberOfReviewsSubmittedTop.getText().split(" חוות דעת");
             String numOfReviews = numOfReviewsArray[0];
+            System.out.println(numOfReviews + " people reviewed this item");
 
             reviewLineTop.click();
             w.until(ExpectedConditions.visibilityOf(exactReviewStarsBottom));
@@ -905,6 +920,7 @@ public class OnlineStorePage {
             double exactStarReview = Double.parseDouble(exactReviewStarsBottom.getText());
 
             double sumOfStars = 0.0;
+
             for (int i = 0; i < ratingList.size(); i++) {
                 double numberOfReviews = Double.parseDouble(ratingList.get(i).getAttribute("data-count"));
                 double ratingStars = Double.parseDouble(ratingStarAmountList.get(i).getAttribute("data-rating"));
@@ -919,8 +935,8 @@ public class OnlineStorePage {
         } else {
             System.out.println("There are no reviews to this item, no review average count exists.");
         }
-
     }
+
 
 
     public void addReviewToItem(){
@@ -933,6 +949,7 @@ public class OnlineStorePage {
         w.until(ExpectedConditions.visibilityOf(newReviewForm));
         Assert.assertTrue(newReviewMainBox.isDisplayed());
         scroll(addReview);
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         addReview.click();
         Assert.assertTrue(!newReviewForm.isDisplayed());
         System.out.println("'Add Review' form was opened and closed (test does not include actual submitting)");
@@ -997,6 +1014,7 @@ public class OnlineStorePage {
         public void shoppingCartItemTotalPrice(){
 
          for (int i=0; i<quantityInCartList.size(); i++ ) {
+
              String[] priceArray = priceInCartList.get(i).getText().split("₪");
              String[] totalPriceArray = sumPriceTotalInCartList.get(i).getText().split("₪");
              int quantity = Integer.parseInt(quantityInCartList.get(i).getAttribute("value"));
@@ -1023,9 +1041,9 @@ public class OnlineStorePage {
             }
 
             Assert.assertTrue(sumItemsQuantity == totalItemsInt);
-            System.out.println("Total of items is calculated correctly: "+ sumItemsQuantity );
+            System.out.println("Total of items quantity is calculated correctly: "+ sumItemsQuantity );
 
-            //total price for order
+            //total price for order , without delivery
             String[] totalPriceForItems = shoppingCartPaymentTotalPriceForItems.getText().split("₪");
             int totalPriceForItemsInt = Integer.parseInt(totalPriceForItems[1]);
             int sumItemsPrices =0;
@@ -1069,7 +1087,7 @@ public class OnlineStorePage {
             Thread.sleep(3000);
             continueWithPaymentProcess.click();
 
-            //address
+            //address confirmation
             try {
                 w.until(ExpectedConditions.visibilityOf(addressBox));
                 System.out.println("User has details saved in account");
@@ -1184,7 +1202,6 @@ public class OnlineStorePage {
             }
 
     }
-
 
 
 
