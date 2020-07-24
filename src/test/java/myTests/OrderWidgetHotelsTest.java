@@ -100,7 +100,7 @@ public class OrderWidgetHotelsTest {
 
 
     @Test
-    public void orderHotelPickDates(){
+    public void orderHotelPickDates() throws InterruptedException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
         orderWidget.scrollToHotelsiframe();

@@ -180,7 +180,7 @@ public class OrderWidgetOnHomePage {
     @FindBy (css = "div[class='asd__change-month-button asd__change-month-button--next']")
     public WebElement calenderMoveToNextMonth;
 
-    @FindBy (css = "table[class='asd__month-table'] button[class='asd__day-button']")
+    @FindBy (css = "button[class*='day-button']")
     public List<WebElement> dates;
 
     @FindBy (css = "button[id='flights-search-button']")
@@ -199,12 +199,6 @@ public class OrderWidgetOnHomePage {
 
     @FindBy (css = "iframe[class='min-h-full']")
     public WebElement hotelsPageiframe;
-
-    @FindBy (id = "H7mf")
-    public WebElement hotelsPageSearchBreadcrumb;
-
-    @FindBy (id="YK5l-SearchLocation")
-    public WebElement hotelsPageSearchDestination;
 
     @FindBy (css = "div[class='mb-1'] button")
     public WebElement numOfRooms;
@@ -357,7 +351,7 @@ public class OrderWidgetOnHomePage {
 
 
     //pick specific flight / hotel date
-    public void pickADateInCalendar (String month, String day) {
+    public void pickADateInCalendar (String month, String day) throws InterruptedException {
 
         String visibleMonth = calendarMonth.getText();
 
@@ -371,11 +365,18 @@ public class OrderWidgetOnHomePage {
         }
 
         for (int i=0; i<dates.size(); i++) {
+
             String text = dates.get(i).getText();
-            if (text.equals(day)){
-                dates.get(i).click();
-                break;
+
+            if (!text.isEmpty()){
+
+                if (text.equals(day)){
+                    dates.get(i).click();
+                    System.out.println("date picked: " + text + " " + visibleMonth);
+                    break;
+                }
             }
+
         }
     }
 
@@ -406,16 +407,26 @@ public class OrderWidgetOnHomePage {
 
             String dayString = String.valueOf(day);
 
+
             for (int i = 0; i < dates.size(); i++) {
+
                 String text = dates.get(i).getText();
 
-                if (text.equals(dayString) && today > day) {  // day is smaller or before today's day){
-                    System.out.println("invalid date");
-                    Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
-                } else if (text.equals(dayString)) {
-                    System.out.println("valid date");
-                }
+                if (!text.isEmpty()) {
 
+                    int textInt = Integer.parseInt(text);
+
+                    if (textInt <= day) {
+
+                        if (text.equals(dayString) && today > day) {  // day is smaller or before today's day){
+                            Assert.assertFalse(dates.get(i).isEnabled());
+                            System.out.println("input date is an invalid date--past date ("+ day + ")");
+
+                        } else if (text.equals(dayString)) {
+                            System.out.println("input date is a valid date (" + day + ")");
+                        }
+                    }
+                }
             }
         }
 
@@ -453,27 +464,37 @@ public class OrderWidgetOnHomePage {
                 e.printStackTrace();
             }
 
+
             for (int i = 0; i < dates.size(); i++) {
 
-                String viewedDate = dates.get(i).getAttribute("date");
+                String text = dates.get(i).getText();
 
-                try {
+                if (!text.isEmpty()) {
 
-                    Date viewedDateDateType = viewedDateSDF.parse(viewedDate);   // date picked on website, DATE type, formatted
+                    int textInt = Integer.parseInt(text);
 
-                    if ((dates.get(i).getText().equals(dayString)) && todayDateFormatted.after(viewedDateDateType)) {
-                        System.out.println("invalid date- " + viewedDateDateType);
-                        Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
-                    } else if (dates.get(i).getText().equals(dayString)) {
-                        dates.get(i).click();
-                        System.out.println("valid date");
+                    if (textInt <= day) {
+
+                        String viewedDate = dates.get(i).getAttribute("date");
+
+                        try {
+
+                            Date viewedDateDateType = viewedDateSDF.parse(viewedDate);   // date picked on website, DATE type, formatted
+
+                            if ((dates.get(i).getText().equals(dayString)) && todayDateFormatted.after(viewedDateDateType)) {
+                                Assert.assertFalse(dates.get(i).isEnabled());
+                                System.out.println("invalid date, passed current date- " + viewedDateDateType);
+
+                            } else if (dates.get(i).getText().equals(dayString)) {
+                                System.out.println("date " + viewedDateDateType + " is a valid date");
+                            }
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
             }
-
     }
 
 
@@ -492,7 +513,11 @@ public class OrderWidgetOnHomePage {
         }
             //entire month isn't valid
             for (int i = 0; i < dates.size(); i++) {
-                Assert.assertFalse(dates.get(i).getAttribute("class").contains("--selected"));
+
+                if(!dates.get(i).getText().isEmpty()){
+                    Assert.assertFalse(dates.get(i).isEnabled());
+                    System.out.println("Dates in past month are invalid");
+                }
             }
         }
 

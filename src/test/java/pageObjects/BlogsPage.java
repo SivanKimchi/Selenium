@@ -200,7 +200,6 @@ public class BlogsPage {
 
     @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]")
     public WebElement saveForLaterAddFolderBox;
-    //    (xpath = "//*[@id='modals']/div[7]/div[2]")
 
     @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]/div[2]/div/div[2]/div/div[1]/input")
     public WebElement saveForLaterAddFolder;

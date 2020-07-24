@@ -128,7 +128,7 @@ public class OrderWidgetFlightsTest {
     }
 
 
-    @Test
+    @Test  // enter FUTURE dates only
     public void returnFlightWithSelectedDates() throws InterruptedException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
@@ -141,8 +141,8 @@ public class OrderWidgetFlightsTest {
         WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(orderWidget.calendarMonth));
 
-        orderWidget.pickADateInCalendar("דצמבר", "20");
-        orderWidget.pickADateInCalendar("דצמבר", "25");
+        orderWidget.pickADateInCalendar("דצמבר", "20");   // future date
+        orderWidget.pickADateInCalendar("דצמבר", "25");   // future date
         orderWidget.flightsSearchButton.click();
 
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
@@ -157,7 +157,7 @@ public class OrderWidgetFlightsTest {
 
 
 
-    @Test
+    @Test     //same month
     public void flightWithInvalidDate() throws InterruptedException, ParseException {
 
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
@@ -171,8 +171,8 @@ public class OrderWidgetFlightsTest {
         WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(orderWidget.calendarMonth));
 
-//        orderWidget.dontAllowPastDates("יולי", 27);    //int type
-        orderWidget.pastDateInCurrentMonthIsInvalid("יולי", 1);    //date type
+//        orderWidget.dontAllowPastDates("יולי", 2);    //int type
+        orderWidget.pastDateInCurrentMonthIsInvalid("יולי", 28);    //date type
 
     }
 
@@ -193,7 +193,7 @@ public class OrderWidgetFlightsTest {
 
         orderWidget.flightsCalenderMoveToPreviousMonth.click();
 
-        orderWidget.dateInPastMonthInvalid("מאי 2020");
+        orderWidget.dateInPastMonthInvalid("יוני 2020");
 
     }
 
@@ -242,8 +242,5 @@ public class OrderWidgetFlightsTest {
         Assert.assertTrue(orderWidget.flightsPageNumOfPassengers.getText().equals("6"));   //specific*
 
     }
-
-
-
 
 }
