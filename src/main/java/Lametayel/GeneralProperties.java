@@ -12,7 +12,7 @@ public class GeneralProperties {
     public static final String username ="earth_trekker";
     public static final String userFirstName ="testSivan";
     public static final String userLastName ="selenium";
-    public static final String userMobilePhone ="0525555555";
+    public static final String userMobilePhone ="0525555556";
     public static final String userCity ="תל אביב";
     public static final String userAddress ="דיזינגוף 100";
 
