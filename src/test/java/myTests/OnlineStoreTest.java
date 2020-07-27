@@ -1,6 +1,6 @@
 package myTests;
 
-import Lametayel.GeneralProperties;
+import Lametayel.GeneralProperties; //gitignore
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
