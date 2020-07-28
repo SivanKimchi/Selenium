@@ -96,6 +96,7 @@ public class SanityTest {
 
         loginToSite();
         HomePage homePage = new HomePage(driver);
+        homePage.skipAd();
         homePage.userMenu.click();
 
         homePage.assertUserMenuValuesValid();   // specific to user
@@ -114,9 +115,11 @@ public class SanityTest {
         homePage.flights.click();
         driver.manage().timeouts().implicitlyWait(5000,TimeUnit.MILLISECONDS);
         driver.navigate().forward();
+        homePage.skipAd();
         Assert.assertTrue(driver.getCurrentUrl().contains("fly.lametayel.co.il"));
 
         driver.navigate().back();
+        homePage.skipAd();
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.hotels.click();
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
