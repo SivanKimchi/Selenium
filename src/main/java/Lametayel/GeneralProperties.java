@@ -18,7 +18,7 @@ public class GeneralProperties {
 
     public static String savedScreenshotLocation = "{path}\\screenshots";
     public final static String CAPTURE = System.getenv("CAPTURE");
-//added
+//added 22
 
 
 }
