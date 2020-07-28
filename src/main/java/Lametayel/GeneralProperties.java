@@ -1,0 +1,78 @@
+package Lametayel;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.junit.Test;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class GeneralProperties {
+
+
+        static JSONParser json = new JSONParser();
+
+        static FileReader reader;
+
+        static {
+            try {
+                reader = new FileReader(GeneralProperties.class.getProtectionDomain().getCodeSource().getLocation().getPath() + "\\JsonValues.json");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        static JSONObject obj;
+
+        static {
+            try {
+                obj = (JSONObject) json.parse(reader);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public static final String driverName = (String) obj.get("driverName");
+        public static final String driverLocation = (String) obj.get("driverLocation");
+
+        public static final String SiteURL1 = (String) obj.get("SiteURL1");
+        public static final String SiteURLShop = (String) obj.get("SiteURLShop");
+        public static final String LoginEmail = (String) obj.get("LoginEmail");
+        public static final String LoginPassword = (String) obj.get("LoginPassword");
+        public static final String username = (String) obj.get("username");
+        public static final String userFirstName = (String) obj.get("userFirstName");
+        public static final String userLastName = (String) obj.get("userLastName");
+        public static final String userMobilePhone = (String) obj.get("userMobilePhone");
+        public static final String userCity = (String) obj.get("userCity");
+        public static final String userAddress = (String) obj.get("userAddress");
+
+        public static String savedScreenshotLocation = (String) obj.get("savedScreenshotLocation");
+//        public final static String CAPTURE = (String) obj.get("CAPTURE");
+
+        public GeneralProperties() throws IOException, ParseException {
+
+        }
+
+
+//    public static final String driverName = "webdriver.chrome.driver";
+//    public static final String driverLocation = "C://Users//Sivan//Documents//seleniumNewDownloads//chromedriver.exe";
+//
+//    public static final String SiteURL1 = "https://www.lametayel.co.il/";
+//    public static final String SiteURLShop = "https://shop.lametayel.co.il/";
+//    public static final String LoginEmail ="seleniumwebdriver9@gmail.com";
+//    public static final String LoginPassword ="sivantest123456";
+//    public static final String username ="earth_trekker";
+//    public static final String userFirstName ="testSivan";
+//    public static final String userLastName ="selenium";
+//    public static final String userMobilePhone ="0525555588";
+//    public static final String userCity ="תל אביב";
+//    public static final String userAddress ="דיזינגוף 100";
+//
+//    public static String savedScreenshotLocation = "C:\\Users\\Sivan\\Documents\\seleniumNew\\screenshots";
+//    public final static String CAPTURE = System.getenv("CAPTURE");
+
+    }
