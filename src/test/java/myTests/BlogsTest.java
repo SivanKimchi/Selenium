@@ -1,27 +1,14 @@
 package myTests;
 
-import Lametayel.GeneralProperties;  //gitignore
 import Lametayel.ScreenshotTaker;
+import Lametayel.GeneralProperties;
 import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.BlogsPage;
-import pageObjects.HomePage;
-import pageObjects.OrderWidgetOnHomePage;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 public class BlogsTest {
 

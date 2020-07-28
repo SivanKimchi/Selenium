@@ -1,7 +1,5 @@
 package myTests;
 
-import Lametayel.GeneralProperties;   //gitignore
-import Lametayel.Screenshot;
 import Lametayel.ScreenshotTaker;
 import org.junit.*;
 import org.junit.rules.TestRule;
@@ -14,12 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.HomePage;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.io.FileUtils;
-
+import Lametayel.GeneralProperties;
 
 
 public class SanityTest {

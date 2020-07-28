@@ -1,7 +1,7 @@
 package pageObjects;
 
-import Lametayel.GeneralProperties;   //gitignore
 import org.junit.Assert;
+import Lametayel.GeneralProperties;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
