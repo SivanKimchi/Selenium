@@ -1,24 +1,26 @@
 package myTests;
 
 import Lametayel.GeneralProperties;   //gitignore
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import Lametayel.Screenshot;
+import Lametayel.ScreenshotTaker;
+import org.junit.*;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.w3c.dom.ls.LSOutput;
-import pageObjects.BlogsPage;
 import pageObjects.HomePage;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.FileUtils;
+
+
 
 public class SanityTest {
 
@@ -30,10 +32,10 @@ public class SanityTest {
     public static String LoginPassword;
 
 
+
 //    public static WebDriver getDriver(){
 //        return driver;
 //    }
-
 
 
     @Before
@@ -48,10 +50,26 @@ public class SanityTest {
 
     }
 
-    @After
-    public void closeTest(){
-        driver.close();
-    }
+
+
+    @Rule      //screenshot taken when test fails
+    public TestRule testWatcher = new TestWatcher() {
+
+        @Override
+        public void failed(Throwable e, Description test) {
+            ScreenshotTaker screenshotTaker = new ScreenshotTaker(driver);
+            screenshotTaker.failed(e, test);
+
+        }
+
+        @Override
+        protected void finished(Description description) {
+            if (driver != null)
+                driver.quit();
+        }
+    };
+
+
 
 
     @Test

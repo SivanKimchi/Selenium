@@ -19,10 +19,10 @@ public class BlogsPage {
     //members
     private WebDriver driver;
 
-    @FindBy(xpath = "//*[@id='index-main-page-search']/div[2]/div/div[1]/span[2]")
+    @FindBy(css = "#index-main-page-search div[class^='dropdown-surface--anchor'] div[id^='dropdown-'] div[class^='autocomplete-input']")
     public WebElement searchBlogsBar;
 
-    @FindBy(xpath = "//*[@id='index-main-page-search']/div[2]/div/div[2]/ul/div/li/input")
+    @FindBy(css = "#modals div:nth-child(2) div[id*='dropdown'] div[class*='bg-white shadow-surface'] input")
     public WebElement searchBlogsInput;
 
 
@@ -390,8 +390,7 @@ public class BlogsPage {
 
         wait.until(ExpectedConditions.visibilityOf(searchBlogsBar));
         searchBlogsBar.click();
-
-        searchBlogsInput.clear();
+       // searchBlogsInput.clear();
         searchBlogsInput.sendKeys(searchFor);
         Thread.sleep(3000);
         searchBlogsInput.sendKeys(Keys.ENTER);

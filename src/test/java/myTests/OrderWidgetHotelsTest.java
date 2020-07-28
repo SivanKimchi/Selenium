@@ -1,10 +1,11 @@
 package myTests;
 
 import Lametayel.GeneralProperties;  //gitignore
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import Lametayel.ScreenshotTaker;
+import org.junit.*;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -40,10 +41,30 @@ public class OrderWidgetHotelsTest {
 
     }
 
-    @After
-    public void closeTest(){
-        driver.quit();
-    }
+
+
+    @Rule      //screenshot taken when test fails
+    public TestRule testWatcher = new TestWatcher() {
+
+        @Override
+        public void failed(Throwable e, Description test) {
+            ScreenshotTaker screenshotTaker = new ScreenshotTaker(driver);
+            screenshotTaker.failed(e, test);
+
+        }
+
+        @Override
+        protected void finished(Description description) {
+            if (driver != null)
+                driver.quit();
+        }
+    };
+
+
+//    @After
+//    public void closeTest(){
+//        driver.quit();
+//    }
 
 
     @Test
