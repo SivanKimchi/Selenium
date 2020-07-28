@@ -1,7 +1,7 @@
 package myTests;
 
 import Lametayel.ScreenshotTaker;
-import Lametayel.GeneralProperties;  //gitignore
+import Lametayel.GeneralProperties;   //uses JsonValues.json -- gitignore (template available)
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

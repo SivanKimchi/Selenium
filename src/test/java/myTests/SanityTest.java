@@ -15,7 +15,7 @@ import pageObjects.HomePage;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import Lametayel.GeneralProperties;   //gitignore
+import Lametayel.GeneralProperties;    //uses JsonValues.json -- gitignore (template available)
 
 
 public class SanityTest {

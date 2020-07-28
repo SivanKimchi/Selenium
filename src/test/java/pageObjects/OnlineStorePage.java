@@ -1,7 +1,7 @@
 package pageObjects;
 
 import org.junit.Assert;
-import Lametayel.GeneralProperties;  //gitignore
+import Lametayel.GeneralProperties;  //uses JsonValues.json -- gitignore (template available)
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
