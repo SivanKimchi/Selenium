@@ -13,13 +13,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.HomePage;
 
 import java.util.concurrent.TimeUnit;
-import Lametayel.GeneralProperties;
+import Lametayel.GeneralProperties;   //gitignore
 
 
 public class SanityTest {
 
-
-    //12345
 
     //members
     private static WebDriver driver;

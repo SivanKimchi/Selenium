@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import Lametayel.GeneralProperties;
+import Lametayel.GeneralProperties;  //gitignore
 
 public class HomePage {
 

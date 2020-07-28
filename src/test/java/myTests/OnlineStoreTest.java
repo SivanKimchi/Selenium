@@ -1,7 +1,7 @@
 package myTests;
 
 import Lametayel.ScreenshotTaker;
-import Lametayel.GeneralProperties;
+import Lametayel.GeneralProperties;  //gitignore
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
