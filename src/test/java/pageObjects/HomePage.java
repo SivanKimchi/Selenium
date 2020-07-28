@@ -197,6 +197,8 @@ public class HomePage {
 
     public void skipAd() {
         try {
+            WebDriverWait wait = new WebDriverWait(driver,5);
+            wait.until(ExpectedConditions.visibilityOf(skipToPageButton));
             skipToPageButton.click();
         } catch (Exception e) {
             System.out.println("no ad page was skipped");

@@ -106,44 +106,54 @@ public class SanityTest {
 
 
     @Test
-    public void centralBarLinks(){
+    public void centralBarLinks() throws InterruptedException {
 
         HomePage homePage = new HomePage(driver);
         WebDriverWait wait = new WebDriverWait(driver,20);
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
 
         homePage.flights.click();
-        driver.manage().timeouts().implicitlyWait(5000,TimeUnit.MILLISECONDS);
-        driver.navigate().forward();
+//        Thread.sleep(5000);
         homePage.skipAd();
+        driver.navigate().refresh();
         Assert.assertTrue(driver.getCurrentUrl().contains("fly.lametayel.co.il"));
 
         driver.navigate().back();
         homePage.skipAd();
-        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
+//        Thread.sleep(5000);
+//        wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.hotels.click();
-        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+//        Thread.sleep(5000);
+        homePage.skipAd();
         driver.navigate().refresh();
         Assert.assertTrue(driver.getCurrentUrl().contains("hotels.lametayel.co.il"));
 
         driver.navigate().back();
+//        Thread.sleep(5000);
+        homePage.skipAd();
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.insurance.click();
-        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+//        Thread.sleep(3000);
+        homePage.skipAd();
         driver.navigate().refresh();
         Assert.assertTrue(driver.getCurrentUrl().contains("insurance.lametayel.co.il"));
 
         driver.navigate().back();
+//        Thread.sleep(5000);
+        homePage.skipAd();
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.benefits.click();
-        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+//        Thread.sleep(3000);
+        homePage.skipAd();
         driver.navigate().refresh();
         Assert.assertTrue(driver.getCurrentUrl().contains("club-lametayel"));
 
         driver.navigate().back();
+//        Thread.sleep(5000);
+        homePage.skipAd();
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.moreOptions.click();
-        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+//        Thread.sleep(5000);
         Assert.assertTrue(homePage.bottomWidget.isDisplayed());
 
     }
