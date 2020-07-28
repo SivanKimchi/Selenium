@@ -16,7 +16,7 @@ public class GeneralProperties {
     public static final String userCity ="תל אביב";
     public static final String userAddress ="דיזינגוף 100";
 
-    public static String savedScreenshotLocation = "C:\\Users\\Sivan\\Documents\\seleniumNew\\screenshots";
+    public static String savedScreenshotLocation = "{path}\\screenshots";
     public final static String CAPTURE = System.getenv("CAPTURE");
 
 
