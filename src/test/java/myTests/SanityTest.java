@@ -1,6 +1,7 @@
 package myTests;
 
 import Lametayel.ScreenshotTaker;
+import org.json.simple.parser.ParseException;
 import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -12,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.HomePage;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import Lametayel.GeneralProperties;   //gitignore
 
@@ -33,7 +35,8 @@ public class SanityTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() throws IOException, ParseException {
+
 
         System.setProperty(GeneralProperties.driverName, GeneralProperties.driverLocation);
         driver = new ChromeDriver();

@@ -1,0 +1,20 @@
+{
+  "driverName":"webdriver.chrome.driver",
+  "driverLocation":"C://Users//Sivan//Downloads//chromedriver.exe",
+
+  "SiteURL1":"https://www.lametayel.co.il/",
+  "SiteURLShop":"https://shop.lametayel.co.il/",
+  "LoginEmail":"natalishalom900@gmail.com",
+  "LoginPassword":"testpass789",
+  "username":"earth_trekker",
+  "userFirstName":"testSivan",
+  "userLastName":"selenium",
+  "userMobilePhone":"0525555588",
+  "userCity":"תל אביב",
+  "userAddress":"דיזינגוף 100",
+
+  "savedScreenshotLocation":"C:\\Users\\Sivan\\Documents\\seleniumNew\\screenshots",
+  "CAPTURE":"System.getenv(\"CAPTURE\")"
+
+}
+

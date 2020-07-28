@@ -222,6 +222,7 @@ public class HomePage {
     public void logIntoSite(){
         logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
         logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         logInSubmit.click();
         System.out.println("Logged in as existing user");
 

@@ -1,0 +1,20 @@
+{
+  "driverName":"{driverName}",
+  "driverLocation":"{driverLocation}",
+
+  "SiteURL1":"{SiteURL1}",
+  "SiteURLShop":"{SiteURLShop}",
+  "LoginEmail":"{LoginEmail}",
+  "LoginPassword":"{LoginPassword}",
+  "username":"{username}",
+  "userFirstName":"{userFirstName}",
+  "userLastName":"{userLastName}",
+  "userMobilePhone":"{userMobilePhone}",
+  "userCity":"{userCity}",
+  "userAddress":"{userAddress}",
+
+  "savedScreenshotLocation":"{savedScreenshotLocation}",
+  "CAPTURE":"{CAPTURE}")"
+
+}
+
