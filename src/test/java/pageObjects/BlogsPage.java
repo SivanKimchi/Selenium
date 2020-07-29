@@ -391,6 +391,7 @@ public class BlogsPage {
         wait.until(ExpectedConditions.visibilityOf(searchBlogsBar));
         searchBlogsBar.click();
        // searchBlogsInput.clear();
+        wait.until(ExpectedConditions.visibilityOf(searchBlogsInput));
         searchBlogsInput.sendKeys(searchFor);
         Thread.sleep(3000);
         searchBlogsInput.sendKeys(Keys.ENTER);
