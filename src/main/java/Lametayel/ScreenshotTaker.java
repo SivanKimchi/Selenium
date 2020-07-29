@@ -1,6 +1,8 @@
 package Lametayel;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.OutputType;
@@ -17,6 +19,7 @@ public class ScreenshotTaker {     // extends TestWatcher
 
     private WebDriver driver;
 
+    public static Logger log = LogManager.getLogger(ScreenshotTaker.class.getName());
 
     public ScreenshotTaker(WebDriver driver) {
 
@@ -34,10 +37,11 @@ public class ScreenshotTaker {     // extends TestWatcher
 
         try {
             FileUtils.copyFile(scrFile, new File(currentDir + "\\screenshots\\" + description.getMethodName() + timeStamp + ".png"));
-            System.out.println("Screenshot of failed test saved in " + GeneralProperties.savedScreenshotLocation);
+            log.info("Screenshot of failed test saved in " + GeneralProperties.savedScreenshotLocation);
 
         } catch (Exception exception) {
             exception.printStackTrace();
+            log.error("Failed to save screenshot of failed test");
         }
     }
 }

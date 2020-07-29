@@ -1,5 +1,7 @@
 package pageObjects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -186,6 +188,8 @@ public class HomePage {
 
 
 
+    private static Logger log = LogManager.getLogger(HomePage.class.getName());
+
 
     //constructor
     public HomePage(WebDriver driver) {
@@ -200,8 +204,9 @@ public class HomePage {
             WebDriverWait wait = new WebDriverWait(driver,5);
             wait.until(ExpectedConditions.visibilityOf(skipToPageButton));
             skipToPageButton.click();
+            log.debug("Skipped ad page");
         } catch (Exception e) {
-            System.out.println("no ad page was skipped");
+            log.error("No ad page was skipped");
         }
     }
 
@@ -218,50 +223,71 @@ public class HomePage {
             childWindow = it.next();
         }
         driver.switchTo().window(childWindow);
+        log.info("Switched to next window handle");
     }
 
 
     public void logIntoSite(){
+
         logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
+        log.debug("Inserted email to login form");
         logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+        log.debug("Inserted password to login form");
         logInSubmit.click();
-        System.out.println("Logged in as existing user");
+        log.info("Logged to website");
 
     }
 
     public void invalidLogIn() throws InterruptedException {
 
         logInButton.click();
+        log.debug("Clicked on main login button");
         logInInputEmail.sendKeys("email");
+        log.debug("Inserted invalid email");
         logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
+        log.debug("Inserted valid password");
         logInSubmit.click();
         Thread.sleep(3000);
+        log.debug("Submitted login form");
         Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+        log.info("Login is invalid as expected");
 
         logInInputEmail.clear();
         logInInputEmail.sendKeys("");
+        log.debug("Inserted invalid email");
         logInInputPassword.clear();
         logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
+        log.debug("Inserted valid password");
         logInSubmit.click();
         Thread.sleep(3000);
+        log.debug("Submitted login form");
         Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+        log.info("Login is invalid as expected");
 
         logInInputEmail.clear();
         logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
+        log.debug("Inserted valid email");
         logInInputPassword.clear();
         logInInputPassword.sendKeys("123456");
+        log.debug("Inserted invalid password");
         logInSubmit.click();
-        Thread.sleep(3000);
+        Thread.sleep(5000);
+        log.debug("Submitted login form");
         Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+        log.info("Login is invalid as expected");
 
         logInInputEmail.clear();
         logInInputEmail.sendKeys(GeneralProperties.LoginEmail);
+        log.debug("Inserted valid email");
         logInInputPassword.clear();
         logInInputPassword.sendKeys("");
+        log.debug("Inserted invalid password");
         logInSubmit.click();
         Thread.sleep(3000);
+        log.debug("Submitted login form");
         Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
+        log.info("Login is invalid as expected");
 
     }
 
@@ -296,24 +322,30 @@ public class HomePage {
     public void searchBarAutoComplete(String search, String expectedResult){
 
         searchBar.sendKeys(search);
+        log.debug("Inserted search value");
         WebDriverWait wait = new WebDriverWait(driver,20);
         wait.until(ExpectedConditions.visibilityOf(searchAutocomplete));
 
         //autocomplete dropdown
         searchBar.sendKeys(Keys.ARROW_DOWN);
+        log.debug("Navgiated one spot on drop down autocomplete");
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         searchBar.sendKeys(Keys.ENTER);
         Assert.assertTrue(driver.getCurrentUrl().contains(expectedResult));
+        log.info("Search result shows in new page");
     }
 
 
     public void searchBarInstantEnter(String partialSearchString, String expectedResult){
 
         searchBar.sendKeys(partialSearchString);
+        log.debug("Inserted search partial-value");
         searchBar.sendKeys(Keys.ENTER);
+        log.debug("Clicked Enter");
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         skipAd();
         Assert.assertEquals(searchResultsPageH1.getText(),expectedResult);
+        log.info("Search query shows in general results page");
 
     }
 
@@ -324,33 +356,38 @@ public class HomePage {
         Actions actions = new Actions(driver);
 
         actions.moveToElement(mainMenuDestinations).build().perform();
+        log.debug("Hoovered over destinations tab");
         wait.until(ExpectedConditions.visibilityOf(mainMenuDestinationList.get(1)));   //0 is not visible
 
         try {
 
             actions.moveToElement(mainMenuDestinationList.get(continentIndex)).build().perform();     //max 8
+            log.debug("Hoovered specific continent");
 
             // * MINI SCOPE *
             WebElement miniScopeChosenContinent = mainMenuDestinationList.get(continentIndex);
             List<WebElement> popularCountries = miniScopeChosenContinent.findElements(By.cssSelector("span:nth-child(3) li a"));
+            log.debug("Switched to mini scope of country list");
 
             try {
                 actions.moveToElement(popularCountries.get(countryIndex)).build().perform();
+                log.debug("Hoovered over a specific country");
 
                 String country = popularCountries.get(countryIndex).getText();
                 popularCountries.get(countryIndex).click();
+                log.debug("Clicked on specific country");
 
                 wait.until(ExpectedConditions.visibilityOf(destinationPageh1));
 
                 Assert.assertTrue(destinationPageh1.getText().contains(country));
-                System.out.println("Selected popular country from main drop down menu Destinations (" + country + ")");
+                log.info("Selected popular country from main drop down menu Destinations (" + country + ")");
 
             } catch (Exception a) {
-                System.out.println("Country index is out of bound. Please run test again with a smaller index");
+                log.error("Country index is out of bound. Please run test again with a smaller index");
             }
 
         } catch (Exception e) {
-            System.out.println("Continent index is out of bound. Please run test again with a smaller index");
+            log.error("Continent index is out of bound. Please run test again with a smaller index");
         }
 
     }

@@ -1,0 +1,6 @@
+2020-07-29 18:58:16 [main] INFO  myTests.SanityTest - Opened driver
+2020-07-29 18:58:16 [main] DEBUG myTests.SanityTest - Clicked on shop link
+2020-07-29 18:58:16 [main] INFO  pageObjects.HomePage - Switched to next window handle
+2020-07-29 18:58:21 [main] INFO  myTests.SanityTest - Entered online shop successfully
+2020-07-29 19:00:29 [main] INFO  myTests.SanityTest - Opened driver
+2020-07-29 19:00:32 [main] INFO  myTests.SanityTest - Scrolled down successfully using JavascriptExecutor- עשו לנו לייק
