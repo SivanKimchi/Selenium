@@ -1,7 +1,0 @@
-2020-07-29 19:44:40 [main] INFO  myTests.SanityTest - Opened driver
-2020-07-29 19:44:41 [main] DEBUG myTests.SanityTest - Clicked on main login button
-2020-07-29 19:44:42 [main] DEBUG pageObjects.HomePage - Inserted email to login form
-2020-07-29 19:44:42 [main] DEBUG pageObjects.HomePage - Inserted password to login form
-2020-07-29 19:44:42 [main] INFO  pageObjects.HomePage - Logged to website
-2020-07-29 19:44:46 [main] INFO  myTests.SanityTest - Finished main login successfully
-2020-07-29 19:46:40 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots

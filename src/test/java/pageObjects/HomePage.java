@@ -248,7 +248,7 @@ public class HomePage {
         logInInputPassword.sendKeys(GeneralProperties.LoginPassword);
         log.debug("Inserted valid password");
         logInSubmit.click();
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         log.debug("Submitted login form");
         Assert.assertTrue(invalidLoginErrorContainer.isDisplayed());
         log.info("Login is invalid as expected");
