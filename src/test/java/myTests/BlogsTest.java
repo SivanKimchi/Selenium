@@ -1,5 +1,7 @@
 import Lametayel.ScreenshotTaker;
 import Lametayel.GeneralProperties;    //uses JsonValues.json -- gitignore (template available)
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -14,6 +16,8 @@ public class BlogsTest {
     //members
     private static WebDriver driver;
 
+    public static Logger log = LogManager.getLogger(BlogsTest.class.getName());
+
 
     @Before
     public void setUp(){
@@ -24,6 +28,7 @@ public class BlogsTest {
         driver.manage().window().maximize();
 
         driver.get(GeneralProperties.SiteURL1);
+        log.info("Opened driver");
 
     }
 
@@ -41,6 +46,7 @@ public class BlogsTest {
 
         @Override
         protected void finished(Description description) {
+            System.out.println("Logged test data to testLogs.log using log4j");
             if (driver != null)
                 driver.quit();
         }
@@ -59,6 +65,7 @@ public class BlogsTest {
     public void searchBlog() throws InterruptedException {
         BlogsPage blogs = new BlogsPage(driver);
         blogs.searchBlogPost("איסלנד");
+        log.info("Finished blog search successfully");
 
     }
 
@@ -66,6 +73,7 @@ public class BlogsTest {
     public void blogSuggestions() {
         BlogsPage blogs = new BlogsPage(driver);
         blogs.suggestedBlogs();
+        log.info("Finished validating suggested blogs successfully");
     }
 
 
@@ -76,7 +84,7 @@ public class BlogsTest {
 
         BlogsPage blogs = new BlogsPage(driver);
         blogs.createABlogPost("יומן מסע", "איזה כיף בחו\"ל", "אירלנד");
-
+        log.info("Finished creating and deleting a blog successfully");
     }
 
 
@@ -93,7 +101,7 @@ public class BlogsTest {
 
         BlogsPage blogs = new BlogsPage(driver);
         blogs.createANewBlogFromBlogsPage();
-
+        log.info("Successfully entered blog creation from blogs page");
     }
 
 
@@ -102,6 +110,7 @@ public class BlogsTest {
     public void invalidBlogPost() throws InterruptedException {
         BlogsPage blogs = new BlogsPage(driver);
         blogs.createInvalidBlogPost("", "הבלוג שלי", "", "בא לי חו\"ל", "אירלנד");
+        log.info("Successfully validated creating new blog post");
     }
 
 
@@ -115,8 +124,10 @@ public class BlogsTest {
         blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
         driver.navigate().refresh();
         blogs.myBlogPosts.get(1).click();
+        log.debug("Navigated to blog post");
 
         blogs.checkForMandatoryBlogAttributes("הבלוג של sivanki");
+        log.info("Successfully validated mandatory blog attributes");
     }
 
 
@@ -131,9 +142,10 @@ public class BlogsTest {
         blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
         driver.navigate().refresh();
         blogs.myBlogPosts.get(1).click();
+        log.debug("Navigated to blog post");
 
         blogs.followBlog();
-
+        log.info("Successfully validated 'follow' on blog posts");
     }
 
 
@@ -146,9 +158,10 @@ public class BlogsTest {
         blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
         driver.navigate().refresh();
         blogs.myBlogPosts.get(1).click();
+        log.debug("Navigated to blog post");
 
         blogs.savePost();
-
+        log.info("Successfully validated 'save for later' on blog posts");
     }
 
 
@@ -161,9 +174,10 @@ public class BlogsTest {
         blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
         driver.navigate().refresh();
         blogs.myBlogPosts.get(1).click();
+        log.debug("Navigated to blog post");
 
         blogs.sharePost();
-
+        log.info("Successfully validated 'share' on blog posts");
     }
 
 
@@ -176,9 +190,10 @@ public class BlogsTest {
         blogs.searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
         driver.navigate().refresh();
         blogs.myBlogPosts.get(1).click();
+        log.debug("Navigated to blog post");
 
         blogs.likePost();
-
+        log.info("Successfully validated 'like' on blog posts");
     }
 
 

@@ -282,6 +282,7 @@ public class OrderWidgetOnHomePage {
             childWindow = it.next();
         }
         driver.switchTo().window(childWindow);
+
     }
 
 

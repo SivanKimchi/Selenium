@@ -1,4 +1,4 @@
-package myTests;
+
 
 import Lametayel.ScreenshotTaker;
 import org.apache.logging.log4j.LogManager;

@@ -1,10 +1,10 @@
 package pageObjects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -156,7 +156,7 @@ public class BlogsPage {
     @FindBy (css ="div[id='form_choose_dest_wrapper'] label[class='error']")
     public WebElement invalidDestinationTagErrorMessage;
 
-    @FindBy (css = "div[class='flex items-start'] div:nth-of-type(2) div a")
+    @FindBy (css = "main[class='right-col'] div[class='flex items-start'] div:nth-child(2) div a")
     public WebElement blogName;
 
     @FindBy (xpath = "//*[contains(@id, 'dropdown')]/div/img")
@@ -198,22 +198,22 @@ public class BlogsPage {
     @FindBy (xpath = "//div[1]/section[3]/main/div[2]/div[2]/div/div[1]/button")
     public WebElement saveForLater;
 
-    @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]")
+    @FindBy (xpath = "//*[@id='modals']/div[9]/div[2]")
     public WebElement saveForLaterAddFolderBox;
 
-    @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]/div[2]/div/div[2]/div/div[1]/input")
+    @FindBy (xpath = "//*[@id='modals']/div[9]/div[2]/div[2]/div/div[2]//div[1]/input")
     public WebElement saveForLaterAddFolder;
 
     @FindBy (xpath = "//div[1]/section[3]/main/div[4]/div[2]/div[1]/div/div[1]/button")
     public WebElement saveForLaterBottom;
 
-    @FindBy (css = "div[class='flex items-center print:hidden mr-3 mt-3 lg:mt-0'] a span[class='icon icon-facebook text-2xl']")
+    @FindBy (css = "div[class*='flex items-center print:hidden'] a span[class='icon icon-facebook text-2xl']")
     public WebElement shareOnFacebook;
 
     @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-facebook text-2xl']")
     public WebElement shareOnFacebookBottom;
 
-    @FindBy (css = "div[class='flex items-center print:hidden mr-3 mt-3 lg:mt-0'] a span[class='icon icon-whatsapp text-2xl']")
+    @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-whatsapp text-2xl']")
     public WebElement shareOnWhatsapp;
 
     @FindBy (css = "div[class='flex items-center print:hidden hidden md:flex'] a span[class='icon icon-whatsapp text-2xl']")
@@ -267,22 +267,22 @@ public class BlogsPage {
     @FindBy (css = "div[id='app'] div[id='comments'] div[class='flex justify-center'] a:nth-of-type(2)")
     public WebElement loginViaFacebookToInteract;
 
-    @FindBy (xpath = "//*[@id=\"modals\"]/div[7]/div[2]/div[2]/div/div/a[1]")
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[8]/div[2]/div[2]//a[1]")
     public WebElement loginToInteractFollowPost;
 
-    @FindBy (xpath = "//*[@id=\"modals\"]/div[7]/div[2]/div[2]/div/div/a[2]")
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[8]/div[2]/div[2]//a[2]")
     public WebElement loginViaFacebookToInteractFollowPost;
 
-    @FindBy (xpath = "//*[@id=\"modals\"]/div[8]/div[2]/div[2]/div/div/div/a[1]")
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[9]/div[2]/div[2]//a[1]")
     public WebElement loginToInteractSavePost;
 
-    @FindBy (xpath = "//*[@id=\"modals\"]/div[8]/div[2]/div[2]/div/div/div/a[2]")
+    @FindBy (xpath = "//*[@id=\"modals\"]/div[9]/div[2]/div[2]//a[2]")
     public WebElement loginViaFacebookToInteractSavePost;
 
-    @FindBy (xpath = " //*[@id=\"modals\"]/div[9]/div[2]/div[2]/div/div/a[1]")
+    @FindBy (xpath = " //*[@id=\"modals\"]/div[10]/div[2]/div[2]//a[1]")
     public WebElement loginToInteractLikePost;
 
-    @FindBy (xpath = " //*[@id=\"modals\"]/div[9]/div[2]/div[2]/div/div/a[2]")
+    @FindBy (xpath = " //*[@id=\"modals\"]/div[10]/div[2]/div[2]//a[2]")
     public WebElement loginViaFacebookToInteractLikePost;
 
 
@@ -316,15 +316,20 @@ public class BlogsPage {
     @FindBy (xpath = "//*[@id='modals']/div[7]/div[2]")
     public WebElement needToSignIn;
 
-    @FindBy (xpath = "//*[@id='modals']/div[9]/div[2]")
+    @FindBy (xpath = "//*[@id='modals']/div[10]/div[2]")
     public WebElement needToSignInBottomLike;
 
     @FindBy (xpath = "//*[@id='modals']/div[8]/div[2]")
     public WebElement needToSignInFromSavePost;
 
-    @FindBy (xpath = "//*[@id='modals']/div[8]/div[contains(@aria-labelledby, 'dropdown')]//ul[@class='p-4 overflow-auto']/li//input")
+    @FindBy (xpath = "//*[@id='modals']/div[9]/div[contains(@aria-labelledby, 'dropdown')]//ul[@class='p-4 overflow-auto']/li//input")
     public List<WebElement> savedPostsFolderCheckedBox;  //last
 
+    @FindBy (css = "div[class*='toast-info']")
+    public WebElement blogCreatedAlert;
+
+
+    public static Logger log = LogManager.getLogger(BlogsPage.class.getName());
 
 
     //constructor
@@ -335,19 +340,44 @@ public class BlogsPage {
     }
 
 
+//    //init
+//    public static BlogsPage initBlogsPage(WebDriver driver) {
+//
+//        return PageFactory.initElements(driver,BlogsPage.class);
+//    }
+
+
+
     public void skipAd(){
         try {
             skipToPageButton.click();
+            log.debug("Skipped ad page");
         } catch (Exception e) {
-            System.out.println("no ad page was skipped");
+            log.error("No ad page was skipped");
         }
     }
 
     public void scroll(WebElement waitForVisibilityOf) {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        log.debug("Scrolled to element");
 
+    }
+
+
+    public void moveToNextTab() {
+
+        String parentId = driver.getWindowHandle();
+        Set<String> windowsIds = driver.getWindowHandles();
+        Iterator<String> it = windowsIds.iterator();
+        String childWindow= "";
+
+        while (it.hasNext()){
+            childWindow = it.next();
+        }
+        driver.switchTo().window(childWindow);
+        log.info("Switched to next window handle");
     }
 
 
@@ -360,22 +390,22 @@ public class BlogsPage {
             searchBlogFreeText.sendKeys("איסלנד - ספטמבר 2017", Keys.ENTER);
             driver.navigate().refresh();
             Assert.assertEquals(myBlogPosts.size(), 2);
-            System.out.println("I have two posts about Iceland :)");
+            log.info("Searched for specific Iceland posts. I have two of them! :)");
 
         } else if (searchPostAbout.equals("נורווגיה")) {
             //  ** search for MY Norway blog posts **
             searchBlogFreeText.sendKeys("נורווגיה, ספטמבר 2018", Keys.ENTER);
             driver.navigate().refresh();
             Assert.assertEquals(myBlogPosts.size(), 2);
-            System.out.println("I have two posts about Norway :)");
+            log.info("Searched for specific Norway posts. I have two of them! :)");
 
         } else if (searchPostAbout.equals("ארה\"ב") || searchPostAbout.equals("סקוטלנד") || searchPostAbout.equals("פראג") || searchPostAbout.equals("גרמניה")) {
             //  ** search for MY blog posts **
 
             driver.navigate().to("https://www.lametayel.co.il/blogs/176606");
-            System.out.println("Yay! I've also been to this destination. Check out my blog :) " + myBlog.getText());
+            log.debug("Navigated to specific blog");
             Assert.assertEquals(myBlog.getText(), "הבלוג של sivanki");
-
+            log.info("Search completed- Yay! I've also been to this destination. Check out my blog :)" + myBlog.getText());
         }
     }
 
@@ -387,17 +417,20 @@ public class BlogsPage {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.mainMenuBlogs.click();
-
         wait.until(ExpectedConditions.visibilityOf(searchBlogsBar));
+        log.debug("Entered Blogs page");
         searchBlogsBar.click();
        // searchBlogsInput.clear();
         wait.until(ExpectedConditions.visibilityOf(searchBlogsInput));
+        log.debug("Clicked blogs search bar");
         searchBlogsInput.sendKeys(searchFor);
         Thread.sleep(3000);
         searchBlogsInput.sendKeys(Keys.ENTER);
+        log.debug("Inserted blog search term");
 
         wait.until(ExpectedConditions.visibilityOf(blogPostsHeader));
         Assert.assertTrue(blogPostsHeader.getText().contains(searchFor));
+        log.info("Entered blog search results page");
     }
 
 
@@ -410,21 +443,24 @@ public class BlogsPage {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(homePage.centralBar));
         homePage.mainMenuBlogs.click();
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         wait.until(ExpectedConditions.visibilityOf(systemSuggestions));
+        log.debug("Entered Blogs page");
         scroll(systemSuggestions);
         Assert.assertEquals(suggestedBlogPosts.size(), 9);
-        System.out.println("There are default " + suggestedBlogPosts.size() + " suggested blog posts");
+        log.info("There are default " + suggestedBlogPosts.size() + " suggested blog posts");
 
         scroll(postsFromBlogs);
         Assert.assertEquals(recentBlogPosts.size(), 30);      //should be 30
-        System.out.println("There are default " + recentBlogPosts.size() + " recent posts from blogs");
+        log.info("There are default " + recentBlogPosts.size() + " recent posts from blogs");
 
         scroll(nextSectionOfBlogPostsButton);
         nextSectionOfBlogPostsButton.click();
         driver.navigate().refresh();
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        log.debug("Entered next blogs page");
         Assert.assertEquals(nextPageBlogPosts.size(), 30);      //should be 30
-        System.out.println("The number of blog posts in the next page is also " + nextPageBlogPosts.size());
+        log.info("The number of blog posts in the next page is also " + nextPageBlogPosts.size());
 
     }
 
@@ -436,8 +472,10 @@ public class BlogsPage {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         homePage.logInButton.click();
         homePage.logIntoSite();
+        skipAd();
         homePage.userMenu.click();
         homePage.userMenuAddNewBlogPost.click();
+        log.debug("Clicked on 'add a new blog post' from user menu");
 
         skipAd();
 
@@ -447,18 +485,26 @@ public class BlogsPage {
         //post content
         scroll(postHeadline);
         postHeadline.sendKeys(insertPostHeadline);
+        log.debug("Inserted blog headline");
         postContent.sendKeys(insertPostContent);
+        log.debug("Inserted blog content");
 
         //destination tags
         addDestinationTags(insertDestinationTag, 1, 1, 1, 1);
-
+        scroll(saveBlogPostButton);
         saveBlogPostButton.click();
+        log.debug("Blog post has been saved");
 
         WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(postHeader)));
-        Assert.assertEquals(postHeader.getText(), insertPostHeadline);
-        System.out.println("Blog created");
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(blogCreatedAlert)));
+        Assert.assertEquals(blogCreatedAlert.getText(), "בלוג שלך נוצר");
 
+        //site changed the behavior
+//        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(postHeader)));
+//        Assert.assertEquals(postHeader.getText(), insertPostHeadline);
+        log.info("Blog created");
+
+        Thread.sleep(5000);
         //delete post
         deletePost();
 
@@ -472,6 +518,7 @@ public class BlogsPage {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         homePage.logInButton.click();
         homePage.logIntoSite();
+        skipAd();
         homePage.userMenu.click();
         homePage.userMenuAddNewBlogPost.click();
 
@@ -483,7 +530,9 @@ public class BlogsPage {
         //post content
         scroll(postHeadline);
         postHeadline.sendKeys(emptyPostHeadline);
+        log.debug("Inserted invalid headline");
         postContent.sendKeys(insertValidPostContent);
+        log.debug("Inserted valid content");
         //destination tag
         blogDestinations.sendKeys(insertDestinationTag);
         Thread.sleep(3000);
@@ -491,37 +540,48 @@ public class BlogsPage {
         Thread.sleep(3000);
         blogDestinations.sendKeys(Keys.ENTER);
         Thread.sleep(5000);
+        log.debug("Inserted valid destination tag");
 
         scroll(saveBlogPostButton);
         saveBlogPostButton.click();
+        log.debug("Saved blog");
         scroll(postHeadline);
         Assert.assertTrue(invalidPostErrorMessage.isDisplayed());
+        log.debug("Headline is invalid");
         invalidPostErrorMessage.click();
         Assert.assertTrue(invalidHeadlineErrorMessage.getText().equals("לא לשכוח לתת כותרת"));
-        System.out.println("Post can't be saved without a headline");
+        log.info("Post can't be saved without a headline");
 
         postHeadline.sendKeys(insertValidPostHeadline);
+        log.debug("Inserted valid headline");
         postContent.clear();
         postContent.sendKeys(insertEmptyPostContent);
+        log.debug("Inserted invalid content");
         scroll(saveBlogPostButton);
         saveBlogPostButton.click();
+        log.debug("Saved blog");
 
         scroll(postContent);
         Assert.assertTrue(invalidPostErrorMessage.isDisplayed());
+        log.debug("Content is invalid");
         invalidPostErrorMessage.click();
         Assert.assertTrue(invalidContentErrorMessage.getText().equals("אופס, צריך לכתוב כאן משהו"));
-        System.out.println("Post can't be saved without a content");
+        log.info("Post can't be saved without a content");
 
         postContent.sendKeys(insertValidPostContent);
+        log.debug("Inserted valid content");
         removeDestinationTag.click();
+        log.debug("Removed destonation tag");
         scroll(saveBlogPostButton);
         saveBlogPostButton.click();
+        log.debug("Saved blog");
         scroll(blogDestinations);
         Assert.assertTrue(invalidPostErrorMessage.isDisplayed());
+        log.debug("Destination tag must be inserted");
         invalidPostErrorMessage.click();
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(invalidDestinationTagErrorMessage.getText().equals("צריך לבחור לפחות יעד אחד"));
-        System.out.println("Post can't be saved without at least 1 Destination Tag");
+        log.info("Post can't be saved without at least 1 Destination Tag");
 
     }
 
@@ -532,7 +592,7 @@ public class BlogsPage {
         scroll(blogPermissions);
         makeBlogPostPrivate.click();
         Assert.assertTrue(blogPermissionsPrivateDiv.getAttribute("class").contains("icon-radio-checked"));
-        System.out.println("Blog post is private");
+        log.info("Blog post is now private");
     }
 
 
@@ -547,37 +607,51 @@ public class BlogsPage {
         Thread.sleep(5000);
         blogDestinationPickFromList.click();
         Thread.sleep(3000);
+        log.debug("First destination tag chosen by arrow down");
 
         scroll(blogDestinationListDiv);
         blogDestinationTagList.get(typeOfDestinationIndex).click();  //יבשת
+        log.debug("Second destination-tag type clicked");
         blogDestinationContinentOptions.get(continentIndex).click(); //אירופה
+        log.debug("Second destination-tag continent clicked");
         blogDestinationCountryOptions.get(countryIndex).click(); //אוסטריה
+        log.debug("Second destination-tag country clicked");
         blogDestinationCityOptions.get(cityIndex).click(); //אינסברוק
+        log.debug("Second destination-tag city clicked");
         addDestinationTag.click();
-
+        log.debug("Second destination tag chosen (4 part pick)");
         Assert.assertTrue(destinationTagsChosen.getText().contains(destinationTag));
+        log.info("First destination tag is displayed");
         Assert.assertTrue(destinationTagsChosen.getText().contains( blogDestinationCityOptions.get(cityIndex).getText()));
+        log.info("Second destination tag is displayed");
 
     }
 
 
     public void deletePost() throws InterruptedException {
+
+        /*   site changed the behavior
         WebDriverWait wait = new WebDriverWait(driver,10);
 
         userMenuFromBlogsPage.click();
         Thread.sleep(3000);
         userMenuMyBlogFromBlogsPage.click();
+        log.debug("Entered my created blog");
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(myDrafts)));
         myDrafts.click();
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(editPost)));
+        log.debug("Entered my draft (private post)");
         editPost.click();
         Thread.sleep(5000);
+         */
+
         scroll(deletePost);
         Thread.sleep(8000);
         deletePost.click();
+        log.debug("Clicked on Delete post");
         Thread.sleep(3000);
         finalDelete.click();
-        System.out.println("Blog deleted");
+        log.info("Blog deleted");
     }
 
 
@@ -597,17 +671,20 @@ public class BlogsPage {
                 writeABlog.click();
                 Thread.sleep(2000);
                 Assert.assertTrue(driver.getCurrentUrl().contains("add/blog"));
+                log.info("User is logged in and can create a blog");
             }
         } catch (Exception e) {
-            System.out.println("User is not logged in");
+            log.info("User is not logged in");
             Thread.sleep(2000);
             scroll(writeABlog);
             writeABlog.click();
-
+            log.debug("Clicked on adding a blog");
             wait.until(ExpectedConditions.visibilityOf(homepage.logInForm));
+            log.debug("User needs to log in");
             homepage.logIntoSite();
             Thread.sleep(3000);
             Assert.assertTrue(driver.getCurrentUrl().contains("add/blog"));
+            log.info("User is now logged in and can create a blog");
         }
 
     }
@@ -615,12 +692,13 @@ public class BlogsPage {
 
 
 
-    public void checkForMandatoryBlogAttributes(String blog) {
+    public void checkForMandatoryBlogAttributes(String blog) throws InterruptedException {
 
         HomePage homepage = new HomePage(driver);
 
         // blog attributes:
         WebDriverWait wait = new WebDriverWait(driver,10);
+        driver.navigate().refresh();
         wait.until(ExpectedConditions.visibilityOf(blogName));
 
         topOfPostElements(blog);
@@ -642,52 +720,54 @@ public class BlogsPage {
         Assert.assertEquals(blogName.getText(), blog);
         Assert.assertTrue(blogAuthorImg.isDisplayed());
         Assert.assertTrue(followBlog.isDisplayed());
+        log.debug("Blog name, author image and follow icon display on top");
 
         try {
             Assert.assertTrue(blogDescription.isDisplayed());
-            System.out.println("In this blog, there is also blog description");
+            log.debug("In this blog, there is also blog description");
         } catch (Exception e){
-            System.out.println("There is no description to blog");
+            log.debug("There is no description to blog");
         }
 
         Assert.assertTrue(blogAuthorImgInsidePost.isDisplayed());
-        System.out.println("Author image also appears under post headline");
+        log.debug("Author image also appears under post headline");
         Assert.assertTrue(blogAuthorNameInsidePost.isDisplayed());
         Assert.assertTrue(blogName.getText().contains(blogAuthorNameInsidePost.getText()));
-        System.out.println("Author name also appears under post headline");
+        log.debug("Author name also appears under post headline");
         Assert.assertTrue(followBlogInsidePost.isDisplayed());
-        System.out.println("You can 'follow' blog from top");
+        log.debug("You can 'follow' blog from top");
         Assert.assertTrue(publishedDate.isDisplayed());
-        System.out.println("Blog post was published on " + publishedDate.getText());
+        log.debug("Blog post was published on " + publishedDate.getText());
         Assert.assertTrue(viewCount.isDisplayed());
-        System.out.println("Blog post has " + viewCount.getText() + " views");
+        log.debug("Blog post has " + viewCount.getText() + " views");
         Assert.assertTrue(saveForLater.isDisplayed());
-        System.out.println("SaveForLater appears on top");
+        log.debug("SaveForLater appears on top");
 
         try {
             Assert.assertTrue(numOfLikes.isDisplayed());
-            System.out.println("Post has " + numOfLikes + " likes");
+            log.debug("Post has " + numOfLikes + " likes");
 
         } catch (Exception e) {
-            System.out.println("Post has no 'likes' yet");
+            log.debug("Post has no 'likes' yet");
         }
 
         Assert.assertTrue(shareOnFacebook.isDisplayed());
-        System.out.println("Facebook share button is displayed on top");
+        log.debug("Facebook share button is displayed on top");
         Assert.assertTrue(shareOnWhatsapp.isDisplayed());
-        System.out.println("WhatsApp share button is displayed on top");
+        log.debug("WhatsApp share button is displayed on top");
         Assert.assertTrue(printPost.isDisplayed());
-        System.out.println("Print button is displayed on top");
+        log.debug("Print button is displayed on top");
 
         scroll(mainPostImg);
         Assert.assertFalse(mainPostImg.getAttribute("class").contains("--hidden"));
         mainPostImg.click();
+        log.debug("Clicked on post main image");
         wait.until(ExpectedConditions.attributeContains(mainPostImg, "class", "--hidden"));
-        System.out.println("Image is zoomed");
+        log.debug("Image is zoomed");
         driver.navigate().refresh();
 
         Assert.assertTrue(content.isDisplayed());
-        System.out.println("Post content is displayed");
+        log.debug("Post content is displayed");
     }
 
 
@@ -696,31 +776,31 @@ public class BlogsPage {
 
         scroll(postDestinations.get(1));
         Assert.assertFalse(postDestinations.isEmpty());    //must have at least 1 destination tag
-        System.out.println("There are " + postDestinations.size() + " destinations in this blog post");
+        log.debug("There are " + postDestinations.size() + " destinations in this blog post");
 
         Assert.assertTrue(likePost.isDisplayed());
-        System.out.println("'Like' post is also visible on bottom");
+        log.debug("'Like' post is also visible on bottom");
         Assert.assertTrue(saveForLaterBottom.isDisplayed());
-        System.out.println("'SaveForLater' is also visible on bottom");
+        log.debug("'SaveForLater' is also visible on bottom");
         Assert.assertTrue(shareOnFacebookBottom.isDisplayed());
-        System.out.println("'Facebook share' is also visible on bottom");
+        log.debug("'Facebook share' is also visible on bottom");
         Assert.assertTrue(shareOnWhatsappBottom.isDisplayed());
-        System.out.println("'WhatsApp share' is also visible on bottom");
+        log.debug("'WhatsApp share' is also visible on bottom");
         Assert.assertTrue(printPostBottom.isDisplayed());
-        System.out.println("Print is also visible on bottom");
+        log.debug("Print is also visible on bottom");
         Assert.assertTrue(flagPost.isDisplayed());
-        System.out.println("Flag post is visible on bottom");
+        log.debug("Flag post is visible on bottom");
         Assert.assertTrue(blogAuthorImgBottom.isDisplayed());
-        System.out.println("Author image is also visible on bottom");
+        log.debug("Author image is also visible on bottom");
         Assert.assertTrue(blogAuthorNameBottom.isDisplayed());
-        System.out.println("Author name is also visible on bottom");
+        log.debug("Author name is also visible on bottom");
         Assert.assertTrue(followBlogBottom.isDisplayed());
-        System.out.println("'Follow' blog is also visible on bottom");
+        log.debug("'Follow' blog is also visible on bottom");
 
     }
 
 
-    public void postComments(){
+    public void postComments() throws InterruptedException {
 
         HomePage homepage = new HomePage(driver);
         WebDriverWait wait = new WebDriverWait(driver,10);
@@ -730,30 +810,38 @@ public class BlogsPage {
         try {
             Assert.assertTrue(addComment.isDisplayed());
             Assert.assertTrue(sendCommentButton.isDisplayed());
-            System.out.println("Comments box is visible --user is logged in");
+            log.debug("Comments box is visible --user is logged in");
 
         } catch (Exception e) {
-            System.out.println("User must log in to add a comment");
+            log.debug("User must log in to add a comment");
             Assert.assertTrue(loginToInteract.isDisplayed());
-            loginToInteract.click();
+            loginToInteract.sendKeys(Keys.CONTROL + "t", Keys.ENTER);
+            moveToNextTab();
             driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
             Assert.assertTrue(homepage.logInForm.isDisplayed());
-            driver.navigate().back();
+            log.debug("Clicked on 'log in to interact'");
+
+            ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
+            driver.close();
+            driver.switchTo().window(windows.get(0));
+
             wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteract));
-            scroll(loginViaFacebookToInteract);
-            loginViaFacebookToInteract.click();
+            loginViaFacebookToInteract.sendKeys(Keys.CONTROL + "t", Keys.ENTER);
+            moveToNextTab();
+            log.debug("Clicked on 'log in from facebook' to interact");
             driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
             Assert.assertTrue(driver.getTitle().contains("Facebook"));
-            driver.navigate().back();
+            driver.close();
+            driver.switchTo().window(windows.get(0));
         }
 
         try {
             scroll(publishedComments.get(1));
-            System.out.println("Number of comments to post: " + publishedComments.size() );
+            log.debug("Number of comments to post: " + publishedComments.size() );
 
         } catch (Exception e) {
 
-            System.out.println("There are currently no comments to post");
+            log.debug("There are currently no comments to post");
         }
     }
 
@@ -762,13 +850,13 @@ public class BlogsPage {
 
         try {
             scroll(mostViewedPostSection);
-            System.out.println("Most Viewed user posts list has " + mostViewedPostsList.size() + "posts" );
+            log.debug("Most Viewed user posts list has " + mostViewedPostsList.size() + "posts" );
             scroll(linkToAllAuthorsPosts);
             Assert.assertTrue(linkToAllAuthorsPosts.isDisplayed());
-            System.out.println("User has even more posts in blog");
+            log.debug("User has even more posts in blog");
 
         } catch (Exception e) {
-            System.out.println("User does not have more posts");
+            log.debug("User does not have more posts");
         }
     }
 
@@ -778,7 +866,7 @@ public class BlogsPage {
         scroll(relatedPostsSection);
         Assert.assertEquals(relatedPostsList.size(), 4);
         Assert.assertTrue(linkToAllRelatedPosts.isDisplayed());
-        System.out.println("There are " + relatedPostsList.size() + " more recommended posts about this destination, and a link to even more posts");
+        log.debug("There are " + relatedPostsList.size() + " more recommended posts about this destination, and a link to even more posts");
     }
 
 
@@ -811,12 +899,12 @@ public class BlogsPage {
         wait.until(ExpectedConditions.visibilityOf(followBlog));
 
         followBlog.click();
+        log.debug("Clicked on 'follow'");
 
         try {
-            wait.until(ExpectedConditions.visibilityOf(needToSignIn));
             wait.until(ExpectedConditions.visibilityOf(loginToInteractFollowPost));
             wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractFollowPost));
-            System.out.println("User needs to log in to interact with blog");
+            log.debug("User needs to log in to interact with blog");
 
             loginToInteractFollowPost.click();
             homepage.logIntoSite();
@@ -825,17 +913,18 @@ public class BlogsPage {
 
             wait.until(ExpectedConditions.visibilityOf(followBlog));
             followBlog.click();
+            log.debug("Clicked on 'follow' as signed in user");
 
         } catch (Exception e) {
-            System.out.println("User is already signed in and can follow blog");
+            log.debug("User is already signed in and can follow blog");
         }
 
         wait.until(ExpectedConditions.attributeContains(followBlog, "class", "bg-orange"));
-        System.out.println("'Follow' button has been clicked. User is now following blog.");
+        log.info("'Follow' button has been clicked. User is now following blog.");
 
         //undo
         followBlog.click();
-        System.out.println("end of test - cancelled 'follow blog'");
+        log.info("End of test - cancelled 'follow blog'");
 
     }
 
@@ -846,12 +935,12 @@ public class BlogsPage {
         WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.visibilityOf(saveForLater));
         saveForLater.click();
+        log.debug("Clicked on 'save post'");
 
         try {
-            wait.until(ExpectedConditions.visibilityOf(needToSignInFromSavePost));
             wait.until(ExpectedConditions.visibilityOf(loginToInteractSavePost));
             wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractSavePost));
-            System.out.println("User needs to log in to interact with blog");
+            log.debug("User needs to log in to interact with blog");
 
             loginToInteractSavePost.click();
             homepage.logIntoSite();
@@ -859,48 +948,68 @@ public class BlogsPage {
 
             wait.until(ExpectedConditions.visibilityOf(saveForLater));
             saveForLater.click();
+            log.debug("User is now signed in and clicked on 'save post'");
 
         } catch (Exception e) {
-            System.out.println("User is already signed in and can save blog post");
+            log.debug("User is already signed in and can save blog post");
         }
 
         wait.until(ExpectedConditions.visibilityOf(saveForLaterAddFolderBox));
         saveForLaterAddFolder.sendKeys("SavedPosts",(Keys.ENTER));
+        log.debug("Entered a folder name for saved items");
         wait.until(ExpectedConditions.attributeContains(saveForLater, "class", "bg-orange"));
-        System.out.println("'Save For Later' button has been clicked. Post is saved.");
+        log.info("'Save For Later' button has been clicked. Post is saved.");
 
         //undo
         saveForLater.click();
         wait.until(ExpectedConditions.visibilityOf(saveForLaterAddFolderBox));
         savedPostsFolderCheckedBox.get(savedPostsFolderCheckedBox.size()-1).click();
-        System.out.println("end of test - cancelled 'save for later'");
+        log.info("End of test - cancelled 'save for later'");
     }
 
 
     public void sharePost(){
 
-        WebDriverWait wait = new WebDriverWait(driver,10);
-        wait.until(ExpectedConditions.visibilityOf(shareOnFacebook));
+        WebDriverWait wait = new WebDriverWait(driver,20);
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
 
         //facebook share
-        shareOnFacebook.click();
+        try {
+            shareOnFacebook.click();
+        } catch (StaleElementReferenceException e) {
+            log.error("Facebook button is stale");
+            WebElement facebookButton = driver.findElement(By.xpath("//*[@id=\"app\"]/section[3]/main/div[2]/div[2]/a[1]/span"));
+            facebookButton.click();
+        }
+
+        log.debug("Clicked on facebook share");
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         OrderWidgetOnHomePage o = new OrderWidgetOnHomePage(driver);
         o.moveToNextTab();
         Assert.assertTrue(driver.getCurrentUrl().contains("facebook.com"));
+        log.debug("Navigated to facebook page");
         ArrayList<String> windows = new ArrayList<>(driver.getWindowHandles());
         driver.close();
         driver.switchTo().window(windows.get(0));
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+
         //whatsapp share
-        wait.until(ExpectedConditions.visibilityOf(shareOnWhatsapp));
-        shareOnWhatsapp.click();
+        try {
+            shareOnWhatsapp.click();
+        } catch (StaleElementReferenceException f){
+            log.error("Whatsapp button is stale");
+            WebElement whatsappButton = driver.findElement(By.xpath("//*[@id=\"app\"]/section[3]/main/div[2]/div[2]/a[2]/span"));
+            whatsappButton.click();
+        }
+        log.debug("Navigated back and clicked on WhatsApp share");
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         o.moveToNextTab();
         Assert.assertTrue(driver.getCurrentUrl().contains("api.whatsapp.com"));
+        log.debug("Navigated to whatsapp page");
 
         driver.close();
         driver.switchTo().window(windows.get(0));
-        System.out.println("Navigated to sharing options and back");
+        log.info("Navigated to all sharing options and back");
     }
 
 
@@ -911,17 +1020,18 @@ public class BlogsPage {
         wait.until(ExpectedConditions.visibilityOf(likePostBottom));
         scroll(likePostBottom);
 
-        try {
+        try {     //number of likes is shown
             Assert.assertTrue(likePostNumberBottom.isDisplayed());
             int numberOfLikes = Integer.parseInt(likePostNumberBottom.getText());
-            System.out.println("This post has " + numberOfLikes + "'likes'");
+            log.debug("This post has " + numberOfLikes + "'likes'");
             likePostBottom.click();
+            log.debug("Clicked 'like'");
 
             try {
                 wait.until(ExpectedConditions.visibilityOf(needToSignInBottomLike));
                 wait.until(ExpectedConditions.visibilityOf(loginToInteractLikePost));
                 wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractLikePost));
-                System.out.println("User needs to log in to interact with blog");
+                log.debug("User needs to log in to interact with blog");
 
                 loginToInteractLikePost.click();
                 homepage.logIntoSite();
@@ -930,24 +1040,26 @@ public class BlogsPage {
                 scroll(likePostBottom);
                 wait.until(ExpectedConditions.visibilityOf(likePostBottom));
                 likePostBottom.click();
+                log.debug("Clicked 'like'");
 
             } catch (Exception a) {
-                System.out.println("User is already signed in and can 'like' blog post");
+                log.debug("User is already signed in and clicked on 'like' blog post");
             }
 
             wait.until(ExpectedConditions.attributeContains(likePostBottom, "class", "text-green"));
             wait.until(ExpectedConditions.visibilityOf(likePostNumberBottom));
-            System.out.println("Now the post has " + numberOfLikes+1 + " 'likes'");
+            log.info("Now the post has " + numberOfLikes+1 + " 'likes'");
 
-        } catch (Exception e){
-            System.out.println("This post doesn't have 'likes' yet");
+        } catch (Exception e){   //number of likes is not shown
+            log.info("This post doesn't have 'likes' yet");
             likePostBottom.click();
+            log.debug("Clicked 'like'");
 
             try {
                 wait.until(ExpectedConditions.visibilityOf(needToSignInBottomLike));
                 wait.until(ExpectedConditions.visibilityOf(loginToInteractLikePost));
                 wait.until(ExpectedConditions.visibilityOf(loginViaFacebookToInteractLikePost));
-                System.out.println("User needs to log in to interact with blog");
+                log.debug("User needs to log in to interact with blog");
 
                 loginToInteractLikePost.click();
                 homepage.logIntoSite();
@@ -956,19 +1068,20 @@ public class BlogsPage {
                 scroll(likePostBottom);
                 wait.until(ExpectedConditions.visibilityOf(likePostBottom));
                 likePostBottom.click();
+                log.debug("Clicked 'like'");
 
             } catch (Exception a) {
-                System.out.println("User is already signed in and can 'like' blog post");
+                log.info("User is already signed in and clicked on 'like' blog post");
             }
 
             wait.until(ExpectedConditions.attributeContains(likePostBottom, "class", "text-green"));
             wait.until(ExpectedConditions.visibilityOf(likePostNumberBottom));
-            System.out.println("Now the post has 1 'like'");
+            log.info("Now the post has 1 'like'");
         }
 
         //undo
         likePostBottom.click();
-        System.out.println("end of test - cancelled 'like post'");
+        log.info("End of test - cancelled 'like post'");
     }
 
 }

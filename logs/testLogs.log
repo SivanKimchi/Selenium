@@ -1,18 +1,5 @@
-2020-07-30 12:32:41 [main] INFO  myTests.SanityTest - Opened driver
-2020-07-30 12:32:43 [main] DEBUG myTests.SanityTest - Clicked on main login button
-2020-07-30 12:32:44 [main] DEBUG pageObjects.HomePage - Inserted email to login form
-2020-07-30 12:32:44 [main] DEBUG pageObjects.HomePage - Inserted password to login form
-2020-07-30 12:32:45 [main] INFO  pageObjects.HomePage - Logged to website
-2020-07-30 12:32:53 [main] INFO  myTests.SanityTest - Finished main login successfully
-2020-07-30 12:32:55 [main] DEBUG pageObjects.HomePage - Skipped ad page
-2020-07-30 12:32:55 [main] DEBUG myTests.SanityTest - Clicked on logged-in user menu
-2020-07-30 12:32:56 [main] INFO  myTests.SanityTest - Finished validating all user menu links
-2020-07-30 12:34:17 [main] INFO  myTests.SanityTest - Opened driver
-2020-07-30 12:34:21 [main] DEBUG myTests.SanityTest - Clicked on main login button
-2020-07-30 12:34:22 [main] DEBUG pageObjects.HomePage - Inserted email to login form
-2020-07-30 12:34:22 [main] DEBUG pageObjects.HomePage - Inserted password to login form
-2020-07-30 12:34:22 [main] INFO  pageObjects.HomePage - Logged to website
-2020-07-30 12:34:28 [main] INFO  myTests.SanityTest - Finished main login successfully
-2020-07-30 12:34:30 [main] DEBUG pageObjects.HomePage - Skipped ad page
-2020-07-30 12:34:30 [main] DEBUG myTests.SanityTest - Clicked on logged-in user menu
-2020-07-30 12:34:31 [main] INFO  myTests.SanityTest - Finished validating all user menu links
+2020-07-31 11:19:00 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-07-31 11:19:01 [main] DEBUG pageObjects.BlogsPage - Clicked 'like'
+2020-07-31 11:19:01 [main] INFO  pageObjects.BlogsPage - Now the post has 1 'like'
+2020-07-31 11:19:01 [main] INFO  pageObjects.BlogsPage - End of test - cancelled 'like post'
+2020-07-31 11:19:01 [main] INFO  BlogsTest - Successfully validated 'like' on blog posts
