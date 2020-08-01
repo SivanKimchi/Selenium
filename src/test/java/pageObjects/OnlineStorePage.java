@@ -1,5 +1,7 @@
 package pageObjects;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import Lametayel.GeneralProperties;  //uses JsonValues.json -- gitignore (template available)
 import org.openqa.selenium.*;
@@ -7,9 +9,12 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -88,10 +93,10 @@ public class OnlineStorePage {
     public List<WebElement> sortingAfterHoover;
 
 
-    @FindBy(css = "div[class*='product_list_item']")
+    @FindBy(css = "div[class^='product_list_item']")
     public List<WebElement> resultList;
 
-    @FindBy(css = "div[class*='product_list_item'] span[class='price ']")
+    @FindBy(css = "div[class^='product_list_item'] span[class='price ']")
     public List<WebElement> resultPriceList;
 
     @FindBy(id = "cbar_w0_header_s")
@@ -225,7 +230,7 @@ public class OnlineStorePage {
     @FindBy (xpath = "//div[@id='medproductwarehouses']/div/span/ul/li/a")
     public List<WebElement> itemAvailabilityInBranchesList;
 
-    @FindBy (css = "div[class='hidden-md-down'] a[itemprop='brand']")
+    @FindBy (css = "div[class='hidden-md-down'] a[class='pro_extra_info_brand']")
     public WebElement itemBrand;
 
     @FindBy (css = "section[id='main'] h1[class*='page_heading mb']")
@@ -350,7 +355,11 @@ public class OnlineStorePage {
     @FindBy (css = "div[id='payment-confirmation'] button")
     public WebElement orderConfirmation;
 
+    @FindBy (css = "a[class='st_shopping_cart dropdown_tri header_item ']")
+    public WebElement shoppingCartButton;
 
+
+    public static Logger log = LogManager.getLogger(OnlineStorePage.class.getName());
 
     //constructor
     public OnlineStorePage(WebDriver driver) {
@@ -364,6 +373,7 @@ public class OnlineStorePage {
          JavascriptExecutor js = (JavascriptExecutor) driver;
          js.executeScript("arguments[0].scrollIntoView();", waitForVisibilityOf);
          driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+         log.debug("Scrolled to element");
     }
 
     //works for 2 or MORE windows
@@ -378,14 +388,16 @@ public class OnlineStorePage {
                 childWindow = it.next();
             }
         driver.switchTo().window(childWindow);
+        log.info("Switched to next window handle");
     }
 
 
     public void skipAd() {
         try {
             skipToPageButton.click();
+            log.debug("Skipped ad page");
         } catch (Exception e) {
-            System.out.println("no ad page was skipped");
+            log.error("No ad page was skipped");
         }
     }
 
@@ -396,23 +408,54 @@ public class OnlineStorePage {
         scroll(mainSectionProducts);
 
         String itemName = productitemsh3.get(itemIndex).getText();
-        System.out.println("Item: " + itemName);
+        log.debug("Item chosen: " + itemName);
         productitemsh3.get(itemIndex).click();
+        log.debug("Clicked on item");
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(itemTitle));
 
         Assert.assertEquals(itemName, itemTitle.getText());
-        System.out.println("Clicked on item amd opened it in a new window");
+        log.debug("Item opened in a new window");
+
+        String mainWindow = driver.getWindowHandle();
 
         addItemToCart.click();
+        log.debug("Clicked on 'add to cart'");
+//
+//        Wait fluentwait = new FluentWait(driver)
+//                .withTimeout(Duration.ofSeconds(9))
+//                .pollingEvery(Duration.ofSeconds(2))
+//                .ignoring(NoAlertPresentException.class);
 
-        wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
-        Assert.assertTrue(itemAddedToCartMessageHeadline.getText().contains("המוצר נוסף לסל הקניות!"));
+        try {
+            driver.switchTo().alert();
+            log.error(driver.switchTo().alert().getText());
+        } catch (NoAlertPresentException e) {
+            log.debug("No immediate alert after adding to cart");
 
-        goToCart.click();
+            try {
+                wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
+                Assert.assertTrue(itemAddedToCartMessageHeadline.getText().contains("המוצר נוסף לסל הקניות!"));
+                log.debug("Message - item was added to cart");
 
-        checkItemAddedToCart(itemName);
+                goToCart.click();
+                log.debug("Clicked on 'go to cart'");
+
+                checkItemAddedToCart(itemName);
+
+            } catch (UnhandledAlertException exception) {
+//            fluentwait.until(ExpectedConditions.alertIsPresent());
+                log.error("Item is out of stock");
+                driver.switchTo().alert();
+                log.error(driver.switchTo().alert().getText());
+
+//            driver.switchTo().window(mainWindow);
+//            shoppingCartButton.click();
+
+            }
+        }
+
 
     }
 
@@ -424,11 +467,12 @@ public class OnlineStorePage {
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(cartHeader));
         Assert.assertTrue(cartItems.isDisplayed());
+        log.debug("Cart is shown");
 
         for (int i = 0; i < cartItemTitleList.size(); i++) {
 
             if (cartItemTitleList.get(i).getText().contains(itemTitle)) {
-                System.out.println("Item was successfully added to cart.");
+                log.info("Item was successfully added to cart.");
                 itemAdded = true;
             }
 
@@ -445,7 +489,9 @@ public class OnlineStorePage {
 
         //general ENTER
         searchBar.sendKeys(searchFor, Keys.ENTER);
+        log.debug("Inserted search term, clicked ENTER");
         wait.until(ExpectedConditions.visibilityOf(searchResultsDiv));
+        log.debug("Results are shown");
 
         String itemsCount = itemsCountString.getText();
         String[] itemsCountSplitArray = itemsCount.split(" ");
@@ -454,7 +500,7 @@ public class OnlineStorePage {
         //there are more pages to show items
         if (numOfItems > 95) {       // 95 = max results per page
             Assert.assertTrue(nextPage.size() > 1);
-            System.out.println("More results in the next page. Each page holds up to 95 results");
+            log.debug("More results in the next page. Each page holds up to 95 results");
         }
 
     }
@@ -463,9 +509,8 @@ public class OnlineStorePage {
     public void suggestedItems() throws InterruptedException {
         scroll(bottomSuggestionsWidget);
         Thread.sleep(5000);
-        System.out.println(bottomSuggestionsList.size());
         Assert.assertTrue(bottomSuggestionsList.size() == 6);
-        System.out.println("There are 6 suggested items at the bottom of item search results");
+        log.debug("There are default " + bottomSuggestionsList.size() + " suggested items at the bottom of item search results");
     }
 
 
@@ -476,31 +521,35 @@ public class OnlineStorePage {
         searchBar.clear();
 
         searchBar.sendKeys(searchFor);
+        log.debug("Inserted partial search term");
         Thread.sleep(3000);
         Assert.assertTrue(suggestedAutocompleteItemSearch.isDisplayed());
+        log.debug("Auto complete items are displayed");
 
         Actions actions = new Actions(driver);
         actions.moveToElement(searchSuggestionsList.get(itemIndex)).build().perform();
         Assert.assertTrue(searchSuggestionsList.get(itemIndex).getAttribute("class").contains("autocomplete-selected"));
+        log.debug("Hoovered to auto complete suggestion");
         String itemName = searchSuggestionsList.get(itemIndex).getText();
         searchSuggestionsList.get(itemIndex).click();
+        log.debug("Clicked on auto complete suggestion");
         wait.until(ExpectedConditions.visibilityOf(itemTitle));
         Assert.assertTrue(itemName.contains(itemTitle.getText()));
-        System.out.println("Item was chosen from autocomplete search suggestion: " + itemName);
+        log.info("Item was chosen from autocomplete search suggestion: " + itemName);
     }
 
 
     public void sortResults() throws InterruptedException {
 
         Assert.assertTrue(sortingBeforeHoover.isDisplayed());
+        log.debug("Sorting option is shown");
         Actions actions = new Actions(driver);
         actions.moveToElement(sortingBeforeHoover).build().perform();
-        // System.out.println(sortingBeforeHoover.getAttribute("class"));
-        //wait.until(ExpectedConditions.refreshed(ExpectedConditions.attributeContains(sortingBeforeHoover, "class", "open")));
         driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(sortingAfterHoover.get(1).isDisplayed());
-        System.out.println("Sorting filter is hoovered on and open");
+        log.debug("Sorting filter is hoovered on and is open");
         sortingAfterHoover.get(3).click();
+        log.debug("Chosen sorting by price ascending");
         Thread.sleep(8000);  //sometimes it still goes to another item. why??
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOfAllElements(resultPriceList));//sometimes it still goes to another item. why??
@@ -509,22 +558,25 @@ public class OnlineStorePage {
             if ((resultPriceList.size() > 1)) {
 
                 double price = 0.0;
+                log.debug("Going through top 2 rows of items prices");
+
                 // trying only 2 rows for visibility issues
                 for (int i = 0; i <= 5; i++) {
-                    double itemPrice = Double.parseDouble(resultPriceList.get(i).getAttribute("content"));
+                    String[] priceTextArray = resultPriceList.get(i).getText().split("₪");
+                    double itemPrice = Double.parseDouble(priceTextArray[1]);
                     Assert.assertTrue(itemPrice >= price);
-                    System.out.println("price- " + price + " itemprice- " + itemPrice);
+                    log.debug("price- " + price + " itemprice- " + itemPrice);
                     double a = itemPrice;
                     price = a;
                 }
             } else if (resultPriceList.size() == 1) {
-                System.out.println("There is only 1 item in results");
+                log.info("There is only 1 item in results");
             }
 
-            System.out.println("Results are ordered as asked - lowest price to highest");
+            log.info("Results are ordered as asked - lowest price to highest");
 
         } catch (Exception e) {
-            System.out.println("There are no results");
+            log.error("There are no results");
         }
     }
 
@@ -535,35 +587,37 @@ public class OnlineStorePage {
 
         try {
             actions.moveToElement(shopTopBarList.get(mainCategoryIndex)).build().perform();   //1=גברים
-
+            log.debug("Hoovered on item's first category");
             driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
 
             try {
                 actions.moveToElement(shopTopBarChoiceRowColumnHeadlineList.get(categoryHeadlineIndex)).build().perform(); //2=סנדלים לגברים
-                System.out.println("Category headline- " + shopTopBarChoiceRowColumnHeadlineList.get(categoryHeadlineIndex).getText());
+                log.debug("Hoovered on category headline- " + shopTopBarChoiceRowColumnHeadlineList.get(categoryHeadlineIndex).getText());
 
                 // ** MINI SCOPE for categories column (mini driver)
                 WebElement column = shopTopBarChoiceRowColumnList.get(categoryHeadlineIndex);
                 List<WebElement> itemCategory = column.findElements(By.cssSelector("ul[class*='p_granditem'] a"));
+                log.debug("Entered mini scope for sub category");
 
                 try {
                     String category = itemCategory.get(categoryIndex).getText();
                     actions.moveToElement(itemCategory.get(categoryIndex)).click().build().perform();
+                    log.debug("Clicked on next item's category");
 
                     driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
                     Assert.assertEquals(categoryTitle.getText(), category);
-                    System.out.println("Items category was chosen from top bar (" + categoryTitle.getText() + ")");
+                    log.info("Items category was chosen from top bar (" + categoryTitle.getText() + ")");
 
                 } catch (Exception e) {
-                    System.out.println("Index is out of bound for this item category scope. Please run the test again with small index.");
+                    log.error("Index is out of bound for this item category scope. Please run the test again with small index.");
                 }
 
             } catch (Exception e) {
-                System.out.println("Index is out of bound for this category scope. Please run the test again with small index.");
+                log.error("Index is out of bound for this category scope. Please run the test again with small index.");
             }
 
         } catch (Exception e) {
-            System.out.println("Main category index is too big and out of scope. Please run the test again with a smaller index.");
+            log.error("Main category index is too big and out of scope. Please run the test again with a smaller index.");
         }
     }
 
@@ -581,49 +635,53 @@ public class OnlineStorePage {
             WebElement colors = colorSizeRows.get(0);
             List<WebElement> itemColorList = colors.findElements(By.cssSelector("ul[id*='group_'] li input[class='input-radio']"));
             List<WebElement> itemColorTextList = colors.findElements(By.cssSelector("ul[id*='group_'] li span[class='radio-label']"));
+            log.debug("Entered mini scope for item colors");
 
-
-            System.out.println(itemColorList.size());
+            log.debug("Number of colors: " + itemColorList.size());
 
             if (itemColorList.size() > 1) {
 
+                log.debug("Going through color list");
                 for (int i = 0; i < itemColorList.size(); i++) {
 
                     if (itemColorList.get(i).isSelected()) {
 
                         try {
-                            System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
+                            log.debug("Color selected now- " + itemColorTextList.get(i).getText());
                             itemColorList.get(i + 1).click();
                             Assert.assertTrue(itemColorList.get(i + 1).isSelected());
-                            System.out.println("Now the next color is selected- " + itemColorTextList.get(i + 1).getText());
+                            log.debug("Now the next color is selected- " + itemColorTextList.get(i + 1).getText());
                             newColor = itemColorTextList.get(i + 1).getText();
                             break;
                         } catch (Exception e) {       //if there are no more colors forward only backwards
-                            System.out.println("Color selected now- " + itemColorTextList.get(i).getText());
+                            log.debug("No more colors on the left side, going right");
+                            log.debug("Color selected now- " + itemColorTextList.get(i).getText());
                             itemColorList.get(i - 1).click();
                             driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
                             Assert.assertTrue(itemColorList.get(i - 1).isSelected());
-                            System.out.println("Now the previous color is selected- " + itemColorTextList.get(i - 1).getText());
+                            log.debug("Now the previous color is selected- " + itemColorTextList.get(i - 1).getText());
                             newColor = itemColorTextList.get(i - 1).getText();
                             break;
                         }
 
 
                     } else {
-                        System.out.println("Color not selected: " + itemColorTextList.get(i).getText());
+                        log.error("Color not selected: " + itemColorTextList.get(i).getText());
                     }
                 }
                 Thread.sleep(5000);
                 addItemToCart.click();
+                log.debug("Clicked on 'add to cart'");
                 wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
                 Assert.assertTrue(colorSizeAmountLine.get(0).getText().contains(newColor));
+                log.info("Item color in cart message is correct");
 
             } else {
-                System.out.println("There is only one color available");
                 Assert.assertTrue(itemColorList.get(0).isSelected());
+                log.info("There is only one color available");
             }
         } catch (Exception e) {
-            System.out.println("Item probably not in stock, and there is no color to choose.");
+            log.error("Item probably not in stock, and there is no color to choose.");
         }
     }
 
@@ -637,50 +695,55 @@ public class OnlineStorePage {
             WebElement sizes = colorSizeRows.get(1);
             List<WebElement> itemSizeList = sizes.findElements(By.cssSelector("ul[id*='group_'] li input[class='input-radio']"));
             List<WebElement> itemSizeTextList = sizes.findElements(By.cssSelector("ul[id*='group_'] li span[class='radio-label']"));
+            log.debug("Entered mini scope for item's sizes");
 
-                System.out.println(itemSizeList.size());
+                log.debug("Number of size options: " + itemSizeList.size());
 
                 if (itemSizeList.size() > 1) {
 
                     String newSize="";
-
+                    log.debug("Going through items size list");
                     for (int i = 0; i < itemSizeList.size(); i++) {
 
                         if (itemSizeList.get(i).isSelected()) {
 
                             try {
-                                System.out.println("Size selected now- " + itemSizeTextList.get(i).getText());
+                                log.debug("Size selected now- " + itemSizeTextList.get(i).getText());
                                 itemSizeList.get(i+1).click();
                                 driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
                                 Assert.assertTrue(itemSizeList.get(i+1).isSelected());
-                                System.out.println("Now the next size is selected- " + itemSizeTextList.get(i+1).getText());
+                                log.debug("Now the next size is selected- " + itemSizeTextList.get(i+1).getText());
                                 newSize = itemSizeTextList.get(i+1).getText();
                                 break;
 
                             } catch (Exception e) {     //if there are no more sizes forward only backwards
-                                System.out.println("Size selected now- " + itemSizeTextList.get(i).getText());
+                                log.debug("No more sizes on the left side, going right");
+                                log.debug("Size selected now- " + itemSizeTextList.get(i).getText());
                                 itemSizeList.get(i - 1).click();
                                 driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
                                 Assert.assertTrue(itemSizeList.get(i - 1).isSelected());
-                                System.out.println("Now the previous size is selected- " + itemSizeTextList.get(i - 1).getText());
+                                log.debug("Now the previous size is selected- " + itemSizeTextList.get(i - 1).getText());
                                 newSize = itemSizeTextList.get(i - 1).getText();
                                 break;
 
                             }
                         } else {
-                            System.out.println("Size not selected: " + itemSizeTextList.get(i).getText());
+                            log.error("Size not selected: " + itemSizeTextList.get(i).getText());
                         }
                     }
                         Thread.sleep(5000);
                         addItemToCart.click();
+                        log.debug("Clicked on'add to cart'");
                         wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
                         Assert.assertTrue(colorSizeAmountLine.get(1).getText().contains(newSize));
+                        log.info("Item size in cart message is correct");
                 } else {
-                    System.out.println("There is only one size available");
                     Assert.assertTrue(itemSizeList.get(0).isSelected());
+                    log.info("There is only one size available");
+
                 }
         } catch (Exception e) {
-            System.out.println("There are no size options to this items");
+            log.error("There are no size options to this items");
         }
     }
 
@@ -694,33 +757,36 @@ public class OnlineStorePage {
 
         //There is an error in the website -- the input tag isn't updated in any attribute, and quantity getText doesn't work either
         //Can not check if quantity is updated on this screen, only on next screen
+        log.error("Error in website- the input tag isn't updated in any attribute, and quantity getText doesn't work either");
 
         try {
             increaseQuantity.click();
 //            Assert.assertEquals(quantity.getAttribute("value"), "1");
-            System.out.println("Quantity has increased");
+            log.debug("Quantity has increased");
             decreaseQuantity.click();
 //            Assert.assertEquals(quantity.getAttribute("value"), "1");
-            System.out.println("Quantity has decreased");
+            log.debug("Quantity has decreased");
 
             //Check if there is size selection for this item, to know index number
-            if (colorSizeRows.size()==2){   //there is a size row
+            if (colorSizeRows.size()==2){   //there IS a size row
+                log.info("There is size and color selection to this item");
                 addItemToCart.click();
                 Thread.sleep(3000);
                 Assert.assertTrue(colorSizeAmountLine.get(2).getText().contains("1"));
-                System.out.println("Added to cart with chosen quantity- 1");
+                log.debug("Added to cart with chosen quantity- 1");
 
             } else if (colorSizeRows.size()==1){   //there isn't a size row
+                log.info("There isn't size selection to this item");
                 addItemToCart.click();
                 Thread.sleep(3000);
                 Assert.assertTrue(colorSizeAmountLine.get(1).getText().contains("1"));
-                System.out.println("Added to cart with chosen quantity- 1");
+                log.debug("Added to cart with chosen quantity- 1");
             }
 
         } catch (Exception e) {   //can not change quantity to this item
 
             Assert.assertTrue(productAvailability.getAttribute("class").contains("product-unavailable") || productAvailability.getAttribute("class").contains("product-last-items"));
-            System.out.println("Product is not available or limited");
+            log.error("Product is not available or limited. Can't change quantity");
         }
     }
 
@@ -732,22 +798,26 @@ public class OnlineStorePage {
         wait.until(ExpectedConditions.visibilityOf(saveProduct));
 
         saveProduct.click();
+        log.debug("Clicked on 'save item'");
 
         //log in to save item to favorites
-        System.out.println("User need to log in");
+        log.debug("User needs to log into store");
         wait.until(ExpectedConditions.visibilityOf(loginToStoreBox));
         loginToStoreButton.click();
         signInToStoreForm();
 
+        log.debug("User is inside store account");
         //user's store-account
         wait.until(ExpectedConditions.visibilityOf(usersSavedItems));
         usersSavedItems.click();
+        log.debug("Clicked on user's saved items");
         wait.until(ExpectedConditions.visibilityOf(savedItemsPageContent));
 //      Assert.assertTrue(notificationNoSavedItems.isDisplayed());
             try {
                 Assert.assertFalse(userSavedItemsRow.isDisplayed());
+                log.error("There are saved items in user's store account");
             } catch (Exception e) {
-                System.out.println("Item was not added to 'Saved items' because user was not signed in to store");
+                log.debug("Item was not added to 'Saved items' because user was not signed in to store");
             }
         }
 
@@ -767,10 +837,13 @@ public class OnlineStorePage {
          WebDriverWait wait = new WebDriverWait(driver, 10);
          wait.until(ExpectedConditions.visibilityOf(loginFromStore_email));
          loginFromStore_email.sendKeys(GeneralProperties.LoginEmail);
+         log.debug("Inserted email in store sign in form");
          Thread.sleep(3000);
          loginFromStore_password.sendKeys(GeneralProperties.LoginPassword);
+         log.debug("Inserted password in store sign in form");
          Thread.sleep(3000);
          loginButton.click();
+         log.debug("Submitted store sign in form");
 
      }
 
@@ -783,26 +856,31 @@ public class OnlineStorePage {
         String productTitle = itemTitle.getText();
 
         saveProduct.click();
-        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+        log.debug("Clicked on 'save item'");
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
 //      wait.until(ExpectedConditions.attributeContains(saveProduct, "class","st_added"));
         Assert.assertTrue(saveProductSaved.getAttribute("class").contains("st_added"));
+        log.debug("It seems item was added to 'saved items'");
         Actions a = new Actions(driver);
         a.moveToElement(userMenuInStore).build().perform();
+        log.debug("Hoovered on user's store menu");
         a.moveToElement(userMenuInStoreOptions.get(1)).click().build().perform();
+        log.debug("Clicked on user's saved items category");
 //      Assert.assertTrue(savedItemsPageContent.getText().contains("המוצרים ששמרתי"));
         Assert.assertTrue(userSavedItemsRow.getText().contains(productTitle));
-        System.out.println("Logged in user- Item was successfully added to Saved Items");
+        log.info("Logged in user- Item was successfully added to Saved Items");
 
         //delete
         deleteSavedItem.click();
+        log.debug("Clicked on 'delete saved item'");
         Thread.sleep(3000);
 
         try {
             Assert.assertFalse(userSavedItemsRow.getText().contains(productTitle));
-            System.out.println("Item was successfully deleted from Saved Items");
+            log.info("Item was successfully deleted from Saved Items");
 
         } catch (Exception f) {  // element userSavedItemsRow does not exist in dom anymore
-            System.out.println("Logged in user- Item was successfully deleted from Saved Items");
+            log.info("Logged in user- Item was successfully deleted from Saved Items");
         }
     }
 
@@ -813,20 +891,24 @@ public class OnlineStorePage {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(itemAvailabilityInBranchesDropDown));
         itemAvailabilityInBranchesDropDown.click();
+        log.debug("Clicked on 'availability in branches' dropdown");
         String branch="";
 
         try {
             wait.until(ExpectedConditions.visibilityOf(itemAvailabilityInBranchesList.get(0)));
-            System.out.println("Item is available in " + itemAvailabilityInBranchesList.size() + " branches");
+            log.debug("Item is available in " + itemAvailabilityInBranchesList.size() + " branches");
 
             try {
                 String[] branchName = itemAvailabilityInBranchesList.get(branchIndex).getText().split("עודפים - ");
                 branch = branchName[1];
+                log.info("Branch name had עודפים in it");
             } catch (Exception e) {    // branch name does not have "עודפים" in it
                 branch = itemAvailabilityInBranchesList.get(branchIndex).getText();
+                log.info("Branch name does not have עודפים in it");
             }
 
             itemAvailabilityInBranchesList.get(branchIndex).click();
+            log.debug("Clicked on a branch");
 
             wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
@@ -836,10 +918,10 @@ public class OnlineStorePage {
 
             wait.until(ExpectedConditions.visibilityOf(orderWidget.firstBranchMoreInfoPageHeadline));
             Assert.assertTrue(orderWidget.firstBranchMoreInfoPageHeadline.getText().contains(branch));
-            System.out.println("Branch info page open");
+            log.info("Branch info page open");
 
         } catch (Exception e) {
-            System.out.println("Item is unavailable in all branches");
+            log.error("Item is unavailable in all branches");
         }
 
     }
@@ -851,25 +933,29 @@ public class OnlineStorePage {
         w.until(ExpectedConditions.visibilityOf(itemBrand));
         String itemsBrand = itemBrand.getText();
         itemBrand.click();
+        log.debug("Clicked on brand name");
         w.until(ExpectedConditions.visibilityOf(brandPageTitle));
         Assert.assertEquals(brandPageTitle.getText(),  "רשימת מוצרים לפי מותג "+ itemsBrand);
-        System.out.println("Relevant brand page loaded");
+        log.debug("Relevant brand page loaded");
 
         w.until(ExpectedConditions.visibilityOfAllElements(resultBrandList));//sometimes it still goes to another item. why??
 
             if ((resultBrandList.size() > 0)) {
 
                 String brand = "";
+
+                log.debug("Going through top 2 rows of items");
                 // trying only 2 rows for visibility&load time issues
                 for (int i = 0; i <= 5; i++) {
                     String itemBrandFromList = resultBrandList.get(i).getText();
                     Assert.assertEquals(itemBrandFromList, itemsBrand);
+                    log.debug("itemBrandFromList- " +itemBrandFromList + " and itemsBrand- " + itemsBrand);
                 }
 
-            System.out.println("Items have the same brand- " + itemsBrand);
+            log.info("Items have the same brand- " + itemsBrand);
 
         } else  {
-            System.out.println("There are no results");
+            log.error("There are no results");
         }
 
     }
@@ -886,19 +972,23 @@ public class OnlineStorePage {
         double amountOfStarsChecked=0.0;
         double halfStar = 0.0;
 
+        log.debug("Going through top stars to see how 'full' they are");
         for (int i=0; i<reviewStarsOnTopList.size(); i++) {
             if (reviewStarsOnTopList.get(i).getAttribute("class").equals("stamped-fa stamped-fa-star")){
                 starIsChecked = true;
                 amountOfStarsChecked = amountOfStarsChecked+1.0;
+                log.debug("Star is fully checked");
             } else if (reviewStarsOnTopList.get(i).getAttribute("class").equals("stamped-fa stamped-fa-star-o")) {
                 starIsChecked = false;
+                log.debug("Star is not checked");
             } else if (reviewStarsOnTopList.get(i).getAttribute("class").equals("stamped-fa stamped-fa-star-half-o")){
                 halfStar = 0.5;
+                log.debug("Star is half checked");
             }
         }
 
         amountOfStarsChecked = amountOfStarsChecked + halfStar;
-        System.out.println("Review to this item (round) is: " + amountOfStarsChecked + " stars");
+        log.info("Review to this item (round) is: " + amountOfStarsChecked + " stars");
 
         return amountOfStarsChecked;
     }
@@ -915,32 +1005,36 @@ public class OnlineStorePage {
         if (amountOfStarsChecked > 0.0) {
             String[] numOfReviewsArray = numberOfReviewsSubmittedTop.getText().split(" חוות דעת");
             String numOfReviews = numOfReviewsArray[0];
-            System.out.println(numOfReviews + " people reviewed this item");
+            log.debug(numOfReviews + " people reviewed this item");
 
             reviewLineTop.click();
+            log.debug("Clicked on review stars on top, and now scrolling down");
             w.until(ExpectedConditions.visibilityOf(exactReviewStarsBottom));
             Assert.assertEquals(numberOfReviewsSubmittedBottom.getAttribute("data-count"), numOfReviews);
+            log.debug("Number of reviews on top matches number at the bottom");
             double numOfReviewsDouble = Double.parseDouble(numOfReviews);
-
 
             //actual stars - average of reviews
             double exactStarReview = Double.parseDouble(exactReviewStarsBottom.getText());
 
             double sumOfStars = 0.0;
 
+            log.debug("Going through rows of stars review (5,4,3,2,1)");
             for (int i = 0; i < ratingList.size(); i++) {
                 double numberOfReviews = Double.parseDouble(ratingList.get(i).getAttribute("data-count"));
                 double ratingStars = Double.parseDouble(ratingStarAmountList.get(i).getAttribute("data-rating"));
                 sumOfStars = sumOfStars + (numberOfReviews * ratingStars);
+                log.info("Row's sum of stars is " + sumOfStars);
             }
 
             double calculatedAverageStarsRounded = (double) Math.round( sumOfStars/numOfReviewsDouble * 10.0) /10.0;
+            log.debug("Performed average calculation");
 
             Assert.assertTrue(exactStarReview == calculatedAverageStarsRounded);
-            System.out.println("Exact review Stars are accurately calculated- " + calculatedAverageStarsRounded);
+            log.info("Exact review Stars are accurately calculated- " + calculatedAverageStarsRounded);
 
         } else {
-            System.out.println("There are no reviews to this item, no review average count exists.");
+            log.error("There are no reviews to this item, no review average count exists.");
         }
     }
 
@@ -952,14 +1046,17 @@ public class OnlineStorePage {
         w.until(ExpectedConditions.visibilityOf(reviewLineTop));
         scroll(addReview);
         addReview.click();
+        log.debug("Clicked on 'add review'");
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         w.until(ExpectedConditions.visibilityOf(newReviewForm));
         Assert.assertTrue(newReviewMainBox.isDisplayed());
+        log.debug("Review form opened");
         scroll(addReview);
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         addReview.click();
+        log.debug("Clicked on 'add review' again");
         Assert.assertTrue(!newReviewForm.isDisplayed());
-        System.out.println("'Add Review' form was opened and closed (test does not include actual submitting)");
+        log.info("'Add Review' form was opened and closed (test does not include actual submitting)");
 
     }
 
@@ -967,12 +1064,15 @@ public class OnlineStorePage {
 
     public void changeCartItemsQuantity() throws InterruptedException {
 
-        for (int i=0; i<quantityInCartList.size(); i++){
-            decreaseCartQuantity(i);
+        try {
+            for (int i = 0; i < quantityInCartList.size(); i++) {
+                decreaseCartQuantity(i);
 //            Thread.sleep(3000);
-            increaseCartItemQuantityToMax(i);
+                increaseCartItemQuantityToMax(i);
+            }
+        } catch (Exception e) {
+            log.error("There are no items in cart or cart is not visible");
         }
-
       }
 
 
@@ -984,17 +1084,20 @@ public class OnlineStorePage {
 
             int valueQuantity = Integer.parseInt(quantityInCartList.get(quantityIndex).getAttribute("value")); //1
 
+            log.debug("Going through quantity and trying to increase");
             while (!(maxQuantityInt == valueQuantity)) {
                 increaseQuantityList.get(quantityIndex).click();
+                log.debug("Able to increase quantity");
 //          driver.navigate().refresh();
                 Thread.sleep(3000);
                 valueQuantity = Integer.parseInt(quantityInCartList.get(quantityIndex).getAttribute("value"));
             }
 
             increaseQuantityList.get(quantityIndex).click();
+            log.debug("Clicked on increase one more time");
 //          driver.navigate().refresh();
             Assert.assertTrue(valueQuantity == maxQuantityInt);
-            System.out.println("Item (" + cartItemTitleList.get(quantityIndex).getText() + ") quantity reached its maximum- " + maxQuantityInt + " and wasn't increased again");
+            log.info("Item (" + cartItemTitleList.get(quantityIndex).getText() + ") quantity reached its maximum- " + maxQuantityInt + " and wasn't increased again");
         }
 
 
@@ -1002,16 +1105,19 @@ public class OnlineStorePage {
         public void decreaseCartQuantity(int quantityIndex) throws InterruptedException {
 
             if (quantityInCartList.get(quantityIndex).getAttribute("value").contains("1")) {
-                System.out.println("Default quantity of second item- 1");
+                log.info("Default quantity of second item- 1");
                 decreaseQuantityList.get(quantityIndex).click();
+                log.debug("Tried to decrease quantity");
                 Thread.sleep(3000);
                 Assert.assertEquals(quantityInCartList.get(quantityIndex).getAttribute("value"), "1");
-                System.out.println("Can not decrease from quantity:1");
+                log.debug("Can not decrease from quantity:1");
                 increaseQuantityList.get(quantityIndex).click();
+                log.debug("Increased quantity by 1");
                 decreaseQuantityList.get(quantityIndex).click();
+                log.debug("Decreased quantity by 1");
                 Thread.sleep(3000);
                 Assert.assertEquals(quantityInCartList.get(quantityIndex).getAttribute("value"), "1");
-                System.out.println("Decrease works for quantity > 1");
+                log.info("Decrease works for quantity > 1");
             }
         }
 
@@ -1029,7 +1135,7 @@ public class OnlineStorePage {
              int totalPrice = Integer.parseInt(totalPriceArray[1]);
              Assert.assertTrue(totalPrice == quantity * price);
 
-             System.out.println("Total item price is "+ totalPrice + " (equals price*quantity: " + price + "*" + quantity + ")");
+             log.debug("Total item price is "+ totalPrice + " (equals price*quantity: " + price + "*" + quantity + ")");
          }
         }
 
@@ -1042,37 +1148,42 @@ public class OnlineStorePage {
             int totalItemsInt = Integer.parseInt(totalItems[0]);
             int sumItemsQuantity =0;
 
+            log.debug("Counting item quantity in cart before payment summary");
             for (int i=0; i<quantityInCartList.size(); i++) {
                 int quantity = Integer.parseInt(quantityInCartList.get(i).getAttribute("value"));
                 sumItemsQuantity = sumItemsQuantity + quantity;
+                log.debug("Current quantity- " + sumItemsQuantity);
             }
 
             Assert.assertTrue(sumItemsQuantity == totalItemsInt);
-            System.out.println("Total of items quantity is calculated correctly: "+ sumItemsQuantity );
+            log.debug("Total of items quantity is calculated correctly: "+ sumItemsQuantity );
 
             //total price for order , without delivery
             String[] totalPriceForItems = shoppingCartPaymentTotalPriceForItems.getText().split("₪");
             int totalPriceForItemsInt = Integer.parseInt(totalPriceForItems[1]);
             int sumItemsPrices =0;
 
+            log.debug("Counting item price in cart before payment summary");
             for (int i=0; i<quantityInCartList.size(); i++) {
                 String[] totalPriceArray = sumPriceTotalInCartList.get(i).getText().split("₪");
                 int totalPrice = Integer.parseInt(totalPriceArray[1]);
                 sumItemsPrices = sumItemsPrices + totalPrice;
+                log.debug("Current price- " + sumItemsPrices);
             }
 
             Assert.assertTrue(sumItemsPrices == totalPriceForItemsInt);
-            System.out.println("Total of prices without delivery is calculated correctly: "+ sumItemsPrices );
+            log.debug("Total of prices without delivery is calculated correctly: "+ sumItemsPrices );
 
             //total price with delivery
             String[] deliveryFeeArray = deliveryFee.getText().split("₪");
             int deliveryFee = Integer.parseInt(deliveryFeeArray[1]);
+            log.debug("Delivery fee is- " + deliveryFee);
 
             String[] totalWithDeliveryArray = totalPriceWithDelivery.getText().split("₪");
             int totalWithDelivery = Integer.parseInt(totalWithDeliveryArray[1]);
 
             Assert.assertTrue(totalWithDelivery == deliveryFee + sumItemsPrices );
-            System.out.println("Total of prices WITH delivery is calculated correctly: "+ totalWithDelivery );
+            log.debug("Total of prices WITH delivery is calculated correctly: "+ totalWithDelivery );
 
         }
 
@@ -1088,16 +1199,19 @@ public class OnlineStorePage {
             Thread.sleep(3000);
             loginFromStore_email.sendKeys(GeneralProperties.LoginEmail);
             Thread.sleep(3000);
+            log.debug("Insert email in payment login");
             loginFromStore_password.clear();
             Thread.sleep(3000);
             loginFromStore_password.sendKeys(GeneralProperties.LoginPassword);
             Thread.sleep(3000);
+            log.debug("Insert password in payment login");
             continueWithPaymentProcess.click();
+            log.debug("Submitted payment login");
 
             //address confirmation
             try {
                 w.until(ExpectedConditions.visibilityOf(addressBox));
-                System.out.println("User has details saved in account");
+                log.info("User has details saved in account (address) ");
 
                 String[] details = {GeneralProperties.userFirstName,
                         GeneralProperties.userLastName,
@@ -1108,26 +1222,31 @@ public class OnlineStorePage {
 
                 try {
                     if (addressFailureAlert.isDisplayed()) {
+                        log.debug("There is something wrong with saved address");
                         editAddress.click();
+                        log.debug("Clicked on 'edit address'");
                         paymentEditAddressForm();    //  goes to delivery section
                     }
 
                 } catch (Exception exception) {
                     Assert.assertTrue(addressBox.getText().contains(details[0 - 4]));
-                    System.out.println("All address details exist and are valid");
+                    log.debug("All address details exist and are valid");
                     continueAfterAddress.click();    //  goes to delivery section
+                    log.debug("Clicked on continue (after addresses) and is moving to delivery");
                 }
 
 
             } catch (Exception p) {
+                log.info("User doesn't have details saved in account (address) ");
                 paymentEditAddressForm();  //  goes to delivery section
             }
 
             //delivery
             w.until(ExpectedConditions.visibilityOf(deliveryOptionDiv));
             Assert.assertTrue(deliveryOptionDiv.getText().contains("שליח עד הבית"));
-            System.out.println("There is currently only 1 delivery method");
+            log.debug("There is currently only 1 delivery method");
             continueAfterDelivery.click();
+            log.debug("Clicked on 'continue' after delivery");
 
             //payment
             paymentOptions(paymentMethod);
@@ -1142,70 +1261,82 @@ public class OnlineStorePage {
             WebDriverWait w = new WebDriverWait(driver, 10);
 
             if (paymentMethod.equals("Buyme")){
-
+                log.debug("Entered payment option -- Buyme");
                 WebElement parentOfWebElement_payWithBuyme = payWithBuyme.findElement(By.xpath(".."));
 
                 String buymeOptionNumber = parentOfWebElement_payWithBuyme.getAttribute("for");
 
                 for (int i = 0; i< paymentOptionRadio.size(); i++){
-
+                    log.debug("Going through radio buttons to find the Buyme radio");
                     if (paymentOptionRadio.get(i).getAttribute("id").equals(buymeOptionNumber)) {
                         paymentOptionRadio.get(i).click();
+                        log.debug("Clicked on radio button");
                         Thread.sleep(2000);
                         Assert.assertTrue(buymeCardNumberInput.isDisplayed());
-                        System.out.println("Buyme card input box is displayed, but site has a bug when continuing without input -- order is CONFIRMED.. end of test");
+                        log.info("Buyme card input box is displayed, but site has a bug when continuing without input -- order is CONFIRMED.. end of test");
+                        break;
                     }
                 }
 
             } else if (paymentMethod.equals("Credit Card")) {
-
+                log.debug("Entered payment option -- Credit Card");
                 WebElement parentOfWebElement_payWithCreditCard = payWithCreditCard.findElement(By.xpath(".."));
 
                 String creditCardOptionNumber = parentOfWebElement_payWithCreditCard.getAttribute("for");
 
                 for (int i = 0; i< paymentOptionRadio.size(); i++){
+                    log.debug("Going through radio buttons to find the Credit Card radio");
                     if (paymentOptionRadio.get(i).getAttribute("id").equals(creditCardOptionNumber)) {
                         paymentOptionRadio.get(i).click();
+                        log.debug("Clicked on radio button");
                         Thread.sleep(2000);
 
                         Actions actions = new Actions(driver);
                         actions.moveToElement(orderConfirmation);
+                        log.debug("Hoovering over 'order confirmation' button");
                         Assert.assertFalse(orderConfirmation.isEnabled());
-                        System.out.println("Can not confirm order without checking 'agree to terms...'");
+                        log.debug("Can not confirm order without checking 'agree to terms...'");
                         agreeToTermsCheckbox.click();
+                        log.debug("Clicked on 'agree to terms'");
                         orderConfirmation.click();
+                        log.debug("Clicked on 'order confirmation'");
                         Thread.sleep(3000);
                         Assert.assertTrue(driver.getCurrentUrl().contains("icom.yaad.net"));
-                        System.out.println("Credit Card secured payment url opened");
+                        log.info("Credit Card secured payment url opened");
+                        break;
                     }
                 }
 
             } else if (paymentMethod.equals("PayPal")) {
-
+                log.debug("Entered payment option -- PayPal");
                 WebElement parentOfWebElement_payWithPayPal = payWithPayPal.findElement(By.xpath(".."));
                 String paypalOptionNumber = parentOfWebElement_payWithPayPal.getAttribute("for");
 
                 for (int i = 0; i< paymentOptionRadio.size(); i++){
-
+                    log.debug("Going through radio buttons to find the PayPal radio");
                     if (paymentOptionRadio.get(i).getAttribute("id").equals(paypalOptionNumber)) {
                         paymentOptionRadio.get(i).click();
+                        log.debug("Clicked on radio button");
                         Thread.sleep(2000);
 
                         Actions actions = new Actions(driver);
                         actions.moveToElement(orderConfirmation);
-
+                        log.debug("Hoovering over 'order confirmation'");
                         Assert.assertFalse(orderConfirmation.isEnabled());
-                        System.out.println("Can not confirm order without checking 'agree to terms...'");
+                        log.debug("Can not confirm order without checking 'agree to terms...'");
                         agreeToTermsCheckbox.click();
+                        log.debug("Clicked on 'agree to terms'");
                         orderConfirmation.click();
-                        w.until(ExpectedConditions.numberOfWindowsToBe(3));
+                        log.debug("Clicked on 'order confirmation'");
+                        w.until(ExpectedConditions.numberOfWindowsToBe(2));
                         moveToNextTab();
                         Assert.assertTrue(driver.getTitle().contains("PayPal"));
-                        System.out.println("A new window was opened for PayPal payment");
+                        log.info("A new window was opened for PayPal payment");
+                        break;
                     }
                 }
             } else {
-                System.out.println("Payment method does not exist yet");
+                log.error("Payment method does not exist yet");
             }
 
     }
@@ -1217,22 +1348,30 @@ public class OnlineStorePage {
 
             WebDriverWait w = new WebDriverWait(driver, 10);
             w.until(ExpectedConditions.visibilityOf(addressForm));
-            System.out.println("User doesn't have FULL address details in account and must insert them");
+            log.debug("User doesn't have FULL address details in account and must insert them");
             Assert.assertEquals(addressFormFirstName.getAttribute("value"), GeneralProperties.userFirstName);
+            log.debug("First name is automatically filled up");
             Assert.assertEquals(addressFormLastName.getAttribute("value"), GeneralProperties.userLastName);
+            log.debug("Last name is automatically filled up");
             if (addressFormMobilePhone.getAttribute("value").isEmpty()) {
                 addressFormMobilePhone.sendKeys(GeneralProperties.userMobilePhone);
+                log.debug("Added mobile phone number");
             }
             addressFormCity.clear();
             addressFormCity.sendKeys("תל אביב");
+            log.debug("Inserted city");
             addressFormAddress.clear();
             addressFormAddress.sendKeys("דיזינגוף 100");
+            log.debug("Inserted street");
             if (!addressFormSameAddressCheckbox.isSelected()){
                 addressFormSameAddressCheckbox.click();
+                log.debug("Address is checked as the same for delivery and payment");
             }
 
             continueAfterAddress.click();
+            log.debug("Clicked on continue after addresses");
             continueAfterAddress.click();
+            log.debug("Clicked on 'continue' again- moving to delivery");
         }
 
 }
