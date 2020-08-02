@@ -12,6 +12,8 @@
   "userMobilePhone":"{userMobilePhone}",
   "userCity":"{userCity}",
   "userAddress":"{userAddress}",
+  "myEmail":"{myEmail}",
+  "myEmailPass":"{myEmailPass}",
 
   "savedScreenshotLocation":"{savedScreenshotLocation}",
   "CAPTURE":"{CAPTURE}")"

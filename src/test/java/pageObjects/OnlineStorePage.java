@@ -1,5 +1,11 @@
 package pageObjects;
 
+import Lametayel.myEmailer;
+import com.sun.mail.smtp.SMTPTransport;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -14,10 +20,13 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
+import javax.mail.*;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.time.Duration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 public class OnlineStorePage {
@@ -359,6 +368,9 @@ public class OnlineStorePage {
     public WebElement shoppingCartButton;
 
 
+
+    public String itemTitlename;
+
     public static Logger log = LogManager.getLogger(OnlineStorePage.class.getName());
 
     //constructor
@@ -420,49 +432,72 @@ public class OnlineStorePage {
 
         String mainWindow = driver.getWindowHandle();
 
-        addItemToCart.click();
-        log.debug("Clicked on 'add to cart'");
-//
-//        Wait fluentwait = new FluentWait(driver)
-//                .withTimeout(Duration.ofSeconds(9))
-//                .pollingEvery(Duration.ofSeconds(2))
-//                .ignoring(NoAlertPresentException.class);
-
-        try {
-            driver.switchTo().alert();
-            log.error(driver.switchTo().alert().getText());
-        } catch (NoAlertPresentException e) {
-            log.debug("No immediate alert after adding to cart");
-
-            try {
-                wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
-                Assert.assertTrue(itemAddedToCartMessageHeadline.getText().contains("המוצר נוסף לסל הקניות!"));
-                log.debug("Message - item was added to cart");
-
-                goToCart.click();
-                log.debug("Clicked on 'go to cart'");
-
-                checkItemAddedToCart(itemName);
-
-            } catch (UnhandledAlertException exception) {
-//            fluentwait.until(ExpectedConditions.alertIsPresent());
-                log.error("Item is out of stock");
-                driver.switchTo().alert();
-                log.error(driver.switchTo().alert().getText());
-
-//            driver.switchTo().window(mainWindow);
-//            shoppingCartButton.click();
-
-            }
-        }
+        checkIfItemInStock();
 
 
     }
 
 
-    public void checkItemAddedToCart(String itemTitle) {
+    public boolean checkIfItemInStock () {
+
+        //  some of the items clearly have subtitle "not in online store stock"
+        //  other items only shot alert of "out of stock" AFTER clicking "add to cart" , so it's not stable or immediately visible
+
+
+        itemTitlename = itemTitle.getText();
+        boolean itemInStock = false;
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+
+        try {
+
+            addItemToCart.isDisplayed();
+            addItemToCart.click();
+            log.debug("Clicked on 'add to cart'");
+
+            try {
+                driver.switchTo().alert();
+                log.error(driver.switchTo().alert().getText());
+            } catch (NoAlertPresentException e) {
+                log.debug("No IMMEDIATE alert after adding to cart");
+
+                try {
+                    wait.until(ExpectedConditions.visibilityOf(itemAddedToCartMessageBox));
+                    Assert.assertTrue(itemAddedToCartMessageHeadline.getText().contains("המוצר נוסף לסל הקניות!"));
+                    log.debug("Message - item was added to cart");
+
+                    goToCart.click();
+                    log.debug("Clicked on 'go to cart'");
+
+                    checkItemAddedToCart(itemTitlename);
+
+                    itemInStock = true;
+
+                } catch (UnhandledAlertException exception) {
+//            fluentwait.until(ExpectedConditions.alertIsPresent());
+                    log.error(driver.switchTo().alert().getText());
+                }
+            }
+        } catch (ElementNotInteractableException s) {
+            try {
+                wait.until(ExpectedConditions.visibilityOf(productAvailability));
+                Assert.assertTrue(productAvailability.getAttribute("class").contains("product-unavailable"));
+                log.error("Item is not in online store stock");
+            } catch (Exception unknown) {
+                log.error("Unknown error - no 'add to cart' button visible");
+            }
+
+        } finally {
+
+            return itemInStock;
+        }
+
+    }
+
+
+    public void checkItemAddedToCart(String itemTitlename) {
 
         boolean itemAdded = false;
+
 
         WebDriverWait wait = new WebDriverWait(driver, 20);
         wait.until(ExpectedConditions.visibilityOf(cartHeader));
@@ -471,7 +506,7 @@ public class OnlineStorePage {
 
         for (int i = 0; i < cartItemTitleList.size(); i++) {
 
-            if (cartItemTitleList.get(i).getText().contains(itemTitle)) {
+            if (cartItemTitleList.get(i).getText().contains(itemTitlename)) {
                 log.info("Item was successfully added to cart.");
                 itemAdded = true;
             }
@@ -479,6 +514,49 @@ public class OnlineStorePage {
         }       Assert.assertTrue(itemAdded);
 
     }
+
+
+
+    public void sendEmailIfOutOfStock() throws Exception {
+
+        boolean inStock = checkIfItemInStock();
+
+        if (inStock==false) {
+
+            //send mail
+            log.debug("Starting email notification method");
+            emailNotification("Item out of stock", "Hello store manager, " +"\r\n"+ "The following item is now out of stock in the online store- " + itemTitlename);
+
+        }
+    }
+
+
+    public void emailNotification (String subject, String emailMessage) throws Exception {
+
+        myEmailer sendEmail = new myEmailer();
+        sendEmail.SendMail(subject, emailMessage );
+        log.info("Email notification sent");
+
+
+//       different way ---not working --
+
+//        Email email = new SimpleEmail();
+//        email.setHostName("smtp.gmail.com");
+//        email.setSmtpPort(465);
+//        email.setAuthenticator(new DefaultAuthenticator(GeneralProperties.myEmail, GeneralProperties.myEmailPass));
+//        email.setSSLOnConnect(true);
+////        email.setAuthentication(GeneralProperties.myEmail, GeneralProperties.myEmailPass);
+////        email.setStartTLSEnabled(true);
+//        email.setFrom(GeneralProperties.LoginEmail);
+//        email.setSubject(subject);
+//        email.setMsg(emailMessage);
+//        email.addTo("sivankimchi@gmail.com");   //send to
+//        email.send();
+//        log.info("Email notification sent");
+
+        }
+
+
 
 
     public void searchItem(String searchFor) throws InterruptedException {
@@ -1373,5 +1451,7 @@ public class OnlineStorePage {
             continueAfterAddress.click();
             log.debug("Clicked on 'continue' again- moving to delivery");
         }
+
+
 
 }

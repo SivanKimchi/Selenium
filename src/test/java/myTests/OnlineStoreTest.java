@@ -1,16 +1,20 @@
-
+package myTests;
 
 import Lametayel.ScreenshotTaker;
 import Lametayel.GeneralProperties;   //uses JsonValues.json -- gitignore (template available)
+import org.apache.commons.mail.EmailException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.UnexpectedAlertBehaviour;
+import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -20,6 +24,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.OnlineStorePage;
 
+import javax.mail.MessagingException;
 import java.util.concurrent.TimeUnit;
 
 public class OnlineStoreTest {
@@ -76,7 +81,7 @@ public class OnlineStoreTest {
     public void addItemToCart() {
 
         OnlineStorePage store = new OnlineStorePage(driver);
-        store.addItemToCart(0);
+        store.addItemToCart(1);
         log.info("Finished adding item to cart successfully");
 
         }
@@ -101,7 +106,7 @@ public class OnlineStoreTest {
     public void searchForItemPickAutoSuggestion() throws InterruptedException {
 
         OnlineStorePage store = new OnlineStorePage(driver);
-        store.searchItemChooseFromAutocompleteList("נעלי", 3);
+        store.searchItemChooseFromAutocompleteList("סנדלי שורש", 2);
         log.info("Finished item search from Auto suggestion successfully");
     }
 
@@ -234,7 +239,7 @@ public class OnlineStoreTest {
         OnlineStorePage store = new OnlineStorePage(driver);
         store.lametayelShopLogo.click();
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
-        store.addItemToCart(3);
+        store.addItemToCart(2);
 
         store.changeCartItemsQuantity();
         log.info("Finished validating shopping cart quantity update successfully");
@@ -272,6 +277,19 @@ public class OnlineStoreTest {
         log.debug("Clicked on button 'continue to payment'");
         store.paymentWithoutPayment("PayPal");  //paying methods: Buyme, Credit Card , PayPal
         log.info("Finished validating payment (without actual payment!!) successfully");
+    }
+
+
+
+    @Test
+    public void sendEmailWhenItemOutOfStock () throws Exception {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        store.searchItemChooseFromAutocompleteList("חגורת כסף כפולה למותן Must Have", 0);   //חגורת כסף כפולה למותן Must Have  //סנדלי שורש
+        store.sendEmailIfOutOfStock();
+        log.info("Finished validating email notification for out-of-stock item");
+
+
     }
 
 

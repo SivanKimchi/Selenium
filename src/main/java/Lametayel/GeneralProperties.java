@@ -50,6 +50,10 @@ public class GeneralProperties {
         public static final String userCity = (String) obj.get("userCity");
         public static final String userAddress = (String) obj.get("userAddress");
 
+        public static final String myEmail = (String) obj.get("myEmail");
+        public static final String myEmailPass = (String) obj.get("myEmailPass");
+
+
         public static String savedScreenshotLocation = (String) obj.get("savedScreenshotLocation");
 //        public final static String CAPTURE = (String) obj.get("CAPTURE");
 

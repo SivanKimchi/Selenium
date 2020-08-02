@@ -1,4 +1,4 @@
-
+package myTests;
 
 import Lametayel.ScreenshotTaker;
 import org.apache.logging.log4j.LogManager;
@@ -202,7 +202,7 @@ public class SanityTest {
     }
 
 
-    @Test
+    @Test  //example of moving to another tab
     public void enterOnlineShop() {
 
         HomePage homePage = new HomePage(driver);
@@ -215,7 +215,7 @@ public class SanityTest {
     }
 
 
-    @Test
+    @Test   //example for using JavaScript
     public void scrollDownToFacebookLike(){
 
         JavascriptExecutor js = (JavascriptExecutor) driver;

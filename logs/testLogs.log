@@ -1,12 +1,11 @@
-2020-08-01 13:23:31 [main] DEBUG pageObjects.OnlineStorePage - First name is automatically filled up
-2020-08-01 13:23:31 [main] DEBUG pageObjects.OnlineStorePage - Last name is automatically filled up
-2020-08-01 13:23:31 [main] DEBUG pageObjects.OnlineStorePage - Added mobile phone number
-2020-08-01 13:23:32 [main] DEBUG pageObjects.OnlineStorePage - Inserted city
-2020-08-01 13:23:33 [main] DEBUG pageObjects.OnlineStorePage - Inserted street
-2020-08-01 13:23:33 [main] DEBUG pageObjects.OnlineStorePage - Address is checked as the same for delivery and payment
-2020-08-01 13:23:35 [main] DEBUG pageObjects.OnlineStorePage - Clicked on continue after addresses
-2020-08-01 13:23:36 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'continue' again- moving to delivery
-2020-08-01 13:23:37 [main] DEBUG pageObjects.OnlineStorePage - There is currently only 1 delivery method
-2020-08-01 13:23:37 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'continue' after delivery
-2020-08-01 13:23:37 [main] ERROR pageObjects.OnlineStorePage - Payment method does not exist yet
-2020-08-01 13:23:37 [main] INFO  OnlineStoreTest - Finished validating payment (without actual payment!!) successfully
+2020-08-02 20:04:33 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-02 20:04:35 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-02 20:04:38 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-02 20:04:38 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-02 20:04:40 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-02 20:04:41 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-02 20:04:41 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-02 20:04:41 [main] DEBUG pageObjects.OnlineStorePage - Starting email notification method
+2020-08-02 20:04:43 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
+2020-08-02 20:04:43 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for out-of-stock item
