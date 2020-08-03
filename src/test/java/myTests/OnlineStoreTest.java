@@ -41,9 +41,13 @@ public class OnlineStoreTest {
 //        ChromeOptions options = new ChromeOptions();
 //        options.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, UnexpectedAlertBehaviour.IGNORE);
 
+        ChromeOptions options = new ChromeOptions();
+        options.setCapability(CapabilityType.UNHANDLED_PROMPT_BEHAVIOUR, UnexpectedAlertBehaviour.ACCEPT);
+
+
         System.setProperty(GeneralProperties.driverName, GeneralProperties.driverLocation);
 
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(options);
 
         driver.manage().window().maximize();
 
@@ -65,8 +69,8 @@ public class OnlineStoreTest {
         @Override
         protected void finished(Description description) {
             System.out.println("Logged test data to testLogs.log using log4j");
-            if (driver != null)
-                driver.quit();
+//            if (driver != null)
+//                driver.quit();
         }
     };
 
@@ -286,12 +290,31 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
         store.searchItemChooseFromAutocompleteList("חגורת כסף כפולה למותן Must Have", 0);   //חגורת כסף כפולה למותן Must Have  //סנדלי שורש
-        store.sendEmailIfOutOfStock();
+        store.sendEmailIfOutOfStock("sivankimchi@gmail.com");
         log.info("Finished validating email notification for out-of-stock item");
 
+    }
+
+    @Test    //example only... can't actually switch item from "not in stock" to "in stock" so this is made on 2 different items
+    public void sendEmailToCustomerWhenItemReturnsToStock () throws Exception {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        store.searchItemChooseFromAutocompleteList("חגורת כסף כפולה למותן Must Have", 0);   //חגורת כסף כפולה למותן Must Have  //סנדלי שורש
+        store.sendEmailIfBackInStock("חולצה", 0);
+        log.info("Finished validating email notification for CUSTOMER when item is back in stock");
 
     }
 
 
+
+    @Test    //check with specific item over time - scheduled for @daily test on Jenkins
+    public void sendEmailToCustomerWhenItemReturnsToStock_JenkinsScheduler () throws Exception {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        store.searchItemChooseFromAutocompleteList("Estes Jacket", 4);   //חגורת כסף כפולה למותן Must Have  //סנדלי שורש//4 Estes Jacket
+        store.sendEmailIfBackInStockJenkinsScheduler("sivankimchi@gmail.com");
+        log.info("Finished validating email notification for CUSTOMER - Jenkins scheduler");
+
+    }
 
 }

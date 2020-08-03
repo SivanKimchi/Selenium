@@ -5,7 +5,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class myEmailer {
+public class myHtmlEmailer {
 
 
     private static final String SMTP_HOST_NAME = "smtp.sendgrid.net";
@@ -14,7 +14,7 @@ public class myEmailer {
 
 
 
-    private class SMTPAuthenticator extends javax.mail.Authenticator {
+    private class SMTPAuthenticator extends Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
             String username = SMTP_AUTH_USER;
             String password = SMTP_AUTH_PWD;
@@ -24,7 +24,7 @@ public class myEmailer {
     }
 
 
-    public void SendMail(String emailSendTo, String subject, String emailMessage, String href) throws Exception {
+    public void SendMail(String emailSendTo, String subject, String messageText, String href) throws Exception {
         Properties properties = new Properties();
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.host", SMTP_HOST_NAME);
@@ -46,8 +46,8 @@ public class myEmailer {
         // Set Subject: subject of the email
         message.setSubject(subject);
 
-        // set body of the email.
-        message.setText(emailMessage);
+        message.setContent("<p>"+messageText+"<a href=\""+ href+"\" target=\"_blank\"> Click here! :) </a> </p>","text/html; charset=UTF-8" );
+
 
         // Send email.
         Transport transport = mailSession.getTransport();

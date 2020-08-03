@@ -1,11 +1,7 @@
 package pageObjects;
 
 import Lametayel.myEmailer;
-import com.sun.mail.smtp.SMTPTransport;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
+import Lametayel.myHtmlEmailer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -19,14 +15,10 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
-import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.time.Duration;
+import javax.swing.*;
+import javax.swing.text.html.HTML;
 import java.util.*;
-import java.util.NoSuchElementException;
+
 import java.util.concurrent.TimeUnit;
 
 public class OnlineStorePage {
@@ -371,6 +363,8 @@ public class OnlineStorePage {
 
     public String itemTitlename;
 
+    public String customerEmail;
+
     public static Logger log = LogManager.getLogger(OnlineStorePage.class.getName());
 
     //constructor
@@ -517,7 +511,7 @@ public class OnlineStorePage {
 
 
 
-    public void sendEmailIfOutOfStock() throws Exception {
+    public void sendEmailIfOutOfStock(String sendTo) throws Exception {
 
         boolean inStock = checkIfItemInStock();
 
@@ -525,17 +519,26 @@ public class OnlineStorePage {
 
             //send mail
             log.debug("Starting email notification method");
-            emailNotification("Item out of stock", "Hello store manager, " +"\r\n"+ "The following item is now out of stock in the online store- " + itemTitlename);
+
+            emailNotification("regular", sendTo, "Item out of stock", "Hello store manager, " +"\r\n"+ "The following item is now out of stock in the online store- " + itemTitlename, "");
 
         }
     }
 
 
-    public void emailNotification (String subject, String emailMessage) throws Exception {
+    public void emailNotification (String emailType, String sendTo, String subject, String emailMessage, String href) throws Exception {
 
-        myEmailer sendEmail = new myEmailer();
-        sendEmail.SendMail(subject, emailMessage );
-        log.info("Email notification sent");
+        if(emailType.equals("regular")) {
+            myEmailer sendEmail = new myEmailer();
+            sendEmail.SendMail(sendTo, subject, emailMessage, href);
+            log.info("Email notification sent");
+
+        } else if (emailType.equals("html")){
+            myHtmlEmailer sendEmail = new myHtmlEmailer();
+            sendEmail.SendMail(sendTo, subject, emailMessage, href);
+        }
+
+
 
 
 //       different way ---not working --
@@ -556,6 +559,69 @@ public class OnlineStorePage {
 
         }
 
+
+
+
+    public void sendEmailIfBackInStock(String secondSearchTerm, int itemIndex) throws Exception {
+
+        boolean inStock = checkIfItemInStock();
+
+        if (inStock==false) {
+
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("window.promptResponse=prompt(\"Please enter your email and we'll notify you when item is back in stock\")");
+            log.debug("Prompt for input customer email");
+            Thread.sleep(5000);
+            driver.switchTo().alert().sendKeys("sivankimchi@gmail.com");
+            log.debug("Inserted customer email");
+            Thread.sleep(3000);
+            driver.switchTo().alert().accept();
+            customerEmail = (String) js.executeScript("return window.promptResponse");
+            log.debug("Saved customer email");
+
+            //can't check switching from "out of stock" to "in stock", so searching for another item
+            // *** can schedule the test to run once a day on JENKINS and check item's availability ***
+
+            searchItemChooseFromAutocompleteList(secondSearchTerm, itemIndex);
+            String itemUrl =  driver.getCurrentUrl();
+
+            inStock = checkIfItemInStock();
+            if (inStock==true) {
+
+
+                emailNotification("html", customerEmail, "Item is back in stock!", "Hello! " + "\r\n" + "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
+            }
+
+        }
+    }
+
+
+
+    public void sendEmailIfBackInStockJenkinsScheduler(String emailSendTo) throws Exception {
+
+        String itemUrl =  driver.getCurrentUrl();
+        boolean inStock = checkIfItemInStock();
+
+        if (inStock==false) {
+
+
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                js.executeScript("window.promptResponse=prompt(\"Please enter your email and we'll notify you when item is back in stock\")");
+                log.debug("Prompt for input customer email");
+                Thread.sleep(5000);
+                driver.switchTo().alert().sendKeys(emailSendTo);
+                log.debug("Inserted customer email");
+                Thread.sleep(3000);
+                driver.switchTo().alert().accept();
+                customerEmail = (String) js.executeScript("return window.promptResponse");
+                log.debug("Saved customer email");
+
+        } else if (inStock==true) {
+
+            emailNotification("html", emailSendTo, "Item is back in stock!", "Hello! " + "\r\n" + "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
+            }
+
+        }
 
 
 
