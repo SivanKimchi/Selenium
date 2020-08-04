@@ -46,7 +46,7 @@ public class myHtmlEmailer {
         // Set Subject: subject of the email
         message.setSubject(subject);
 
-        message.setContent("<p>"+messageText+"<a href=\""+ href+"\" target=\"_blank\"> Click here! :) </a> </p>","text/html; charset=UTF-8" );
+        message.setContent("<p> Hello!</p> <p>"+messageText+"<a href=\""+ href+"\" target=\"_blank\"> Click here! :) </a> </p>","text/html; charset=UTF-8" );
 
 
         // Send email.

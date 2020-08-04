@@ -1,0 +1,22 @@
+2020-08-04 10:19:05 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-04 10:19:08 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-04 10:19:11 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-04 10:19:12 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-04 10:19:15 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-04 10:19:16 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-04 10:19:16 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-04 10:19:16 [main] DEBUG pageObjects.OnlineStorePage - Starting email notification method
+2020-08-04 10:19:27 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
+2020-08-04 10:22:38 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-04 10:22:41 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
+2020-08-04 10:41:23 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-04 10:41:25 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-04 10:41:28 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-04 10:41:29 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-04 10:41:30 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-04 10:41:31 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-04 10:41:32 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-04 10:41:32 [main] DEBUG pageObjects.OnlineStorePage - Starting email notification method
+2020-08-04 10:41:34 [main] INFO  pageObjects.OnlineStorePage - Email notification sent

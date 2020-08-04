@@ -13,7 +13,6 @@ public class myEmailer {
     private static final String SMTP_AUTH_PWD = GeneralProperties.myEmailPass;
 
 
-
     private class SMTPAuthenticator extends javax.mail.Authenticator {
         public PasswordAuthentication getPasswordAuthentication() {
             String username = SMTP_AUTH_USER;
@@ -29,6 +28,7 @@ public class myEmailer {
         properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.host", SMTP_HOST_NAME);
         properties.put("mail.smtp.port", 587);
+
         properties.put("mail.smtp.auth", "true");
 
         Authenticator auth = new SMTPAuthenticator();

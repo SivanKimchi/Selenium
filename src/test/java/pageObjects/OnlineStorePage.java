@@ -2,6 +2,10 @@ package pageObjects;
 
 import Lametayel.myEmailer;
 import Lametayel.myHtmlEmailer;
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.Email;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -15,8 +19,6 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.swing.*;
-import javax.swing.text.html.HTML;
 import java.util.*;
 
 import java.util.concurrent.TimeUnit;
@@ -537,26 +539,6 @@ public class OnlineStorePage {
             myHtmlEmailer sendEmail = new myHtmlEmailer();
             sendEmail.SendMail(sendTo, subject, emailMessage, href);
         }
-
-
-
-
-//       different way ---not working --
-
-//        Email email = new SimpleEmail();
-//        email.setHostName("smtp.gmail.com");
-//        email.setSmtpPort(465);
-//        email.setAuthenticator(new DefaultAuthenticator(GeneralProperties.myEmail, GeneralProperties.myEmailPass));
-//        email.setSSLOnConnect(true);
-////        email.setAuthentication(GeneralProperties.myEmail, GeneralProperties.myEmailPass);
-////        email.setStartTLSEnabled(true);
-//        email.setFrom(GeneralProperties.LoginEmail);
-//        email.setSubject(subject);
-//        email.setMsg(emailMessage);
-//        email.addTo("sivankimchi@gmail.com");   //send to
-//        email.send();
-//        log.info("Email notification sent");
-
         }
 
 
@@ -589,7 +571,7 @@ public class OnlineStorePage {
             if (inStock==true) {
 
 
-                emailNotification("html", customerEmail, "Item is back in stock!", "Hello! " + "\r\n" + "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
+                emailNotification("html", customerEmail, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
             }
 
         }
@@ -618,7 +600,7 @@ public class OnlineStorePage {
 
         } else if (inStock==true) {
 
-            emailNotification("html", emailSendTo, "Item is back in stock!", "Hello! " + "\r\n" + "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
+            emailNotification("html", emailSendTo, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
             }
 
         }
@@ -1519,5 +1501,34 @@ public class OnlineStorePage {
         }
 
 
+        //different method to send email -- in Avast virus scan - need to uncheck settings>protection>core shields>mail shield>scan outbound emails (SMTP)
+
+    public void sendEmailIfOutOfStock_Gmail(String sendTo) throws Exception {
+
+        boolean inStock = checkIfItemInStock();
+
+        if (inStock==false) {
+
+            //send mail
+            log.debug("Starting email notification method");
+
+            notificationFromGmailHost("Item out of stock", "Hello store manager, " +"\r\n"+ "The following item is now out of stock in the online store- " + itemTitlename, sendTo);
+
+        }
+    }
+
+  public void notificationFromGmailHost(String subject, String message, String sendTo) throws EmailException {
+        Email email = new SimpleEmail();
+        email.setHostName("smtp.gmail.com");
+        email.setSmtpPort(465);
+        email.setAuthenticator(new DefaultAuthenticator(GeneralProperties.myEmail, GeneralProperties.myEmailPass));
+        email.setSSLOnConnect(true);
+        email.setFrom(GeneralProperties.LoginEmail);
+        email.setSubject(subject);
+        email.setMsg(message);
+        email.addTo(sendTo);   //send to
+        email.send();
+        log.info("Email notification sent");
+    }
 
 }

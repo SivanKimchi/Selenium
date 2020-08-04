@@ -1,11 +1,1 @@
-2020-08-02 20:04:33 [main] INFO  myTests.OnlineStoreTest - Opened driver
-2020-08-02 20:04:35 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
-2020-08-02 20:04:38 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
-2020-08-02 20:04:38 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
-2020-08-02 20:04:40 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
-2020-08-02 20:04:41 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
-₪49
-2020-08-02 20:04:41 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
-2020-08-02 20:04:41 [main] DEBUG pageObjects.OnlineStorePage - Starting email notification method
-2020-08-02 20:04:43 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
-2020-08-02 20:04:43 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for out-of-stock item
+2020-08-04 10:41:34 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for out-of-stock item (send from gmail)

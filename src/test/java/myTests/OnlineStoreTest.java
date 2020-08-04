@@ -69,8 +69,8 @@ public class OnlineStoreTest {
         @Override
         protected void finished(Description description) {
             System.out.println("Logged test data to testLogs.log using log4j");
-//            if (driver != null)
-//                driver.quit();
+            if (driver != null)
+                driver.quit();
         }
     };
 
@@ -295,6 +295,19 @@ public class OnlineStoreTest {
 
     }
 
+
+
+    @Test  //same as above - different email method
+    public void sendEmailWhenItemOutOfStock_Gmail () throws Exception {
+
+        OnlineStorePage store = new OnlineStorePage(driver);
+        store.searchItemChooseFromAutocompleteList("חגורת כסף כפולה למותן Must Have", 0);   //חגורת כסף כפולה למותן Must Have  //סנדלי שורש
+        store.sendEmailIfOutOfStock_Gmail("sivankimchi@gmail.com");
+        log.info("Finished validating email notification for out-of-stock item (send from gmail)");
+
+    }
+
+
     @Test    //example only... can't actually switch item from "not in stock" to "in stock" so this is made on 2 different items
     public void sendEmailToCustomerWhenItemReturnsToStock () throws Exception {
 
@@ -316,5 +329,7 @@ public class OnlineStoreTest {
         log.info("Finished validating email notification for CUSTOMER - Jenkins scheduler");
 
     }
+
+
 
 }
