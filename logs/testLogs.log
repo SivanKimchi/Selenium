@@ -1,1 +1,9 @@
-2020-08-04 10:41:34 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for out-of-stock item (send from gmail)
+2020-08-04 12:00:51 [main] DEBUG pageObjects.OnlineStorePage - price- 15.0 itemprice- 19.0
+2020-08-04 12:00:51 [main] DEBUG pageObjects.OnlineStorePage - price- 19.0 itemprice- 49.0
+2020-08-04 12:00:51 [main] DEBUG pageObjects.OnlineStorePage - price- 49.0 itemprice- 50.0
+2020-08-04 12:00:51 [main] DEBUG pageObjects.OnlineStorePage - price- 50.0 itemprice- 59.0
+2020-08-04 12:00:51 [main] DEBUG pageObjects.OnlineStorePage - price- 59.0 itemprice- 65.0
+2020-08-04 12:00:51 [main] INFO  pageObjects.OnlineStorePage - Results are ordered as asked - lowest price to highest
+2020-08-04 12:00:51 [main] DEBUG pageObjects.OnlineStorePage - Scrolled to element
+2020-08-04 12:00:56 [main] DEBUG pageObjects.OnlineStorePage - There are default 6 suggested items at the bottom of item search results
+2020-08-04 12:00:56 [main] INFO  myTests.OnlineStoreTest - Finished item search and sort successfully

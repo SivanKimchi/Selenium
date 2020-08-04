@@ -102,6 +102,9 @@ public class OnlineStorePage {
     @FindBy(css = "div[class^='product_list_item'] span[class='price ']")
     public List<WebElement> resultPriceList;
 
+    @FindBy(css = "div[class^='product_list_item'] h3[class*='title_block']")
+    public List<WebElement> resultTitleList;
+
     @FindBy(id = "cbar_w0_header_s")
     public WebElement bottomSuggestionsHeader;
 
@@ -619,14 +622,37 @@ public class OnlineStorePage {
         wait.until(ExpectedConditions.visibilityOf(searchResultsDiv));
         log.debug("Results are shown");
 
+    }
+
+
+    public void countItems(){
+
         String itemsCount = itemsCountString.getText();
         String[] itemsCountSplitArray = itemsCount.split(" ");
         int numOfItems = Integer.parseInt(itemsCountSplitArray[0]);
+        log.debug("Count of items on top is- " + numOfItems);
 
-        //there are more pages to show items
-        if (numOfItems > 95) {       // 95 = max results per page
-            Assert.assertTrue(nextPage.size() > 1);
-            log.debug("More results in the next page. Each page holds up to 95 results");
+        try {
+
+                int countItemsInResults = 0;
+
+                log.debug("Looping through items in search results");
+                for (int i = 0; i < resultTitleList.size(); i++) {
+                    scroll(resultTitleList.get(i));
+                    countItemsInResults++;
+                }
+
+                Assert.assertTrue(numOfItems == countItemsInResults);
+                log.debug("Items count as shown on top is the correct number of items in search results- " + countItemsInResults);
+
+            //there are more pages to show items
+            if (numOfItems > 95) {       // 95 = max results per page
+                Assert.assertTrue(nextPage.size() > 1);
+                log.debug("More results in the next page. Each page holds up to 95 results");
+            }
+
+        } catch (Exception e) {
+            log.error("There are no results");
         }
 
     }

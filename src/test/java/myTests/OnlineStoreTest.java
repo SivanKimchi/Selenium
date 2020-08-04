@@ -115,6 +115,14 @@ public class OnlineStoreTest {
     }
 
 
+    @Test
+    public void countItemsCorrect() throws InterruptedException {
+        OnlineStorePage store = new OnlineStorePage(driver);
+        store.searchItem("לדרמן");
+        store.countItems();
+    }
+
+
 
     @Test
     public void pickAnItemFromTopBar(){
