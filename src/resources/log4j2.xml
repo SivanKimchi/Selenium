@@ -8,12 +8,12 @@
             <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
-        <!-- Creating a new file for each day AND when size > 2000 -->
+        <!-- Creating a new file for each day AND when size > 5000 -->
         <RollingFile name="File" fileName="${basePath}/testLogs.log" filePattern="${basePath}/testLogs-%d{yyyy-MM-dd}--%i.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true" />
-                <SizeBasedTriggeringPolicy size="2000" />
+                <SizeBasedTriggeringPolicy size="5000" />
 
             </Policies>
         </RollingFile>
