@@ -1,14 +1,5 @@
-2020-08-05 19:06:32 [main] ERROR pageObjects.HomePage - No ad page was skipped
-2020-08-05 19:08:13 [main] ERROR pageObjects.HomePage - No ad page was skipped
-2020-08-05 19:09:42 [main] INFO  myTests.OnlineStoreTest - Opened driver
-2020-08-05 19:09:42 [main] DEBUG pageObjects.OnlineStorePage - Scrolled to element
-2020-08-05 19:09:43 [main] DEBUG pageObjects.OnlineStorePage - Item chosen: כובע ווילדקט מצחייה Wildcat
-2020-08-05 19:09:46 [main] DEBUG pageObjects.OnlineStorePage - Clicked on item
-2020-08-05 19:09:46 [main] DEBUG pageObjects.OnlineStorePage - Item opened in a new window
-2020-08-05 19:09:46 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'add to cart'
-2020-08-05 19:09:46 [main] DEBUG pageObjects.OnlineStorePage - No IMMEDIATE alert after adding to cart
-2020-08-05 19:09:49 [main] DEBUG pageObjects.OnlineStorePage - Message - item was added to cart
-2020-08-05 19:09:52 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'go to cart'
-2020-08-05 19:09:52 [main] DEBUG pageObjects.OnlineStorePage - Cart is shown
-2020-08-05 19:09:52 [main] INFO  pageObjects.OnlineStorePage - Item was successfully added to cart.
-2020-08-05 19:09:52 [main] INFO  myTests.OnlineStoreTest - Finished adding item to cart successfully
+2020-08-10 18:34:49 [main] INFO  pageObjects.BlogsPage - Blog created
+2020-08-10 18:34:55 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-08-10 18:35:05 [main] DEBUG pageObjects.BlogsPage - Clicked on Delete post
+2020-08-10 18:35:11 [main] INFO  pageObjects.BlogsPage - Blog deleted
+2020-08-10 18:35:11 [main] INFO  myTests.BlogsTest - Finished creating and deleting a blog successfully

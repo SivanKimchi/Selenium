@@ -14,9 +14,13 @@
   "userAddress":"{userAddress}",
   "myEmail":"{myEmail}",
   "myEmailPass":"{myEmailPass}",
+  "autoITPathToPicture":"{autoITPathToPicture}",
 
   "savedScreenshotLocation":"{savedScreenshotLocation}",
-  "CAPTURE":"{CAPTURE}")"
+  "CAPTURE":"{CAPTURE}"
+
+
+
 
 }
 

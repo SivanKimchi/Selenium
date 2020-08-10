@@ -309,6 +309,25 @@ public class OrderWidgetOnHomePage {
         }
     }
 
+
+    public void orderOneWayFlight(){
+
+        Assert.assertEquals(flightsDirection.getText(), "הלוך - חזור");
+        flightsDirection.click();
+        flightsDirectionOneWay.click();
+
+
+    }
+
+
+    public void flightDestinationHitFirstResult(String partialDestination, String fullDestination) throws InterruptedException {
+        pickDestination(partialDestination);
+        Assert.assertTrue(flightsTo.getText().contains(fullDestination));
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+        flightsSearchButton.click();
+    }
+
+
     //choose destination
     public void pickDestination (String destination) throws InterruptedException {
         flightsTo.click();
@@ -320,6 +339,18 @@ public class OrderWidgetOnHomePage {
         Thread.sleep(5000);
     }
 
+
+    public void pickDestinationArrowDown (String partialDestination, String fullDestination) throws InterruptedException {
+
+        flightsTo.click();
+        flightsTo_InputBox.clear();
+        Thread.sleep(3000);
+        flightsTo_InputBox.sendKeys(partialDestination);
+        Thread.sleep(5000);
+        flightsTo_InputBox.sendKeys(Keys.ARROW_DOWN, Keys.ARROW_DOWN, Keys.ENTER);
+        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(flightsTo.getText().contains(fullDestination));
+    }
 
     public void scrollToHotelsiframe(){
         scrollDownToWidget(orderWidgetHotels);

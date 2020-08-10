@@ -1,5 +1,6 @@
 package pageObjects;
 
+import Lametayel.GeneralProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -83,7 +85,7 @@ public class BlogsPage {
     @FindBy(css = "input[name='edit[title]']")
     public WebElement postHeadline;
 
-    @FindBy(css = "input[name='uploadfile']")
+    @FindBy(css = "#cover_img_btn")
     public WebElement addPictureToPost;
 
     @FindBy(css = "div[id='cke_1_contents'] div[role='textbox']")
@@ -466,7 +468,7 @@ public class BlogsPage {
 
 
 
-    public void createABlogPost(String insertPostHeadline, String insertPostContent, String insertDestinationTag) throws InterruptedException {
+    public void createABlogPost(String insertPostHeadline, String insertPostContent, String insertDestinationTag) throws InterruptedException, IOException {
 
         HomePage homePage = new HomePage(driver);
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -486,6 +488,11 @@ public class BlogsPage {
         scroll(postHeadline);
         postHeadline.sendKeys(insertPostHeadline);
         log.debug("Inserted blog headline");
+
+        addPictureToBlogPost();   // autoIT with local file
+        log.debug("Inserted blog picture");
+
+        Thread.sleep(3000);
         postContent.sendKeys(insertPostContent);
         log.debug("Inserted blog content");
 
@@ -510,6 +517,14 @@ public class BlogsPage {
 
     }
 
+
+    public void addPictureToBlogPost() throws InterruptedException, IOException {
+
+        addPictureToPost.click();
+        Thread.sleep(3000);
+        Runtime.getRuntime().exec(GeneralProperties.autoITPathToPicture);   //using AutoIT with local file
+
+    }
 
 
     public void createInvalidBlogPost(String emptyPostHeadline, String insertValidPostHeadline, String insertEmptyPostContent, String insertValidPostContent, String insertDestinationTag) throws InterruptedException {

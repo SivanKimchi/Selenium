@@ -53,13 +53,16 @@ public class GeneralProperties {
         public static final String myEmail = (String) obj.get("myEmail");
         public static final String myEmailPass = (String) obj.get("myEmailPass");
 
+        public static final String autoITPathToPicture = (String) obj.get("autoITPathToPicture");
+
+
 
         public static String savedScreenshotLocation = (String) obj.get("savedScreenshotLocation");
 //        public final static String CAPTURE = (String) obj.get("CAPTURE");
 
-        public GeneralProperties() throws IOException, ParseException {
-
-        }
+//        public GeneralProperties() throws IOException, ParseException {
+//
+//        }
 
 
     }

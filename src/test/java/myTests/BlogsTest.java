@@ -11,6 +11,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import pageObjects.BlogsPage;
 
+import java.io.IOException;
+
 public class BlogsTest {
 
 
@@ -80,7 +82,7 @@ public class BlogsTest {
 
 
     @Test
-    public void createABlogPost() throws InterruptedException {
+    public void createABlogPost() throws InterruptedException, IOException {
           //with logged-in user
 
         BlogsPage blogs = new BlogsPage(driver);

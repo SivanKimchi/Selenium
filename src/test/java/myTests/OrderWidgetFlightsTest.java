@@ -72,22 +72,16 @@ public class OrderWidgetFlightsTest {
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
         orderWidget.moveToiframe();
 
-        Assert.assertTrue(orderWidget.orderWidgetFlightsApp.isDisplayed());
-        Assert.assertEquals(orderWidget.flightsDirection.getText(), "הלוך - חזור");
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        wait.until(ExpectedConditions.visibilityOf(orderWidget.orderWidgetFlightsApp));
 
-        orderWidget.flightsDirection.click();
-        orderWidget.flightsDirectionOneWay.click();
+        orderWidget.orderOneWayFlight();
 
         //search and hit first destination result
-        orderWidget.pickDestination("rey");
-        Assert.assertTrue(orderWidget.flightsTo.getText().contains("ריאונוסה"));
-        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
-        orderWidget.flightsSearchButton.click();
+        orderWidget.flightDestinationHitFirstResult("rey", "ריאונוסה");
 
-        WebDriverWait wait = new WebDriverWait(driver,10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         orderWidget.moveToNextTab();
-
         Assert.assertTrue(driver.getCurrentUrl().contains("flights.lametayel.co.il"));
 
     }
@@ -100,14 +94,7 @@ public class OrderWidgetFlightsTest {
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
         orderWidget.moveToiframe();
 
-        orderWidget.flightsTo.click();
-        orderWidget.flightsTo_InputBox.clear();
-        Thread.sleep(3000);
-        orderWidget.flightsTo_InputBox.sendKeys("rey");
-        Thread.sleep(5000);
-        orderWidget.flightsTo_InputBox.sendKeys(Keys.ARROW_DOWN, Keys.ARROW_DOWN, Keys.ENTER);
-        driver.manage().timeouts().implicitlyWait(5000, TimeUnit.MILLISECONDS);
-        Assert.assertTrue(orderWidget.flightsTo.getText().contains("רייקייאוויק"));
+        orderWidget.pickDestinationArrowDown("rey", "רייקייאוויק" );
 
         driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
         orderWidget.flightsSearchButton.click();
@@ -183,8 +170,7 @@ public class OrderWidgetFlightsTest {
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
         orderWidget.moveToiframe();
 
-        orderWidget.flightsDirection.click();
-        orderWidget.flightsDirectionOneWay.click();
+        orderWidget.orderOneWayFlight();
 
         orderWidget.flightsDatesOneWay.click();
 
@@ -203,8 +189,7 @@ public class OrderWidgetFlightsTest {
         OrderWidgetOnHomePage orderWidget = new OrderWidgetOnHomePage(driver);
         orderWidget.moveToiframe();
 
-        orderWidget.flightsDirection.click();
-        orderWidget.flightsDirectionOneWay.click();
+        orderWidget.orderOneWayFlight();
 
         orderWidget.flightsDatesOneWay.click();
 
