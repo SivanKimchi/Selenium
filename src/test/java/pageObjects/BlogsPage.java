@@ -3,6 +3,13 @@ package pageObjects;
 import Lametayel.GeneralProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
@@ -11,7 +18,11 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +31,10 @@ public class BlogsPage {
 
     //members
     private WebDriver driver;
+
+
+    @FindBy (css = "a[class*='menu-logo']")
+    public WebElement lametayelLogo;
 
     @FindBy(css = "#index-main-page-search div[class^='dropdown-surface--anchor'] div[id^='dropdown-'] div[class^='autocomplete-input']")
     public WebElement searchBlogsBar;
@@ -91,6 +106,9 @@ public class BlogsPage {
     @FindBy(css = "div[id='cke_1_contents'] div[role='textbox']")
     public WebElement postContent;
 
+    @FindBy (css = "#edit-body")
+    public WebElement postContentEdit;
+
     @FindBy(id = "form_dest_autocomplete")
     public WebElement blogDestinations;
 
@@ -130,8 +148,11 @@ public class BlogsPage {
     @FindBy(css = "div[id='modals'] div:nth-child(2) li:nth-child(8)")
     public WebElement userMenuMyBlogFromBlogsPage;
 
-    @FindBy(xpath = "//*[@id='app']/section[4]/main/div[2]/a")
+    @FindBy(xpath = "//*[@id='app']/section[4]/main/div[3]/a")
     public WebElement myDrafts;
+
+    @FindBy(xpath = "//*[@class='right-col']/div/div/article")
+    public WebElement myFirstDrafts;
 
 
     @FindBy(xpath = "//*[@id='app']/section[3]/main/div[1]/div/article/a[2]/span")
@@ -527,6 +548,47 @@ public class BlogsPage {
     }
 
 
+    public ArrayList[] addContentFromExcel(String filePath,String fileName,String sheetName) throws IOException {
+        log.debug("Starting file data extraction");
+        File file = new File(filePath+"\\"+fileName);
+        FileInputStream inputStream = new FileInputStream(file);
+        Workbook workbook = null;
+        String fileExtensionName = fileName.substring(fileName.indexOf("."));
+
+        if(fileExtensionName.equals(".xlsx")) {
+            workbook = new XSSFWorkbook(inputStream);
+         }  else if(fileExtensionName.equals(".xls")){
+            workbook = new HSSFWorkbook(inputStream);
+        }
+
+        //Read sheet inside the workbook by its name
+        Sheet sheet = workbook.getSheet("Sheet1");
+
+        //Find number of rows in excel file
+        int rowCount = sheet.getLastRowNum()-sheet.getFirstRowNum();
+        log.debug("There are " + rowCount + " rows in the sheet");
+        ArrayList<String> listOfBlogHeaders= new ArrayList<String>();
+        ArrayList<String> listOfBlogContents= new ArrayList<String>();
+        log.debug("Created lists of 2 cells data");
+
+        //Create a loop over all the rows of excel file to read it
+        for (int i = 0; i < rowCount+1; i++) {
+            Row row = sheet.getRow(i);
+            log.debug("Adding values to array lists - row " + (i+1));
+            listOfBlogHeaders.add(row.getCell(0).getStringCellValue());
+            listOfBlogContents.add(row.getCell(1).getStringCellValue());
+        }
+
+       ArrayList[] excelData = new ArrayList[]{listOfBlogHeaders, listOfBlogContents};
+       log.debug("Added 2 array list to 1 ArrayList[] of method return value");
+       return excelData;
+    }
+
+
+
+
+
+
     public void createInvalidBlogPost(String emptyPostHeadline, String insertValidPostHeadline, String insertEmptyPostContent, String insertValidPostContent, String insertDestinationTag) throws InterruptedException {
 
         HomePage homePage = new HomePage(driver);
@@ -549,13 +611,7 @@ public class BlogsPage {
         postContent.sendKeys(insertValidPostContent);
         log.debug("Inserted valid content");
         //destination tag
-        blogDestinations.sendKeys(insertDestinationTag);
-        Thread.sleep(3000);
-        blogDestinations.sendKeys(Keys.ARROW_DOWN);
-        Thread.sleep(3000);
-        blogDestinations.sendKeys(Keys.ENTER);
-        Thread.sleep(5000);
-        log.debug("Inserted valid destination tag");
+        insertOneDestinationTag(insertDestinationTag);
 
         scroll(saveBlogPostButton);
         saveBlogPostButton.click();
@@ -640,6 +696,17 @@ public class BlogsPage {
         Assert.assertTrue(destinationTagsChosen.getText().contains( blogDestinationCityOptions.get(cityIndex).getText()));
         log.info("Second destination tag is displayed");
 
+    }
+
+
+    public void insertOneDestinationTag(String insertDestinationTag) throws InterruptedException {
+        blogDestinations.sendKeys(insertDestinationTag);
+        Thread.sleep(3000);
+        blogDestinations.sendKeys(Keys.ARROW_DOWN);
+        Thread.sleep(3000);
+        blogDestinations.sendKeys(Keys.ENTER);
+        Thread.sleep(5000);
+        log.debug("Inserted valid destination tag");
     }
 
 

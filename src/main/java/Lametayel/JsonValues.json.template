@@ -15,6 +15,7 @@
   "myEmail":"{myEmail}",
   "myEmailPass":"{myEmailPass}",
   "autoITPathToPicture":"{autoITPathToPicture}",
+  "blogExcelFilePath":"{blogExcelFilePath}",
 
   "savedScreenshotLocation":"{savedScreenshotLocation}",
   "CAPTURE":"{CAPTURE}"

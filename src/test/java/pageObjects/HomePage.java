@@ -86,15 +86,18 @@ public class HomePage {
     public WebElement userMenuMyContents;
 
     @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(11)")
-    public WebElement userMenuMyMessages;
+    public WebElement userMenuMyBlog;
 
     @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(12)")
-    public WebElement userMenuMyFavorites;
+    public WebElement userMenuMyMessages;
 
     @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(13)")
-    public WebElement userMenuMyPublishedContents;
+    public WebElement userMenuMyFavorites;
 
     @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(14)")
+    public WebElement userMenuMyPublishedContents;
+
+    @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(15)")
     public WebElement userMenuMyContentsComments;
 
     @FindBy(css = "ul[id='authenticated_user_menu'] li:nth-child(16)")

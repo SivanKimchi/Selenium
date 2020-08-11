@@ -1,5 +1,35 @@
-2020-08-10 18:34:49 [main] INFO  pageObjects.BlogsPage - Blog created
-2020-08-10 18:34:55 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
-2020-08-10 18:35:05 [main] DEBUG pageObjects.BlogsPage - Clicked on Delete post
-2020-08-10 18:35:11 [main] INFO  pageObjects.BlogsPage - Blog deleted
-2020-08-10 18:35:11 [main] INFO  myTests.BlogsTest - Finished creating and deleting a blog successfully
+2020-08-11 13:57:23 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 4
+2020-08-11 13:57:23 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 5
+2020-08-11 13:57:23 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 6
+2020-08-11 13:57:23 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 7
+2020-08-11 13:57:23 [main] DEBUG pageObjects.BlogsPage - Added 2 array list to 1 List of method return value
+2020-08-11 13:57:24 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
+2020-08-11 14:01:45 [main] INFO  myTests.BlogsTest - Opened driver
+2020-08-11 14:01:46 [main] DEBUG pageObjects.HomePage - Inserted email to login form
+2020-08-11 14:01:46 [main] DEBUG pageObjects.HomePage - Inserted password to login form
+2020-08-11 14:01:47 [main] INFO  pageObjects.HomePage - Logged to website
+2020-08-11 14:01:49 [main] DEBUG pageObjects.BlogsPage - Skipped ad page
+2020-08-11 14:01:53 [main] ERROR pageObjects.BlogsPage - No ad page was skipped
+2020-08-11 14:01:53 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-08-11 14:01:53 [main] INFO  pageObjects.BlogsPage - Blog post is now private
+2020-08-11 14:01:53 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-08-11 14:01:53 [main] DEBUG pageObjects.BlogsPage - Starting file data extraction
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - There are 6 rows in the sheet
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Created lists of 2 cells data
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 1
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 2
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 3
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 4
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 5
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 6
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Adding values to array lists - row 7
+2020-08-11 14:01:54 [main] DEBUG pageObjects.BlogsPage - Added 2 array list to 1 List of method return value
+2020-08-11 14:01:54 [main] DEBUG myTests.BlogsTest - Inserted header - post number 5
+2020-08-11 14:01:55 [main] DEBUG myTests.BlogsTest - Inserted content - It was so much fun in Paris&Prague in 2016
+2020-08-11 14:01:58 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-08-11 14:02:09 [main] DEBUG pageObjects.BlogsPage - Inserted valid destination tag
+2020-08-11 14:02:09 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-08-11 14:02:44 [main] DEBUG pageObjects.BlogsPage - Scrolled to element
+2020-08-11 14:02:52 [main] DEBUG pageObjects.BlogsPage - Clicked on Delete post
+2020-08-11 14:02:58 [main] INFO  pageObjects.BlogsPage - Blog deleted
+2020-08-11 14:02:58 [main] INFO  myTests.BlogsTest - Inserted data from Excel

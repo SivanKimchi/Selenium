@@ -54,6 +54,8 @@ public class GeneralProperties {
         public static final String myEmailPass = (String) obj.get("myEmailPass");
 
         public static final String autoITPathToPicture = (String) obj.get("autoITPathToPicture");
+        public static final String blogExcelFilePath = (String) obj.get("blogExcelFilePath");
+
 
 
 

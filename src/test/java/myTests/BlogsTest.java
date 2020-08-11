@@ -9,9 +9,15 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import pageObjects.BlogsPage;
+import pageObjects.HomePage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BlogsTest {
 
@@ -50,8 +56,8 @@ public class BlogsTest {
         @Override
         protected void finished(Description description) {
             System.out.println("Logged test data to testLogs.log using log4j");
-            if (driver != null)
-                driver.quit();
+//            if (driver != null)
+//                driver.quit();
         }
     };
 
@@ -88,6 +94,67 @@ public class BlogsTest {
         BlogsPage blogs = new BlogsPage(driver);
         blogs.createABlogPost("יומן מסע", "איזה כיף בחו\"ל", "אירלנד");
         log.info("Finished creating and deleting a blog successfully");
+    }
+
+
+    @Test
+    public void exampleToBlogContentFromExcel() throws InterruptedException, IOException {
+
+        BlogsPage blogs = new BlogsPage(driver);
+        HomePage homePage = new HomePage(driver);
+        //log in to write blog post
+        homePage.logInButton.click();
+        homePage.logIntoSite();
+        blogs.skipAd();
+        homePage.userMenu.click();
+        homePage.userMenuAddNewBlogPost.click();
+        blogs.skipAd();
+
+        // make post private
+        blogs.makePostPrivate();
+
+        //post content from EXCEL
+        blogs.scroll(blogs.postHeadline);
+
+        ArrayList[] excelData = blogs.addContentFromExcel(GeneralProperties.blogExcelFilePath, "postContent.xlsx", "Sheet1");
+        ArrayList<String> headers = excelData[0];
+        ArrayList<String> contents = excelData[1];
+
+        blogs.postHeadline.sendKeys(headers.get(4));   //change of index relevant to headlineNumber
+        log.debug("Inserted header - " + headers.get(4));
+        blogs.postContent.sendKeys(contents.get(4));   //change of index relevant to headlineNumber
+        log.debug("Inserted content - " + contents.get(4));
+        Thread.sleep(3000);
+
+        //must publish (private) blog post to check input from excel
+        blogs.scroll(blogs.addDestinationTag);
+        blogs.insertOneDestinationTag("ספרד");
+        blogs.scroll(blogs.saveBlogPostButton);
+        Thread.sleep(5000);
+        blogs.saveBlogPostButton.click();
+        Thread.sleep(5000);
+        WebDriverWait wait = new WebDriverWait(driver, 5);
+
+        int headlineNumber = 4+1;   // (index+1  "Post number 5")
+
+        try {
+            wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(blogs.blogCreatedAlert)));
+        } catch (Exception e) {   //unkown error in submitting post
+            blogs.lametayelLogo.click();
+            homePage.userMenu.click();
+            homePage.userMenuMyBlog.click();
+            driver.findElement(By.xpath("//*[@id='app']/section[4]/main/div[3]/a")).click();
+            blogs.myFirstDrafts.click();
+
+        }
+
+        Assert.assertTrue(blogs.postHeadline.getAttribute("value").contains(Integer.toString(headlineNumber)));
+        Assert.assertTrue(blogs.postContent.getText().contains("It was so much fun in"));
+        Thread.sleep(5000);
+        blogs.deletePost();
+
+        log.info("Inserted data from Excel Successfully");
+
     }
 
 
