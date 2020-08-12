@@ -19,6 +19,10 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 
 import java.util.concurrent.TimeUnit;
@@ -525,7 +529,7 @@ public class OnlineStorePage {
             //send mail
             log.debug("Starting email notification method");
 
-            emailNotification("regular", sendTo, "Item out of stock", "Hello store manager, " +"\r\n"+ "The following item is now out of stock in the online store- " + itemTitlename, "");
+            emailNotification("regular",  sendTo, "Item out of stock", "Hello store manager, " +"\r\n"+ "The following item is now out of stock in the online store- " + itemTitlename, "");
 
         }
     }
@@ -541,6 +545,7 @@ public class OnlineStorePage {
         } else if (emailType.equals("html")){
             myHtmlEmailer sendEmail = new myHtmlEmailer();
             sendEmail.SendMail(sendTo, subject, emailMessage, href);
+            log.info("Email notification sent");
         }
         }
 
@@ -548,6 +553,13 @@ public class OnlineStorePage {
 
 
     public void sendEmailIfBackInStock(String secondSearchTerm, int itemIndex) throws Exception {
+
+        //db connection
+        String host = "localhost";
+        String port = "3306";
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://"+ host + ":" + port + "/lametayel?serverTimezone=UTC",GeneralProperties.dbUser,GeneralProperties.dbPassword);
+        Statement s = (Statement) dbConnection.createStatement();
+        log.debug("Connected to database");
 
         boolean inStock = checkIfItemInStock();
 
@@ -559,32 +571,59 @@ public class OnlineStorePage {
             Thread.sleep(5000);
             driver.switchTo().alert().sendKeys("sivankimchi@gmail.com");
             log.debug("Inserted customer email");
-            Thread.sleep(3000);
+            Thread.sleep(5000);
             driver.switchTo().alert().accept();
             customerEmail = (String) js.executeScript("return window.promptResponse");
             log.debug("Saved customer email");
 
+            //save email to db
+            s.executeUpdate("INSERT INTO customer_details (customerEmail, customerSearchedItem) VALUES ('"+ customerEmail +"', '"+ itemTitlename + "')");
+            log.debug("Saved customer's email to database");
+
             //can't check switching from "out of stock" to "in stock", so searching for another item
-            // *** can schedule the test to run once a day on JENKINS and check item's availability ***
+            // *** in next method- I'm scheduling the test to run once a day on JENKINS and check item's availability ***
+
+            String firstItemName = itemTitlename;
 
             searchItemChooseFromAutocompleteList(secondSearchTerm, itemIndex);
+
+            //Item's url for email content
             String itemUrl =  driver.getCurrentUrl();
 
             inStock = checkIfItemInStock();
             if (inStock==true) {
 
+                ResultSet savedCustomerEmail = s.executeQuery("SELECT DISTINCT customerEmail FROM customer_details WHERE customerSearchedItem='" + firstItemName + "'");
 
-                emailNotification("html", customerEmail, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
+                String savedEmail="";
+
+                while (savedCustomerEmail.next()) {
+                    savedEmail = savedCustomerEmail.getString(1);
+                }
+                    //in real life, this should be made as a loop+array for multiple customers who were interested in the item
+                    System.out.println(savedEmail);
+                    emailNotification("html", savedEmail, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl);
+
             }
-
         }
+        dbConnection.close();
+        log.debug("Disconnected from database");
     }
 
 
 
-    public void sendEmailIfBackInStockJenkinsScheduler(String emailSendTo) throws Exception {
+    public void sendEmailIfBackInStockJenkinsScheduler() throws Exception {
 
+        //db connection
+        String host = "localhost";
+        String port = "3306";
+        Connection dbConnection = DriverManager.getConnection("jdbc:mysql://"+ host + ":" + port + "/lametayel?serverTimezone=UTC", GeneralProperties.dbUser,GeneralProperties.dbPassword);
+        Statement s = (Statement) dbConnection.createStatement();
+        log.debug("Connected to database");
+
+        //item url for email content
         String itemUrl =  driver.getCurrentUrl();
+
         boolean inStock = checkIfItemInStock();
 
         if (inStock==false) {
@@ -594,18 +633,32 @@ public class OnlineStorePage {
                 js.executeScript("window.promptResponse=prompt(\"Please enter your email and we'll notify you when item is back in stock\")");
                 log.debug("Prompt for input customer email");
                 Thread.sleep(5000);
-                driver.switchTo().alert().sendKeys(emailSendTo);
+                driver.switchTo().alert().sendKeys("sivankimchi@gmail.com");
                 log.debug("Inserted customer email");
                 Thread.sleep(3000);
                 driver.switchTo().alert().accept();
                 customerEmail = (String) js.executeScript("return window.promptResponse");
                 log.debug("Saved customer email");
 
+                s.executeUpdate("INSERT INTO customer_details (customerEmail, customerSearchedItem) VALUES ('"+ customerEmail +"', '"+ itemTitlename + "')");
+                log.debug("Saved customer's email to database");
+
         } else if (inStock==true) {
 
-            emailNotification("html", emailSendTo, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl );
-            }
+            ResultSet savedCustomerEmail = s.executeQuery("SELECT DISTINCT customerEmail FROM customer_details WHERE customerSearchedItem='" + itemTitlename + "'");
 
+            String savedEmail="";
+
+            while (savedCustomerEmail.next()) {
+                savedEmail = savedCustomerEmail.getString(1);
+            }
+            //in real life, this should be made as a loop+array for multiple customers who were interested in the item
+
+            emailNotification("html", savedEmail, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl);
+
+         }
+        dbConnection.close();
+        log.debug("Disconnected from database");
         }
 
 
@@ -674,7 +727,7 @@ public class OnlineStorePage {
 
         searchBar.sendKeys(searchFor);
         log.debug("Inserted partial search term");
-        Thread.sleep(3000);
+        Thread.sleep(8000);
         Assert.assertTrue(suggestedAutocompleteItemSearch.isDisplayed());
         log.debug("Auto complete items are displayed");
 

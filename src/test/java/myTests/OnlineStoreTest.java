@@ -333,7 +333,7 @@ public class OnlineStoreTest {
 
         OnlineStorePage store = new OnlineStorePage(driver);
         store.searchItemChooseFromAutocompleteList("Estes Jacket", 4);   //חגורת כסף כפולה למותן Must Have  //סנדלי שורש//4 Estes Jacket
-        store.sendEmailIfBackInStockJenkinsScheduler("sivankimchi@gmail.com");
+        store.sendEmailIfBackInStockJenkinsScheduler();
         log.info("Finished validating email notification for CUSTOMER - Jenkins scheduler");
 
     }

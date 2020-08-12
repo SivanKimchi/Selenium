@@ -1,0 +1,53 @@
+2020-08-12 12:42:22 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:42:23 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:42:32 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:42:32 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:42:35 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:42:36 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-12 12:42:37 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-12 12:42:37 [main] DEBUG pageObjects.OnlineStorePage - Prompt for input customer email
+2020-08-12 12:42:42 [main] DEBUG pageObjects.OnlineStorePage - Inserted customer email
+2020-08-12 12:42:47 [main] DEBUG pageObjects.OnlineStorePage - Saved customer email
+2020-08-12 12:42:47 [main] DEBUG pageObjects.OnlineStorePage - Saved customer's email to database
+2020-08-12 12:42:48 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:42:56 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:42:56 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:43:00 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:43:01 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חולצה תרמית עבה לגברים Expedition Shirt R4
+₪123
+2020-08-12 12:43:02 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'add to cart'
+2020-08-12 12:43:02 [main] DEBUG pageObjects.OnlineStorePage - No IMMEDIATE alert after adding to cart
+2020-08-12 12:43:03 [main] DEBUG pageObjects.OnlineStorePage - Message - item was added to cart
+2020-08-12 12:43:06 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'go to cart'
+2020-08-12 12:43:07 [main] DEBUG pageObjects.OnlineStorePage - Cart is shown
+2020-08-12 12:43:07 [main] INFO  pageObjects.OnlineStorePage - Item was successfully added to cart.
+2020-08-12 12:43:09 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
+2020-08-12 12:43:09 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for CUSTOMER when item is back in stock
+2020-08-12 12:50:03 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:50:06 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:50:14 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:50:14 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:50:16 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:50:17 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-12 12:50:17 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-12 12:50:17 [main] DEBUG pageObjects.OnlineStorePage - Starting email notification method
+2020-08-12 12:50:19 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
+2020-08-12 12:50:19 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for out-of-stock item
+2020-08-12 12:50:47 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:50:50 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:50:58 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:50:58 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:51:00 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:51:01 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-12 12:51:01 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-12 12:51:01 [main] DEBUG pageObjects.OnlineStorePage - Starting email notification method
+2020-08-12 12:51:04 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
+2020-08-12 12:51:04 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for out-of-stock item (send from gmail)
+2020-08-12 12:51:37 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:51:39 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:51:47 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:51:47 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:51:49 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion

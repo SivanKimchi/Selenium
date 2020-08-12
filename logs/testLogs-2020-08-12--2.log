@@ -1,0 +1,53 @@
+2020-08-12 12:51:50 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חגורת כסף כפולה למותן Must Have
+₪49
+2020-08-12 12:51:50 [main] DEBUG pageObjects.OnlineStorePage - Connected to database
+2020-08-12 12:51:51 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-12 12:51:51 [main] DEBUG pageObjects.OnlineStorePage - Prompt for input customer email
+2020-08-12 12:51:56 [main] DEBUG pageObjects.OnlineStorePage - Inserted customer email
+2020-08-12 12:52:01 [main] DEBUG pageObjects.OnlineStorePage - Saved customer email
+2020-08-12 12:52:01 [main] DEBUG pageObjects.OnlineStorePage - Saved customer's email to database
+2020-08-12 12:52:01 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:52:09 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:52:09 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:52:11 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:52:12 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: חולצה תרמית עבה לגברים Expedition Shirt R4
+₪123
+2020-08-12 12:52:13 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'add to cart'
+2020-08-12 12:52:13 [main] DEBUG pageObjects.OnlineStorePage - No IMMEDIATE alert after adding to cart
+2020-08-12 12:52:14 [main] DEBUG pageObjects.OnlineStorePage - Message - item was added to cart
+2020-08-12 12:52:17 [main] DEBUG pageObjects.OnlineStorePage - Clicked on 'go to cart'
+2020-08-12 12:52:17 [main] DEBUG pageObjects.OnlineStorePage - Cart is shown
+2020-08-12 12:52:18 [main] INFO  pageObjects.OnlineStorePage - Item was successfully added to cart.
+2020-08-12 12:52:19 [main] INFO  pageObjects.OnlineStorePage - Email notification sent
+2020-08-12 12:52:19 [main] DEBUG pageObjects.OnlineStorePage - Disconnected from database
+2020-08-12 12:52:19 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for CUSTOMER when item is back in stock
+2020-08-12 12:52:55 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:52:57 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:53:05 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:53:06 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:53:10 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:53:11 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: מעיל סופטשל לנשים Estes Jacket
+₪656
+2020-08-12 12:53:12 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
+2020-08-12 12:54:30 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:54:32 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:54:40 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:54:41 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:54:42 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:54:43 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: מעיל סופטשל לנשים Estes Jacket
+₪656
+2020-08-12 12:54:44 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
+2020-08-12 12:55:29 [main] INFO  myTests.OnlineStoreTest - Opened driver
+2020-08-12 12:55:32 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
+2020-08-12 12:55:40 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
+2020-08-12 12:55:40 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
+2020-08-12 12:55:43 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
+2020-08-12 12:55:43 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: מעיל סופטשל לנשים Estes Jacket
+₪656
+2020-08-12 12:55:44 [main] DEBUG pageObjects.OnlineStorePage - Connected to database
+2020-08-12 12:55:44 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
+2020-08-12 12:55:44 [main] DEBUG pageObjects.OnlineStorePage - Prompt for input customer email
+2020-08-12 12:55:49 [main] DEBUG pageObjects.OnlineStorePage - Inserted customer email
+2020-08-12 12:55:52 [main] DEBUG pageObjects.OnlineStorePage - Saved customer email
+2020-08-12 12:55:53 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
+2020-08-12 12:57:05 [main] INFO  myTests.OnlineStoreTest - Opened driver

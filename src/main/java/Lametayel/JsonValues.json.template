@@ -16,6 +16,9 @@
   "myEmailPass":"{myEmailPass}",
   "autoITPathToPicture":"{autoITPathToPicture}",
   "blogExcelFilePath":"{blogExcelFilePath}",
+  "dbUser":"{dbUser}",
+  "dbPassword":"{dbPassword}",
+
 
   "savedScreenshotLocation":"{savedScreenshotLocation}",
   "CAPTURE":"{CAPTURE}"

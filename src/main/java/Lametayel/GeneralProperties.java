@@ -56,6 +56,11 @@ public class GeneralProperties {
         public static final String autoITPathToPicture = (String) obj.get("autoITPathToPicture");
         public static final String blogExcelFilePath = (String) obj.get("blogExcelFilePath");
 
+        public static final String dbUser = (String) obj.get("dbUser");
+        public static final String dbPassword = (String) obj.get("dbPassword");
+
+
+
 
 
 
