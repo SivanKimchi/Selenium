@@ -4,6 +4,7 @@
 
   "SiteURL1":"{SiteURL1}",
   "SiteURLShop":"{SiteURLShop}",
+  "SiteURLAttractions":"{SiteURLAttractions}",
   "LoginEmail":"{LoginEmail}",
   "LoginPassword":"{LoginPassword}",
   "username":"{username}",

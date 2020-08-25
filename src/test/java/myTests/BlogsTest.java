@@ -56,8 +56,8 @@ public class BlogsTest {
         @Override
         protected void finished(Description description) {
             System.out.println("Logged test data to testLogs.log using log4j");
-//            if (driver != null)
-//                driver.quit();
+            if (driver != null)
+                driver.quit();
         }
     };
 

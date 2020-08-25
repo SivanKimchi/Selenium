@@ -1,14 +1,11 @@
-2020-08-12 12:57:07 [main] DEBUG pageObjects.OnlineStorePage - Inserted partial search term
-2020-08-12 12:57:15 [main] DEBUG pageObjects.OnlineStorePage - Auto complete items are displayed
-2020-08-12 12:57:15 [main] DEBUG pageObjects.OnlineStorePage - Hoovered to auto complete suggestion
-2020-08-12 12:57:17 [main] DEBUG pageObjects.OnlineStorePage - Clicked on auto complete suggestion
-2020-08-12 12:57:18 [main] INFO  pageObjects.OnlineStorePage - Item was chosen from autocomplete search suggestion: מעיל סופטשל לנשים Estes Jacket
-₪656
-2020-08-12 12:57:19 [main] DEBUG pageObjects.OnlineStorePage - Connected to database
-2020-08-12 12:57:19 [main] ERROR pageObjects.OnlineStorePage - Item is not in online store stock
-2020-08-12 12:57:19 [main] DEBUG pageObjects.OnlineStorePage - Prompt for input customer email
-2020-08-12 12:57:24 [main] DEBUG pageObjects.OnlineStorePage - Inserted customer email
-2020-08-12 12:57:27 [main] DEBUG pageObjects.OnlineStorePage - Saved customer email
-2020-08-12 12:57:27 [main] DEBUG pageObjects.OnlineStorePage - Saved customer's email to database
-2020-08-12 12:57:27 [main] DEBUG pageObjects.OnlineStorePage - Disconnected from database
-2020-08-12 12:57:27 [main] INFO  myTests.OnlineStoreTest - Finished validating email notification for CUSTOMER - Jenkins scheduler
+2020-08-25 12:54:49 [main] INFO  myTests.AttractionsTest - Opened driver
+2020-08-25 12:54:54 [main] DEBUG pageObjects.AttractionsPage - There is no pop-up
+2020-08-25 12:54:54 [main] INFO  pageObjects.AttractionsPage - Switched to attractions iframe
+2020-08-25 12:54:55 [main] DEBUG pageObjects.AttractionsPage - Saved index of searched city: 44
+2020-08-25 12:54:55 [main] DEBUG pageObjects.AttractionsPage - Inserted city destination
+2020-08-25 12:54:55 [main] DEBUG pageObjects.AttractionsPage - Requested city appears in search results without submitting search term (only inserting in search bar)
+2020-08-25 12:54:58 [main] DEBUG pageObjects.AttractionsPage - Submitted search
+2020-08-25 12:54:58 [main] DEBUG pageObjects.AttractionsPage - After search, search results are as default - ALL DESTINATIONS, and not according to search. Bug in Lametayel website...
+2020-08-25 12:54:58 [main] DEBUG pageObjects.AttractionsPage - Inserted country destination
+2020-08-25 12:54:59 [main] DEBUG pageObjects.AttractionsPage - Destination COUNTRY does not appear in search results, search for attractions is by CITY
+2020-08-25 12:54:59 [main] INFO  myTests.AttractionsTest - Finished test- search for attractions by city or country

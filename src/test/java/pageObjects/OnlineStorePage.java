@@ -601,7 +601,7 @@ public class OnlineStorePage {
                     savedEmail = savedCustomerEmail.getString(1);
                 }
                     //in real life, this should be made as a loop+array for multiple customers who were interested in the item
-                    System.out.println(savedEmail);
+
                     emailNotification("html", savedEmail, "Item is back in stock!", "We're happy to notify you item " + itemTitlename + " is back in stock. You can check it out in the following link: ", itemUrl);
 
             }

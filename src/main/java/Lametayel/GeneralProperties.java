@@ -41,6 +41,7 @@ public class GeneralProperties {
 
         public static final String SiteURL1 = (String) obj.get("SiteURL1");
         public static final String SiteURLShop = (String) obj.get("SiteURLShop");
+        public static final String SiteURLAttractions = (String) obj.get("SiteURLAttractions");
         public static final String LoginEmail = (String) obj.get("LoginEmail");
         public static final String LoginPassword = (String) obj.get("LoginPassword");
         public static final String username = (String) obj.get("username");
