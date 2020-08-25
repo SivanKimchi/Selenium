@@ -12,6 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,6 +38,8 @@ public class AttractionsPage {
     @FindBy (css = "ul[class='cityList'] li")
     public List<WebElement> attractionsDestinationsList;
 
+    @FindBy (css = "div[id='vendor_usp'] h2")
+    public WebElement attractionCityHeadline;
 
 
 
@@ -101,8 +104,6 @@ public class AttractionsPage {
         }
 
 
-        driver.switchTo().frame(0);
-        log.info("Switched to attractions iframe");
         wait.until(ExpectedConditions.visibilityOf(searchAttractionDestination));
 
         int destinationSize = attractionsDestinationsList.size();
@@ -169,6 +170,41 @@ public class AttractionsPage {
         } catch (Exception e) {
             log.error("Destination COUNTRY does appear in search results?");
         }
+
+    }
+
+
+    public void pickAttractionCity (String destinationCity) {
+
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(searchAttractionDestination));
+
+        List<String> destinations = new ArrayList<String>();
+        WebElement clickThisCity = null;
+        for (WebElement destination : attractionsDestinationsList) {
+                String destinationText = destination.getText();
+                if (!destinationText.isEmpty()){
+                    destinations.add(destinationText);
+                    if (destinationText.equals(destinationCity)){
+                        clickThisCity = destination;
+                    }
+                }
+        }
+
+        System.out.println("destinations: "+ destinations);
+        String message = "Visible Destinations for attractions: ";
+        for (String string : destinations ) {
+            message = message + " ," + string;
+           
+        }
+        log.info(message);
+
+        clickThisCity.click();
+        log.debug("Clicked city: " + destinationCity);
+
+        wait.until(ExpectedConditions.visibilityOf(attractionCityHeadline));
+        Assert.assertTrue(attractionCityHeadline.getText().contains(destinationCity));
+        log.info("Entered page for attractions in selected city");
 
     }
 

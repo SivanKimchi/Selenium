@@ -1,11 +1,10 @@
-2020-08-25 12:54:49 [main] INFO  myTests.AttractionsTest - Opened driver
-2020-08-25 12:54:54 [main] DEBUG pageObjects.AttractionsPage - There is no pop-up
-2020-08-25 12:54:54 [main] INFO  pageObjects.AttractionsPage - Switched to attractions iframe
-2020-08-25 12:54:55 [main] DEBUG pageObjects.AttractionsPage - Saved index of searched city: 44
-2020-08-25 12:54:55 [main] DEBUG pageObjects.AttractionsPage - Inserted city destination
-2020-08-25 12:54:55 [main] DEBUG pageObjects.AttractionsPage - Requested city appears in search results without submitting search term (only inserting in search bar)
-2020-08-25 12:54:58 [main] DEBUG pageObjects.AttractionsPage - Submitted search
-2020-08-25 12:54:58 [main] DEBUG pageObjects.AttractionsPage - After search, search results are as default - ALL DESTINATIONS, and not according to search. Bug in Lametayel website...
-2020-08-25 12:54:58 [main] DEBUG pageObjects.AttractionsPage - Inserted country destination
-2020-08-25 12:54:59 [main] DEBUG pageObjects.AttractionsPage - Destination COUNTRY does not appear in search results, search for attractions is by CITY
-2020-08-25 12:54:59 [main] INFO  myTests.AttractionsTest - Finished test- search for attractions by city or country
+2020-08-25 15:43:22 [main] INFO  myTests.AttractionsTest - Switched to attractions iframe
+2020-08-25 15:43:24 [main] INFO  pageObjects.AttractionsPage - Visible Destinations for attractions:  ,ברלין ,ברצלונה ,פראג ,בודפשט ,אמסטרדם ,לונדון ,ניו יורק ,רומא ,פריז ,מדריד ,פירנצה ,פארקי-שעשועים ,אורלנדו ,אנדורה ,אנדלוסיה ,אתונה ,בלגיה ,ברטיסלבה ,הונג קונג ,וושינגטון ,וינה ,ולנסיה ,ונציה ,לאס וגאס ,לוס אנג'לס ,ליסבון ,מיאמי ,מיורקה ,מילאנו ,נאפולי ,סן פרנסיסקו ,פורטו ,קופנהגן ,קייפטאון ,קרקוב ,רוטרדם ,שטוקהולם
+2020-08-25 15:43:28 [main] DEBUG pageObjects.AttractionsPage - Clicked city: ליסבון
+2020-08-25 15:43:39 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
+2020-08-25 15:44:28 [main] INFO  myTests.AttractionsTest - Opened driver
+2020-08-25 15:44:28 [main] INFO  myTests.AttractionsTest - Switched to attractions iframe
+2020-08-25 15:44:32 [main] INFO  pageObjects.AttractionsPage - Visible Destinations for attractions:  ,ברלין ,ברצלונה ,פראג ,בודפשט ,אמסטרדם ,לונדון ,ניו יורק ,רומא ,פריז ,מדריד ,פירנצה ,פארקי-שעשועים ,אורלנדו ,אנדורה ,אנדלוסיה ,אתונה ,בלגיה ,ברטיסלבה ,הונג קונג ,וושינגטון ,וינה ,ולנסיה ,ונציה ,לאס וגאס ,לוס אנג'לס ,ליסבון ,מיאמי ,מיורקה ,מילאנו ,נאפולי ,סן פרנסיסקו ,פורטו ,קופנהגן ,קייפטאון ,קרקוב ,רוטרדם ,שטוקהולם
+2020-08-25 15:44:37 [main] DEBUG pageObjects.AttractionsPage - Clicked city: ליסבון
+2020-08-25 15:44:38 [main] INFO  pageObjects.AttractionsPage - Entered page for attractions in selected city
+2020-08-25 15:44:38 [main] INFO  myTests.AttractionsTest - Finished test- pick destination for attractions from list

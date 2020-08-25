@@ -71,6 +71,9 @@ public class AttractionsTest {
     public void searchDestinationForAttractions(){
         AttractionsPage attractions = new AttractionsPage(driver);
 
+        driver.switchTo().frame(0);
+        log.info("Switched to attractions iframe");
+
         attractions.searchAttractionDestinationCity("רומא");
         attractions.searchAttractionDestinationCountry("איטליה");
 
@@ -83,8 +86,11 @@ public class AttractionsTest {
     @Test
     public void pickAttractionsDestinationFromList(){
         AttractionsPage attractions = new AttractionsPage(driver);
+        driver.switchTo().frame(0);
+        log.info("Switched to attractions iframe");
 
-        log.info("");
+        attractions.pickAttractionCity("ליסבון");
+        log.info("Finished test- pick destination for attractions from list");
 
     }
 
