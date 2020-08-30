@@ -95,4 +95,15 @@ public class AttractionsTest {
     }
 
 
+    @Test
+    public void pickAttractionType(){
+
+        AttractionsPage attractions = new AttractionsPage(driver);
+        driver.switchTo().frame(0);
+        log.info("Switched to attractions iframe");
+
+        attractions.pickAttractionType("פורטו", "סיורים");
+    }
+
+
 }

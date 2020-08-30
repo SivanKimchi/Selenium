@@ -1,10 +1,20 @@
-2020-08-25 15:43:22 [main] INFO  myTests.AttractionsTest - Switched to attractions iframe
-2020-08-25 15:43:24 [main] INFO  pageObjects.AttractionsPage - Visible Destinations for attractions:  ,ברלין ,ברצלונה ,פראג ,בודפשט ,אמסטרדם ,לונדון ,ניו יורק ,רומא ,פריז ,מדריד ,פירנצה ,פארקי-שעשועים ,אורלנדו ,אנדורה ,אנדלוסיה ,אתונה ,בלגיה ,ברטיסלבה ,הונג קונג ,וושינגטון ,וינה ,ולנסיה ,ונציה ,לאס וגאס ,לוס אנג'לס ,ליסבון ,מיאמי ,מיורקה ,מילאנו ,נאפולי ,סן פרנסיסקו ,פורטו ,קופנהגן ,קייפטאון ,קרקוב ,רוטרדם ,שטוקהולם
-2020-08-25 15:43:28 [main] DEBUG pageObjects.AttractionsPage - Clicked city: ליסבון
-2020-08-25 15:43:39 [main] INFO  Lametayel.ScreenshotTaker - Screenshot of failed test saved in C:\Users\Sivan\Documents\seleniumNew\screenshots
-2020-08-25 15:44:28 [main] INFO  myTests.AttractionsTest - Opened driver
-2020-08-25 15:44:28 [main] INFO  myTests.AttractionsTest - Switched to attractions iframe
-2020-08-25 15:44:32 [main] INFO  pageObjects.AttractionsPage - Visible Destinations for attractions:  ,ברלין ,ברצלונה ,פראג ,בודפשט ,אמסטרדם ,לונדון ,ניו יורק ,רומא ,פריז ,מדריד ,פירנצה ,פארקי-שעשועים ,אורלנדו ,אנדורה ,אנדלוסיה ,אתונה ,בלגיה ,ברטיסלבה ,הונג קונג ,וושינגטון ,וינה ,ולנסיה ,ונציה ,לאס וגאס ,לוס אנג'לס ,ליסבון ,מיאמי ,מיורקה ,מילאנו ,נאפולי ,סן פרנסיסקו ,פורטו ,קופנהגן ,קייפטאון ,קרקוב ,רוטרדם ,שטוקהולם
-2020-08-25 15:44:37 [main] DEBUG pageObjects.AttractionsPage - Clicked city: ליסבון
-2020-08-25 15:44:38 [main] INFO  pageObjects.AttractionsPage - Entered page for attractions in selected city
-2020-08-25 15:44:38 [main] INFO  myTests.AttractionsTest - Finished test- pick destination for attractions from list
+2020-08-30 09:57:28 [main] INFO  myTests.AttractionsTest - Opened driver
+2020-08-30 09:57:29 [main] INFO  myTests.AttractionsTest - Switched to attractions iframe
+2020-08-30 09:57:31 [main] DEBUG pageObjects.AttractionsPage - destinations: [ברלין, ברצלונה, פראג, בודפשט, אמסטרדם, לונדון, ניו יורק, רומא, פריז, מדריד, פירנצה, פארקי-שעשועים, אורלנדו, אנדורה, אנדלוסיה, אתונה, בלגיה, ברטיסלבה, הונג קונג, וושינגטון, וינה, ולנסיה, ונציה, לאס וגאס, לוס אנג'לס, ליסבון, מיאמי, מיורקה, מילאנו, נאפולי, סן פרנסיסקו, פורטו, קופנהגן, קייפטאון, קרקוב, רוטרדם, שטוקהולם]
+2020-08-30 09:57:31 [main] INFO  pageObjects.AttractionsPage - Visible Destinations for attractions:  ,ברלין ,ברצלונה ,פראג ,בודפשט ,אמסטרדם ,לונדון ,ניו יורק ,רומא ,פריז ,מדריד ,פירנצה ,פארקי-שעשועים ,אורלנדו ,אנדורה ,אנדלוסיה ,אתונה ,בלגיה ,ברטיסלבה ,הונג קונג ,וושינגטון ,וינה ,ולנסיה ,ונציה ,לאס וגאס ,לוס אנג'לס ,ליסבון ,מיאמי ,מיורקה ,מילאנו ,נאפולי ,סן פרנסיסקו ,פורטו ,קופנהגן ,קייפטאון ,קרקוב ,רוטרדם ,שטוקהולם
+2020-08-30 09:57:31 [main] DEBUG pageObjects.AttractionsPage - There is no pop-up
+2020-08-30 09:57:33 [main] DEBUG pageObjects.AttractionsPage - Clicked city: פורטו
+2020-08-30 09:57:33 [main] INFO  pageObjects.AttractionsPage - Entered page for attractions in selected city
+2020-08-30 09:57:33 [main] INFO  pageObjects.AttractionsPage - Going through attractions types:
+2020-08-30 09:57:33 [main] INFO  pageObjects.AttractionsPage - מומלצים
+2020-08-30 09:57:33 [main] INFO  pageObjects.AttractionsPage - אטרקציות
+2020-08-30 09:57:33 [main] INFO  pageObjects.AttractionsPage - סיורים
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - שייט
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - חיי לילה
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - טיולי אופניים
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - הסעות מנמל התעופה
+2020-08-30 09:57:34 [main] DEBUG pageObjects.AttractionsPage - Clicked on attraction type סיורים בפורטו
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - There are 3 products in This category: 
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - טיול יום לדורו
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - סיור הסגוואי המקורי
+2020-08-30 09:57:34 [main] INFO  pageObjects.AttractionsPage - כרטיס פורטו פרימיום – 3 ב-1

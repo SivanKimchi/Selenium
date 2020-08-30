@@ -41,7 +41,17 @@ public class AttractionsPage {
     @FindBy (css = "div[id='vendor_usp'] h2")
     public WebElement attractionCityHeadline;
 
+    @FindBy (css = "form ul[class='filter'] li[class^='classification'] label[for^='c_'] span:nth-of-type(2)")
+    public List<WebElement> attractionTypesList;
 
+    @FindBy (css = "div[id='vendor_usp'] h2[class='category']")
+    public WebElement attractionCategoryTitle;
+
+    @FindBy (css = "ul[id='products'] li[class^='classification-'][style='display: list-item;']")
+    public List<WebElement> attractionProducts;
+
+    @FindBy (css = "ul[id='products'] li[class^='classification-'][style='display: list-item;'] a")
+    public List<WebElement> attractionProductsHeadline;
 
 
 
@@ -191,13 +201,21 @@ public class AttractionsPage {
                 }
         }
 
-        System.out.println("destinations: "+ destinations);
+        log.debug("destinations: "+ destinations);
         String message = "Visible Destinations for attractions: ";
         for (String string : destinations ) {
             message = message + " ," + string;
            
         }
         log.info(message);
+
+        try{
+            closePopUp.click();
+            closePopUp2.click();
+
+        } catch (Exception a) {
+            log.debug("There is no pop-up");
+        }
 
         clickThisCity.click();
         log.debug("Clicked city: " + destinationCity);
@@ -209,6 +227,28 @@ public class AttractionsPage {
     }
 
 
+    public void pickAttractionType(String city, String requestedAttractionType) {
+
+        pickAttractionCity(city);
+        driver.manage().timeouts().implicitlyWait(3000, TimeUnit.MILLISECONDS);
+
+        log.info("Going through attractions types:");
+        for (WebElement attractionType : attractionTypesList) {
+            String attractionTypeText = attractionType.getText().trim();
+            log.info(attractionTypeText);
+            if (attractionTypeText.contains(requestedAttractionType)){
+                attractionType.click();
+            }
+        }
+        Assert.assertTrue(attractionCategoryTitle.getText().contains(requestedAttractionType));
+        log.debug("Clicked on attraction type " + attractionCategoryTitle.getText());
+        log.info("There are " + attractionProducts.size() + " products in This category: ");
+        for (WebElement titles : attractionProductsHeadline) {
+            log.info(titles.getAttribute("title"));
+        }
+
+
+    }
 
 
 
