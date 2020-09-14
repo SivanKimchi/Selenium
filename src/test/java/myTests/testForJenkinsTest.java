@@ -26,7 +26,7 @@ public class testForJenkinsTest {
     public void setUp() throws IOException, ParseException {
 
 
-        System.setProperty("webdriver.chrome.driver", "C://Users//Sivan//Downloads//chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         driver = new ChromeDriver();
 
         driver.manage().window().maximize();
